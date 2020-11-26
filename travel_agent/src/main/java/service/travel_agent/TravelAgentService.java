@@ -41,7 +41,7 @@ public class TravelAgentService {
 	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
 	static int referenceNumber = 0;
 	// POST Method, handles requests from client for quotations with given clientInfo
-	@RequestMapping(value="/applications",method=RequestMethod.POST)
+	@RequestMapping(value="/bookings",method=RequestMethod.POST)
 	public ResponseEntity<ArrayList<String>> getFlightInfo(@RequestBody String location) throws URISyntaxException {
 	
 		ArrayList<String> flightInfo = new ArrayList();
@@ -53,7 +53,7 @@ public class TravelAgentService {
 		
 		referenceNumber++;
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/applications/"+referenceNumber;  // Create new URI for this newly created ClientApplication
+			build().toUriString()+ "/bookings/"+referenceNumber;  // Create new URI for this newly created ClientApplication
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(flightInfo, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class

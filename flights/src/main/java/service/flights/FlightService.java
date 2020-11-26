@@ -43,40 +43,31 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-
-/**
- * Implementation of the AuldFellas insurance quotation service.
- * 
- * @author Rem
- *
- */
 @RestController
 public class FlightService {
 	
-	static int referenceNumber = 0;
+	static int referenceNumber = 0;    // unique reference number for each booking
 
-	// POST request, handles all quotation requests from broker
-	@RequestMapping(value="/quotations",method=RequestMethod.POST)
-	public ResponseEntity<ArrayList<String>> createQuotation(@RequestBody String location)  throws URISyntaxException {
+	// POST request, handles all booking requests from travel agent
+	@RequestMapping(value="/flights",method=RequestMethod.POST)
+	public ResponseEntity<ArrayList<String>> createBooking(@RequestBody String location)  throws URISyntaxException {
 
 		ArrayList<String> list = new ArrayList();
 		list = getflightInfo(location);
 
 		referenceNumber++;
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/quotations/"+referenceNumber;     // Create URI for this quotation
+			build().toUriString()+ "/flights/"+referenceNumber;     // Create URI for this quotation
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(list, headers, HttpStatus.CREATED);     // Returns quotation to broker
 	} 
 
 
-
-
 	public ArrayList<String> getflightInfo(String location){
 		ArrayList<String> list = new ArrayList<>();
 
-		try {
+		try { // GET List Places (rapidapi.com)
                   HttpRequest request = HttpRequest.newBuilder()
                         .uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/UK/GBP/en-GB/?query="+location))
                         .header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
@@ -84,12 +75,9 @@ public class FlightService {
                         .method("GET", HttpRequest.BodyPublishers.noBody())
                         .build();
                   HttpResponse<Path> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("example.json")));
-                  
-                  System.out.println(response.body());
 
                   JSONParser jsonParser = new JSONParser();
-            
-                  
+             
                   try (FileReader reader = new FileReader("example.json"))
                   {
                         //Read JSON file
