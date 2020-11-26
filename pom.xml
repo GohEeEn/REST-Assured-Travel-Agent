@@ -1,0 +1,13 @@
+<project>
+      <modelVersion>4.0.0</modelVersion>
+      <groupId>SkyScannerDemo</groupId>
+      <artifactId>skyscanner</artifactId>
+      <version>0.0.1</version>
+      <packaging>pom</packaging>       
+      
+      <modules>
+            <module>client</module> 
+            <module>travel_agent</module> 
+            <module>flights</module>
+      </modules>      
+</project>
