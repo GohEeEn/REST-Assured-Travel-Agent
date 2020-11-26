@@ -52,18 +52,7 @@ import org.json.simple.parser.ParseException;
  */
 @RestController
 public class FlightService {
-	// All references are to be prefixed with an AF (e.g. AF001000)
-	public static final String PREFIX = "AF";
-	public static final String COMPANY = "Auld Fellas Ltd.";
 	
-	/**
-	 * Quote generation:
-	 * 30% discount for being male
-	 * 2% discount per year over 60
-	 * 20% discount for less than 3 penalty points
-	 * 50% penalty (i.e. reduction in discount) for more than 60 penalty points 
-	 */
-
 	static int referenceNumber = 0;
 
 	// POST request, handles all quotation requests from broker
@@ -97,7 +86,6 @@ public class FlightService {
                   HttpResponse<Path> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("example.json")));
                   
                   System.out.println(response.body());
-                  // System.out.println(response.headers());
 
                   JSONParser jsonParser = new JSONParser();
             
