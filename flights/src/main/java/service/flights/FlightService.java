@@ -41,7 +41,10 @@ import com.mashape.unirest.http.exceptions.UnirestException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.simple.parser.ParseException; 
+
+import service.core.Flight; 
+import service.core.ClientBooking;
 
 @RestController
 public class FlightService {
@@ -50,22 +53,21 @@ public class FlightService {
 
 	// POST request, handles all booking requests from travel agent
 	@RequestMapping(value="/flights",method=RequestMethod.POST)
-	public ResponseEntity<ArrayList<String>> createBooking(@RequestBody String location)  throws URISyntaxException {
+	public ResponseEntity<ArrayList<Flight>> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
 
-		ArrayList<String> list = new ArrayList();
-		list = getflightInfo(location);
-
+		ArrayList<Flight> flights = new ArrayList();
+		flights = getflightInfo(clientBooking.getCityOfOrigin());
 		referenceNumber++;
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/flights/"+referenceNumber;     // Create URI for this quotation
+			build().toUriString()+ "/flights/"+referenceNumber;     // Create URI for this flight
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(list, headers, HttpStatus.CREATED);     // Returns quotation to broker
+		return new ResponseEntity<>(flights, headers, HttpStatus.CREATED);     // Returns flights to travel agent
 	} 
 
 
-	public ArrayList<String> getflightInfo(String location){
-		ArrayList<String> list = new ArrayList<>();
+	public ArrayList<Flight> getflightInfo(String location){
+		ArrayList<Flight> list = new ArrayList<>();
 
 		try { // GET List Places (rapidapi.com)
                   HttpRequest request = HttpRequest.newBuilder()
@@ -107,9 +109,9 @@ public class FlightService {
 		return list;        
 	}
 	
-	private static ArrayList<String> parseFlightObject(JSONObject flight) 
+	private static ArrayList<Flight> parseFlightObject(JSONObject flight) 
 	{
-	    ArrayList<String> list2 = new ArrayList();
+	    ArrayList<Flight> list2 = new ArrayList();
 
 	    //Get places array within outer array
 	    JSONArray jsonArray = new JSONArray();
@@ -133,9 +135,12 @@ public class FlightService {
 	    String countryId = (String) ob.get("CountryId");    
 	    System.out.println(countryId);
 
-	    list2.add(place);
-	    list2.add(countryName);
-	    list2.add(countryId);
+	    
+	    Flight f = new Flight(place, "BBBB", "BBBB", "BBBB", "BBBB", 125);
+	    Flight f2 = new Flight(countryName, "CCCC", "CCCC", "CCCC", "CCCC", 375);
+	 
+	    list2.add(f);
+	    list2.add(f2);
 
 	    return list2;
 	}

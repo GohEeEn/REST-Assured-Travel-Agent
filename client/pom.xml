@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>skyscanner</groupId>
+	<groupId>assignment2</groupId>
 	<artifactId>client</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>hello-spring</name>
@@ -36,6 +36,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>assignment2</groupId>
+			<artifactId>core</artifactId>
+			<version>0.0.1</version>
+       	</dependency>
 	</dependencies>
 
 	<build>

@@ -7,18 +7,34 @@ import java.util.LinkedList;
 
 import org.springframework.web.client.RestTemplate; 
 import org.springframework.http.HttpEntity;
+ 
+import service.core.ClientBooking;
+import service.core.Flight;
 
 public class Client {
 	
 	public static void main(String[] args) {
 		
-		RestTemplate restTemplate = new RestTemplate();
-		String s = "Stockholm";
-		HttpEntity<String> request = new HttpEntity<>(s);
-		ArrayList<String> arrayStrings = restTemplate.postForObject(args[0],request,ArrayList.class);  // ClientApplicati.on received from calling POST method in broker
+		// RestTemplate restTemplate = new RestTemplate();
+		// String s = "Stockholm";
+		// HttpEntity<String> request = new HttpEntity<>(s);
+		// ArrayList<String> arrayStrings = restTemplate.postForObject(args[0],request,ArrayList.class);  // ClientApplicati.on received from calling POST method in broker
 		
-		for (String str : arrayStrings){
-			System.out.println(str);
+		// for (String str : arrayStrings){
+		// 	System.out.println(str);
+		// }
+		
+		ArrayList<Flight> flights = new ArrayList<>();
+		RestTemplate restTemplate = new RestTemplate();
+		for (ClientBooking booking : clients){
+			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
+			flights = restTemplate.postForObject(args[0],request,ArrayList.class);
+		}
+		
+		for (Flight flight : flights ){
+			System.out.println(flight.getCityOfOrigin());
+			System.out.println(flight.getCityOfDestination());
+			System.out.println(flight.getPrice());
 		}
 	} 
 	     
@@ -56,15 +72,10 @@ public class Client {
 	// 	System.out.println("|=================================================================================================================|");
 	// }
 	
-	// /**
-	//  * Test Data
-	//  */
-	// public static final ClientInfo[] clients = {
-	// 	new ClientInfo("Niki Collier", ClientInfo.FEMALE, 43, 0, 5, "PQR254/1"),
-	// 	new ClientInfo("Old Geeza", ClientInfo.MALE, 65, 0, 2, "ABC123/4"),
-	// 	new ClientInfo("Hannah Montana", ClientInfo.FEMALE, 16, 10, 0, "HMA304/9"),
-	// 	new ClientInfo("Rem Collier", ClientInfo.MALE, 44, 5, 3, "COL123/3"),
-	// 	new ClientInfo("Jim Quinn", ClientInfo.MALE, 55, 4, 7, "QUN987/4"),
-	// 	new ClientInfo("Donald Duck", ClientInfo.MALE, 35, 5, 2, "XYZ567/9")		
-	// };
+	/**
+	 * Test Data
+	 */
+	public static final ClientBooking[] clients = {
+		new ClientBooking("Donald Trump", "Dublin", "IE", "Paris", "FR", true, "2020-12-17", null, "EUR")	
+	};
 }

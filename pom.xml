@@ -1,7 +1,7 @@
 <project>
       <modelVersion>4.0.0</modelVersion>
-      <groupId>SkyScannerDemo</groupId>
-      <artifactId>skyscanner</artifactId>
+      <groupId>assignment2</groupId>
+      <artifactId>quaranteam</artifactId>
       <version>0.0.1</version>
       <packaging>pom</packaging>       
       
@@ -9,5 +9,6 @@
             <module>client</module> 
             <module>travel_agent</module> 
             <module>flights</module>
+            <module>core</module>
       </modules>      
 </project>

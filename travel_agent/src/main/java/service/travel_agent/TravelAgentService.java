@@ -26,8 +26,11 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
+ 
 import java.text.NumberFormat;
+
+import service.core.ClientBooking;
+import service.core.Flight;
 
 /**
  * Implementation of the broker service that uses the Service Registry.
@@ -42,13 +45,13 @@ public class TravelAgentService {
 	static int referenceNumber = 0;
 	// POST Method, handles requests from client for quotations with given clientInfo
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)
-	public ResponseEntity<ArrayList<String>> getFlightInfo(@RequestBody String location) throws URISyntaxException {
+	public ResponseEntity<ArrayList<Flight>> getFlightInfo(@RequestBody ClientBooking clientBooking) throws URISyntaxException {
 	
-		ArrayList<String> flightInfo = new ArrayList();
+		ArrayList<Flight> flights = new ArrayList();
 		for(String uri : URIs){   // Iterate through list of URIs and send clientInfo to each quotation service (1 per URI)
 				RestTemplate restTemplate = new RestTemplate();
-				HttpEntity<String> request = new HttpEntity<>(location);
-				flightInfo = restTemplate.postForObject(uri,request, ArrayList.class);
+				HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
+				flights = restTemplate.postForObject(uri,request, ArrayList.class);
 			}
 		
 		referenceNumber++;
@@ -56,7 +59,7 @@ public class TravelAgentService {
 			build().toUriString()+ "/bookings/"+referenceNumber;  // Create new URI for this newly created ClientApplication
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(flightInfo, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
+		return new ResponseEntity<>(flights, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
 		
 	} 
 

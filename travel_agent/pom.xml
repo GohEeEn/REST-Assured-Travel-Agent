@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 
-	<groupId>SkyScannnerDemo</groupId>
+	<groupId>assignment2</groupId>
 	<artifactId>travel_agent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>travel_agent</name>
@@ -38,6 +38,12 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+
+		<dependency>
+			<groupId>assignment2</groupId>
+			<artifactId>core</artifactId>
+			<version>0.0.1</version>
+       	</dependency>
 	</dependencies>
 
 	<build>
