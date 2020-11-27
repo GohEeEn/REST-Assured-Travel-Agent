@@ -53,10 +53,12 @@ public class FlightService {
 
 	// POST request, handles all booking requests from travel agent
 	@RequestMapping(value="/flights",method=RequestMethod.POST)
-	public ResponseEntity<ArrayList<Flight>> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
+	public ResponseEntity<Flight[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
 
-		ArrayList<Flight> flights = new ArrayList();
+		Flight[] flights = new Flight[10];
 		flights = getflightInfo(clientBooking.getCityOfOrigin());
+		Flight f = flights[0];
+		System.out.println("Yeah yeah: "+ f.getCityOfOrigin());
 		referenceNumber++;
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/flights/"+referenceNumber;     // Create URI for this flight
@@ -66,8 +68,9 @@ public class FlightService {
 	} 
 
 
-	public ArrayList<Flight> getflightInfo(String location){
-		ArrayList<Flight> list = new ArrayList<>();
+	public Flight[] getflightInfo(String location){
+		System.out.println("Location: "+ location);
+		Flight[] list = new Flight[10];
 
 		try { // GET List Places (rapidapi.com)
                   HttpRequest request = HttpRequest.newBuilder()
@@ -77,11 +80,13 @@ public class FlightService {
                         .method("GET", HttpRequest.BodyPublishers.noBody())
                         .build();
                   HttpResponse<Path> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("example.json")));
+			System.out.println(response.body());
+                  
 
-                  JSONParser jsonParser = new JSONParser();
-             
                   try (FileReader reader = new FileReader("example.json"))
                   {
+				JSONParser jsonParser = new JSONParser();
+				System.out.println("try statement");
                         //Read JSON file
                         Object obj = jsonParser.parse(reader);
                         System.out.println(obj);
@@ -90,6 +95,7 @@ public class FlightService {
                         JSONArray array = new JSONArray();
                         array.add(obj);
 				
+				System.out.println("try statement2");
 				list = parseFlightObject( (JSONObject) obj);
             
                   } catch (FileNotFoundException e) {
@@ -106,12 +112,13 @@ public class FlightService {
             catch(InterruptedException e) {
                   e.printStackTrace();
 		}    
+		
 		return list;        
 	}
 	
-	private static ArrayList<Flight> parseFlightObject(JSONObject flight) 
+	private static Flight[] parseFlightObject(JSONObject flight) 
 	{
-	    ArrayList<Flight> list2 = new ArrayList();
+	    Flight[] list2 = new Flight[10];
 
 	    //Get places array within outer array
 	    JSONArray jsonArray = new JSONArray();
@@ -139,8 +146,8 @@ public class FlightService {
 	    Flight f = new Flight(place, "BBBB", "BBBB", "BBBB", "BBBB", 125);
 	    Flight f2 = new Flight(countryName, "CCCC", "CCCC", "CCCC", "CCCC", 375);
 	 
-	    list2.add(f);
-	    list2.add(f2);
+	    list2[0] =f;
+	    list2[1] = f2;
 
 	    return list2;
 	}

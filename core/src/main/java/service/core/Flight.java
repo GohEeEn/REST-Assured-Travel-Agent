@@ -12,6 +12,8 @@ public class Flight {
             this.price = price;
       }
 
+      public Flight() {}
+
       private String cityOfOrigin;
       private String cityOfDestination;
       private String outboundDate;

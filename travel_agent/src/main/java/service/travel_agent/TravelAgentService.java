@@ -45,14 +45,19 @@ public class TravelAgentService {
 	static int referenceNumber = 0;
 	// POST Method, handles requests from client for quotations with given clientInfo
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)
-	public ResponseEntity<ArrayList<Flight>> getFlightInfo(@RequestBody ClientBooking clientBooking) throws URISyntaxException {
+	public ResponseEntity<Flight[]> getFlightInfo(@RequestBody ClientBooking clientBooking) throws URISyntaxException {
 	
-		ArrayList<Flight> flights = new ArrayList();
+		Flight[] flights = new Flight[10];
 		for(String uri : URIs){   // Iterate through list of URIs and send clientInfo to each quotation service (1 per URI)
 				RestTemplate restTemplate = new RestTemplate();
 				HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
-				flights = restTemplate.postForObject(uri,request, ArrayList.class);
+				System.out.println(clientBooking.getName());
+				flights = restTemplate.postForObject(uri,request, Flight[].class);
 			}
+		
+		System.out.println(flights.length);
+		Flight f = flights[0];
+		System.out.println("UP UP UP: "+ f.getCityOfOrigin());
 		
 		referenceNumber++;
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().

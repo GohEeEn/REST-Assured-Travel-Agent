@@ -24,18 +24,27 @@ public class Client {
 		// 	System.out.println(str);
 		// }
 		
-		ArrayList<Flight> flights = new ArrayList<>();
+		Flight[] flights = new Flight[10];
 		RestTemplate restTemplate = new RestTemplate();
 		for (ClientBooking booking : clients){
 			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
-			flights = restTemplate.postForObject(args[0],request,ArrayList.class);
+			
+			flights = restTemplate.postForObject(args[0],request,Flight[].class);
+			System.out.println(flights.length);
+
+			for (int i=0; i<1; i++){
+				Flight f = flights[i];
+				System.out.println(f.getCityOfOrigin());
+			}
 		}
+
 		
-		for (Flight flight : flights ){
-			System.out.println(flight.getCityOfOrigin());
-			System.out.println(flight.getCityOfDestination());
-			System.out.println(flight.getPrice());
-		}
+		
+		// for (Flight flight : flights ){
+		// 	System.out.println(flight.getCityOfOrigin());
+		// 	System.out.println(flight.getCityOfDestination());
+		// 	System.out.println(flight.getPrice());
+		// }
 	} 
 	     
 	// /**
@@ -76,6 +85,6 @@ public class Client {
 	 * Test Data
 	 */
 	public static final ClientBooking[] clients = {
-		new ClientBooking("Donald Trump", "Dublin", "IE", "Paris", "FR", true, "2020-12-17", null, "EUR")	
+		new ClientBooking("Donald Trump", "Dublin", "IE", "Paris", "FR", false, "2020-12-17", "2020-12-18", "EUR")	
 	};
 }
