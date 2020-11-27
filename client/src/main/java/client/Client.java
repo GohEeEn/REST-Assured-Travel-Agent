@@ -15,36 +15,22 @@ public class Client {
 	
 	public static void main(String[] args) {
 		
-		// RestTemplate restTemplate = new RestTemplate();
-		// String s = "Stockholm";
-		// HttpEntity<String> request = new HttpEntity<>(s);
-		// ArrayList<String> arrayStrings = restTemplate.postForObject(args[0],request,ArrayList.class);  // ClientApplicati.on received from calling POST method in broker
-		
-		// for (String str : arrayStrings){
-		// 	System.out.println(str);
-		// }
-		
 		Flight[] flights = new Flight[10];
 		RestTemplate restTemplate = new RestTemplate();
 		for (ClientBooking booking : clients){
 			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
 			
 			flights = restTemplate.postForObject(args[0],request,Flight[].class);
-			System.out.println(flights.length);
 
-			for (int i=0; i<1; i++){
+			for (int i=0; i < flights.length; i++){
 				Flight f = flights[i];
-				System.out.println(f.getCityOfOrigin());
+				if (f != null){
+					System.out.println("City of Destination is: " + f.getCityOfDestination());
+					System.out.println("Price of flight is: " + f.getPrice());
+				}
+				
 			}
 		}
-
-		
-		
-		// for (Flight flight : flights ){
-		// 	System.out.println(flight.getCityOfOrigin());
-		// 	System.out.println(flight.getCityOfDestination());
-		// 	System.out.println(flight.getPrice());
-		// }
 	} 
 	     
 	// /**

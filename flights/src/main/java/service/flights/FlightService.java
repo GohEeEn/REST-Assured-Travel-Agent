@@ -57,9 +57,8 @@ public class FlightService {
 
 		Flight[] flights = new Flight[10];
 		flights = getflightInfo(clientBooking.getCityOfOrigin());
-		Flight f = flights[0];
-		System.out.println("Yeah yeah: "+ f.getCityOfOrigin());
 		referenceNumber++;
+
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/flights/"+referenceNumber;     // Create URI for this flight
 		HttpHeaders headers = new HttpHeaders();
@@ -69,34 +68,35 @@ public class FlightService {
 
 
 	public Flight[] getflightInfo(String location){
-		System.out.println("Location: "+ location);
+		
 		Flight[] list = new Flight[10];
 
 		try { // GET List Places (rapidapi.com)
                   HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/UK/GBP/en-GB/?query="+location))
-                        .header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
-                        .header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
-                        .method("GET", HttpRequest.BodyPublishers.noBody())
-                        .build();
+				.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/IE/EUR/en-GB/?query=Paris%20France"))
+				.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
+				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+				.method("GET", HttpRequest.BodyPublishers.noBody())
+				.build();
                   HttpResponse<Path> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("example.json")));
-			System.out.println(response.body());
-                  
 
                   try (FileReader reader = new FileReader("example.json"))
                   {
+				/***
+				 * TODO Iterate through the JSON file and extract names of every airport for that region
+				 * Team Member: Barry
+				 */
+
 				JSONParser jsonParser = new JSONParser();
-				System.out.println("try statement");
                         //Read JSON file
                         Object obj = jsonParser.parse(reader);
                         System.out.println(obj);
 
                         //Create json array from json file
-                        JSONArray array = new JSONArray();
-                        array.add(obj);
+                        // JSONArray array = new JSONArray();
+                        // array.add(obj);
 				
-				System.out.println("try statement2");
-				list = parseFlightObject( (JSONObject) obj);
+				list = parseFlightObject( (JSONObject) obj);     // add flight info to list
             
                   } catch (FileNotFoundException e) {
                         e.printStackTrace();
@@ -124,27 +124,22 @@ public class FlightService {
 	    JSONArray jsonArray = new JSONArray();
 	    jsonArray = (JSONArray) flight.get("Places");
 	     
-	    JSONObject ob= (JSONObject) jsonArray.get(0);
+	    JSONObject ob= (JSONObject) jsonArray.get(0);    // testing
 	    System.out.println("Object1: " + ob);
   
-	    JSONObject ob2= (JSONObject) jsonArray.get(1);
+	    JSONObject ob2= (JSONObject) jsonArray.get(1);  // testing
 	    System.out.println("Object2: " + ob2);
   
-	    //Get PlaceName
-	    String place = (String) ob.get("PlaceName");    
-	    System.out.println("place name is: " + place);
+	    //Get airport id
+	    String place = (String) ob.get("PlaceId");    
+	    System.out.println("1st Airport ID is: " + place);
    
-	    //Get CountryName
-	    String countryName = (String) ob.get("CountryName");  
-	    System.out.println(countryName);
-	     
-	    //Get CountryId
-	    String countryId = (String) ob.get("CountryId");    
-	    System.out.println(countryId);
-
+	    //Get airport id
+	    String place2 = (String) ob2.get("PlaceId");  
+	    System.out.println("2nd Airport ID is: " + place2);
 	    
-	    Flight f = new Flight(place, "BBBB", "BBBB", "BBBB", "BBBB", 125);
-	    Flight f2 = new Flight(countryName, "CCCC", "CCCC", "CCCC", "CCCC", 375);
+	    Flight f = new Flight(place, place, "BBBB", "BBBB", "BBBB", 125);    // test input
+	    Flight f2 = new Flight(place2, place2, "CCCC", "CCCC", "CCCC", 375);    // test input
 	 
 	    list2[0] =f;
 	    list2[1] = f2;

@@ -51,13 +51,8 @@ public class TravelAgentService {
 		for(String uri : URIs){   // Iterate through list of URIs and send clientInfo to each quotation service (1 per URI)
 				RestTemplate restTemplate = new RestTemplate();
 				HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
-				System.out.println(clientBooking.getName());
 				flights = restTemplate.postForObject(uri,request, Flight[].class);
 			}
-		
-		System.out.println(flights.length);
-		Flight f = flights[0];
-		System.out.println("UP UP UP: "+ f.getCityOfOrigin());
 		
 		referenceNumber++;
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
