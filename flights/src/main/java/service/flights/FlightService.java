@@ -288,6 +288,10 @@ public class FlightService {
 		return flights;
 	}
 
+	public Flight createFlight(FlightQuote flightQuote){
+		
+	}
+
 	// GET List Places (skyscanner call)
 	public Flight[] getAirportID (String city, String country, String countryCode, String currency, String locale){
 		
