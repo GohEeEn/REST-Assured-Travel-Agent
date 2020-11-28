@@ -68,14 +68,12 @@ public class FlightService {
 					countryOfOriginCode, clientBooking.getCurrency());
 		destinationAirportIDs = getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
 					countryOfDestinationCode, clientBooking.getCurrency());
-		for (String s : destinationAirportIDs){
-			System.out.println("Destination IDs:" + s);
+		for (String airportID : destinationAirportIDs){
+			findFlights(countryOfOriginCode,clientBooking.getCurrency(),locale,originAirportIDs.get(0),airportID,clientBooking.getOutboundDate());
 		}
-		for (String s : originAirportIDs){
-			System.out.println("Origin IDs:" + s);
-		}
-		flights = getAirportID(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(), countryOfOriginCode, 
-			clientBooking.getCurrency(), locale);
+
+		// flights = getAirportID(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(), countryOfOriginCode, 
+		// 	clientBooking.getCurrency(), locale);
 		referenceNumber++;
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
@@ -172,7 +170,7 @@ public class FlightService {
 			JSONArray placesArray = new JSONArray();
 		      placesArray = (JSONArray) placesJson.get("Places");
 			System.out.println("Places array: "+placesArray);
-
+			
 			int index = 0;
 			while (index < placesArray.size()) {
 				JSONObject jsonObject = (JSONObject) placesArray.get(index);
@@ -195,6 +193,49 @@ public class FlightService {
 	public String findCountryCode(Object json){
 		String s = "";
 		return s;
+	}
+	
+	public ArrayList<Flight> findFlights(String countryOfOriginCode, String currency, String locale, String originAirportCode, String destAirportCode, 
+							String outboundDate) {
+		
+		ArrayList<Flight> flights = new ArrayList();
+
+		try{
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/"+
+						countryOfOriginCode+"/"+currency+"/"+locale+"/"+originAirportCode+"/"+destAirportCode+"/"+outboundDate))
+					.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
+					.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+					.method("GET", HttpRequest.BodyPublishers.noBody())
+					.build();
+			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+			// System.out.println("FindFlights: "+ response.body());
+
+			String flightQuotes = response.body();
+			JSONObject placesJson = parseJSONObject(flightQuotes);
+
+			JSONArray flightQuotesArray = new JSONArray();
+		      flightQuotesArray = (JSONArray) placesJson.get("Quotes");
+			System.out.println("Quotes array: "+flightQuotesArray);
+
+			int index = 0;
+			while (index < flightQuotesArray.size()) {
+				JSONObject jsonObject = (JSONObject) flightQuotesArray.get(index);
+				System.out.println("Min Price: "+jsonObject.get("MinPrice"));
+				JSONObject jsonObject2 = (JSONObject) jsonObject.get("OutboundLeg");
+				JSONArray jsonObject3 = (JSONArray) jsonObject2.get("CarrierIds");
+				System.out.println("CarrierID: "+jsonObject3.get(0));
+				index++;
+			}	
+
+		} catch(IOException e) {
+                  e.printStackTrace();
+            }
+            catch(InterruptedException e) {
+                  e.printStackTrace();
+		}    
+
+		return flights;
 	}
 
 	// GET List Places (skyscanner call)
