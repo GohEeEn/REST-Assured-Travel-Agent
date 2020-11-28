@@ -50,13 +50,19 @@ import service.core.ClientBooking;
 public class FlightService {
 	
 	static int referenceNumber = 0;    // unique reference number for each booking
+	final String locale = "en-GB";
 
 	// POST request, handles all booking requests from travel agent
 	@RequestMapping(value="/flights",method=RequestMethod.POST)
 	public ResponseEntity<Flight[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
 
 		Flight[] flights = new Flight[10];
-		flights = getflightInfo(clientBooking.getCityOfOrigin());
+		
+		String countryOfOriginCode = getListMarkets(clientBooking.getCountryOfOrigin());         //find country code 
+		getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
+					countryOfOriginCode, clientBooking.getCurrency());
+		flights = getAirportID(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(), countryOfOriginCode, 
+			clientBooking.getCurrency(), locale);
 		referenceNumber++;
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
@@ -65,15 +71,130 @@ public class FlightService {
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(flights, headers, HttpStatus.CREATED);     // Returns flights to travel agent
 	} 
+	/**
+	 * TODO Perhaps we should call this method once and then persist the data in MongoDb 
+	 * 	  instead of calling it every time we want to find a countryCode
+	 */
 
+	public JSONObject parseJSONObject(String response){
 
-	public Flight[] getflightInfo(String location){
+		JSONObject jsonObject = new JSONObject();
+		try{
+			JSONParser parser = new JSONParser();
+			jsonObject = (JSONObject) parser.parse(response);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
+	}
+
+	public String getListMarkets(String countryName) { 
+		
+		String countryCode = "";
+
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+				.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/countries/en-GB"))
+				.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
+				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+				.method("GET", HttpRequest.BodyPublishers.noBody())
+				.build();
+			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+
+			/**
+			 * TODO may need to delete this response if examples.json isn't needed going forward
+			 */
+			HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("countryCodes.json")));
+			String countryCodes = response.body();
+			JSONObject countryCodesJson = parseJSONObject(countryCodes);
+
+			JSONArray countryCodesArray = new JSONArray();
+	    		countryCodesArray = (JSONArray) countryCodesJson.get("Countries");
+			
+			//loop through array to find the country code 
+			int index = 0;
+			while (index < countryCodesArray.size()) {
+
+				JSONObject jsonObject = (JSONObject) countryCodesArray.get(index);
+				String name = (String) jsonObject.get("Name");
+				
+				if (name.equals(countryName)){
+					countryCode = (String) jsonObject.get("Code");
+				}
+				index++;
+			}	
+
+		} catch(IOException e) {
+                  e.printStackTrace();
+		}
+		catch(InterruptedException e) {
+                  e.printStackTrace();
+		}  
+		return countryCode;
+	}
+
+	public String getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
+		
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/"+
+						countryOfOriginCode+"/"+currency+"/"+locale+"/?query="+cityOfDestination+"%20"+countryOfDestination))
+					.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
+					.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+					.method("GET", HttpRequest.BodyPublishers.noBody())
+					.build();
+			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+			System.out.println("Get ListPlaces: "+response.body());
+
+			/**
+			 * TODO may need to delete this response if airports.json isn't needed going forward
+			 */
+			// HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("airports.json")));
+			// String countryCodes = response.body();
+			// JSONObject countryCodesJson = parseJSONObject(countryCodes);
+
+			// JSONArray countryCodesArray = new JSONArray();
+	    		// countryCodesArray = (JSONArray) countryCodesJson.get("Countries");
+			
+			// //loop through array to find the country code 
+			// int index = 0;
+			// while (index < countryCodesArray.size()) {
+
+			// 	JSONObject jsonObject = (JSONObject) countryCodesArray.get(index);
+			// 	String name = (String) jsonObject.get("Name");
+				
+			// 	if (name.equals(countryName)){
+			// 		countryCode = (String) jsonObject.get("Code");
+			// 	}
+			// 	index++;
+			// }	
+
+		} catch(IOException e) {
+                  e.printStackTrace();
+		}
+		catch(InterruptedException e) {
+                  e.printStackTrace();
+		}  
+		return countryOfOriginCode;
+	}
+
+	/**
+	 * TODO implement this from getListMarkets code when countryCodes.json remains persistent
+	 */
+	public String findCountryCode(Object json){
+		String s = "";
+		return s;
+	}
+
+	// GET List Places (skyscanner call)
+	public Flight[] getAirportID (String city, String country, String countryCode, String currency, String locale){
 		
 		Flight[] list = new Flight[10];
 
 		try { // GET List Places (rapidapi.com)
                   HttpRequest request = HttpRequest.newBuilder()
-				.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/IE/EUR/en-GB/?query=Paris%20France"))
+				.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/"+countryCode+
+					"/"+currency+"/"+locale+"/?query="+city+"%20"+country))
 				.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
 				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
 				.method("GET", HttpRequest.BodyPublishers.noBody())
@@ -127,19 +248,19 @@ public class FlightService {
 	    JSONObject ob= (JSONObject) jsonArray.get(0);    // testing
 	    System.out.println("Object1: " + ob);
   
-	    JSONObject ob2= (JSONObject) jsonArray.get(1);  // testing
-	    System.out.println("Object2: " + ob2);
+	//     JSONObject ob2= (JSONObject) jsonArray.get(1);  // testing
+	//     System.out.println("Object2: " + ob2);
   
 	    //Get airport id
 	    String place = (String) ob.get("PlaceId");    
 	    System.out.println("1st Airport ID is: " + place);
    
-	    //Get airport id
-	    String place2 = (String) ob2.get("PlaceId");  
-	    System.out.println("2nd Airport ID is: " + place2);
+	//     //Get airport id
+	//     String place2 = (String) ob2.get("PlaceId");  
+	//     System.out.println("2nd Airport ID is: " + place2);
 	    
 	    Flight f = new Flight(place, place, "BBBB", "BBBB", "BBBB", 125);    // test input
-	    Flight f2 = new Flight(place2, place2, "CCCC", "CCCC", "CCCC", 375);    // test input
+	    Flight f2 = new Flight(place, place, "CCCC", "CCCC", "CCCC", 375);    // test input
 	 
 	    list2[0] =f;
 	    list2[1] = f2;
