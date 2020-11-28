@@ -57,10 +57,14 @@ public class FlightService {
 	public ResponseEntity<Flight[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
 
 		Flight[] flights = new Flight[10];
+		ArrayList<String> airportIDs = new ArrayList();
 		
 		String countryOfOriginCode = getListMarkets(clientBooking.getCountryOfOrigin());         //find country code 
-		getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
+		airportIDs = getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
 					countryOfOriginCode, clientBooking.getCurrency());
+		for (String s : airportIDs){
+			System.out.println("!!!!" + s);
+		}
 		flights = getAirportID(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(), countryOfOriginCode, 
 			clientBooking.getCurrency(), locale);
 		referenceNumber++;
@@ -133,8 +137,10 @@ public class FlightService {
 		return countryCode;
 	}
 
-	public String getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
+	public ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
 		
+		ArrayList<String> airportIDs = new ArrayList();
+
 		try {
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/"+
@@ -144,30 +150,26 @@ public class FlightService {
 					.method("GET", HttpRequest.BodyPublishers.noBody())
 					.build();
 			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println("Get ListPlaces: "+response.body());
-
 			/**
 			 * TODO may need to delete this response if airports.json isn't needed going forward
 			 */
 			// HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("airports.json")));
-			// String countryCodes = response.body();
-			// JSONObject countryCodesJson = parseJSONObject(countryCodes);
-
-			// JSONArray countryCodesArray = new JSONArray();
-	    		// countryCodesArray = (JSONArray) countryCodesJson.get("Countries");
 			
-			// //loop through array to find the country code 
-			// int index = 0;
-			// while (index < countryCodesArray.size()) {
+			System.out.println("Get ListPlaces: "+response.body());
 
-			// 	JSONObject jsonObject = (JSONObject) countryCodesArray.get(index);
-			// 	String name = (String) jsonObject.get("Name");
-				
-			// 	if (name.equals(countryName)){
-			// 		countryCode = (String) jsonObject.get("Code");
-			// 	}
-			// 	index++;
-			// }	
+			String places = response.body();
+			JSONObject placesJson = parseJSONObject(places);
+
+			JSONArray placesArray = new JSONArray();
+		      placesArray = (JSONArray) placesJson.get("Places");
+			System.out.println("Places array: "+placesArray);
+
+			int index = 0;
+			while (index < placesArray.size()) {
+				JSONObject jsonObject = (JSONObject) placesArray.get(index);
+				airportIDs.add((String) jsonObject.get("PlaceId"));
+				index++;
+			}	
 
 		} catch(IOException e) {
                   e.printStackTrace();
@@ -175,7 +177,7 @@ public class FlightService {
 		catch(InterruptedException e) {
                   e.printStackTrace();
 		}  
-		return countryOfOriginCode;
+		return airportIDs;
 	}
 
 	/**
