@@ -69,6 +69,7 @@ public class FlightService {
 		destinationAirportIDs = getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
 					countryOfDestinationCode, clientBooking.getCurrency());
 		for (String airportID : destinationAirportIDs){
+			System.out.println(airportID);
 			findFlights(countryOfOriginCode,clientBooking.getCurrency(),locale,originAirportIDs.get(0),airportID,clientBooking.getOutboundDate());
 		}
 
@@ -209,22 +210,71 @@ public class FlightService {
 					.method("GET", HttpRequest.BodyPublishers.noBody())
 					.build();
 			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-			// System.out.println("FindFlights: "+ response.body());
+			System.out.println("FindFlights: "+ response.body());
 
-			String flightQuotes = response.body();
-			JSONObject placesJson = parseJSONObject(flightQuotes);
+			String flightQuotations = response.body();
+			JSONObject placesJson = parseJSONObject(flightQuotations);
 
 			JSONArray flightQuotesArray = new JSONArray();
-		      flightQuotesArray = (JSONArray) placesJson.get("Quotes");
-			System.out.println("Quotes array: "+flightQuotesArray);
+			flightQuotesArray = (JSONArray) placesJson.get("Quotes");
+			
+			JSONArray carriersArray = new JSONArray();
+			carriersArray = (JSONArray) placesJson.get("Carriers");
+
+			JSONArray placesArray = new JSONArray();
+			placesArray = (JSONArray) placesJson.get("Places");
+
+			ArrayList<FlightQuote> flightQuotes = new ArrayList();
 
 			int index = 0;
 			while (index < flightQuotesArray.size()) {
-				JSONObject jsonObject = (JSONObject) flightQuotesArray.get(index);
-				System.out.println("Min Price: "+jsonObject.get("MinPrice"));
-				JSONObject jsonObject2 = (JSONObject) jsonObject.get("OutboundLeg");
-				JSONArray jsonObject3 = (JSONArray) jsonObject2.get("CarrierIds");
-				System.out.println("CarrierID: "+jsonObject3.get(0));
+
+				FlightQuote flightQuote = new FlightQuote();
+				JSONObject quotes = (JSONObject) flightQuotesArray.get(index);
+				Long price = (Long) quotes.get("MinPrice");
+				flightQuote.setPrice(Long.toString(price));
+
+				JSONObject outboundLeg = (JSONObject) quotes.get("OutboundLeg");
+				JSONArray carrierIds = (JSONArray) outboundLeg.get("CarrierIds");
+				Long carrierId = (Long) carrierIds.get(0);
+				flightQuote.setCarrierId(Long.toString(carrierId));
+				
+				Long originId = (Long) outboundLeg.get("OriginId");
+				flightQuote.setOriginId(Long.toString(originId));
+				Long destId = (Long) outboundLeg.get("DestinationId");
+				flightQuote.setDestinationId(Long.toString(destId));
+
+				for(int j=0; j<carriersArray.size(); j++){
+					JSONObject carriers = (JSONObject) carriersArray.get(j);
+					Long carId = (Long) carriers.get("CarrierId");
+					System.out.println("Carrier name: "+carriers.get("Name"));
+					System.out.println("Carrierid 1: "+carId);
+					System.out.println("Carrierid 2: "+carrierId);
+					if (carId.equals(carrierId)){
+						flightQuote.setAirline((String) carriers.get("Name"));
+					}
+				}
+
+				for(int k=0; k<placesArray.size(); k++){
+
+					JSONObject places = (JSONObject) placesArray.get(k);
+					Long placeId = (Long) places.get("PlaceId");
+					String placeName = (String) places.get("Name");
+					
+					if (placeId.equals(originId)){
+						
+						flightQuote.setOriginAirportName(placeName);
+						System.out.println("placename: "+placeName+" placeid: "+placeId);
+					}
+
+					if (placeId.equals(destId)){
+						flightQuote.setDestAirportName(placeName);
+					}
+				}
+				
+
+				flightQuotes.add(flightQuote);
+				
 				index++;
 			}	
 

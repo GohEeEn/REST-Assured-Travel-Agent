@@ -1,2 +1,3 @@
 service\flights\FlightService.class
+service\flights\FlightQuote.class
 service\flights\Application.class
