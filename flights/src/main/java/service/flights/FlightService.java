@@ -57,13 +57,22 @@ public class FlightService {
 	public ResponseEntity<Flight[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
 
 		Flight[] flights = new Flight[10];
-		ArrayList<String> airportIDs = new ArrayList();
+
+		ArrayList<String> originAirportIDs = new ArrayList();
+		ArrayList<String> destinationAirportIDs = new ArrayList();
 		
-		String countryOfOriginCode = getListMarkets(clientBooking.getCountryOfOrigin());         //find country code 
-		airportIDs = getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
+		String countryOfOriginCode = getListMarkets(clientBooking.getCountryOfOrigin());         //find country code
+		String countryOfDestinationCode = getListMarkets(clientBooking.getCountryOfDestination());         //find country code 
+
+		originAirportIDs = getListPlaces(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(),
 					countryOfOriginCode, clientBooking.getCurrency());
-		for (String s : airportIDs){
-			System.out.println("!!!!" + s);
+		destinationAirportIDs = getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
+					countryOfDestinationCode, clientBooking.getCurrency());
+		for (String s : destinationAirportIDs){
+			System.out.println("Destination IDs:" + s);
+		}
+		for (String s : originAirportIDs){
+			System.out.println("Origin IDs:" + s);
 		}
 		flights = getAirportID(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(), countryOfOriginCode, 
 			clientBooking.getCurrency(), locale);
@@ -238,6 +247,8 @@ public class FlightService {
 		
 		return list;        
 	}
+
+
 	
 	private static Flight[] parseFlightObject(JSONObject flight) 
 	{

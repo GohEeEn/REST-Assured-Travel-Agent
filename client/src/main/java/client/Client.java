@@ -71,6 +71,6 @@ public class Client {
 	 * Test Data
 	 */
 	public static final ClientBooking[] clients = {
-		new ClientBooking("Donald Trump", "Dublin", "Ireland", "Paris", "FR", false, "2020-12-17", "2020-12-18", "EUR")	
+		new ClientBooking("Donald Trump", "Dublin", "Ireland", "Paris", "France", false, "2020-12-17", "2020-12-18", "EUR")	
 	};
 }
