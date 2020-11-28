@@ -1,2 +1,2 @@
-service\core\ClientBooking.class
-service\core\Flight.class
+service/core/ClientBooking.class
+service/core/Flight.class
