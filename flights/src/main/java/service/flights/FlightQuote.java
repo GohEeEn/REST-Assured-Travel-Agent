@@ -67,4 +67,13 @@ public class FlightQuote {
       public void setDestAirportName(String destAirportName){
             this.destAirportName = destAirportName;
       }
+
+      public boolean equals(FlightQuote flightQuote){
+            if (this.price.equals(flightQuote.price) && this.airline.equals(flightQuote.airline) && 
+                  this.originAirportName.equals(flightQuote.getOriginAirportName()) && this.destAirportName.equals(
+                        flightQuote.getDestAirportName()) ) {
+                              return true;
+                        }
+            return false;
+      }
 }

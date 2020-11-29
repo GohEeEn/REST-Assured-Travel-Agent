@@ -46,6 +46,8 @@ import org.json.simple.parser.ParseException;
 import service.core.Flight; 
 import service.core.ClientBooking;
 
+import java.util.Iterator;
+
 @RestController
 public class FlightService {
 	
@@ -68,9 +70,39 @@ public class FlightService {
 					countryOfOriginCode, clientBooking.getCurrency());
 		destinationAirportIDs = getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
 					countryOfDestinationCode, clientBooking.getCurrency());
+
+		ArrayList<FlightQuote> flightQuotes = new ArrayList();
+
 		for (String airportID : destinationAirportIDs){
 			System.out.println(airportID);
-			findFlights(countryOfOriginCode,clientBooking.getCurrency(),locale,originAirportIDs.get(0),airportID,clientBooking.getOutboundDate());
+			flightQuotes.addAll(findFlights(countryOfOriginCode,clientBooking.getCurrency(),locale,originAirportIDs.get(0),airportID,
+				clientBooking.getOutboundDate()));
+		}
+
+		ArrayList<FlightQuote> flightQuotesCopy = new ArrayList();
+		for (FlightQuote flightQuote : flightQuotes){
+			flightQuotesCopy.add(flightQuote);
+		}
+
+		for (Iterator<FlightQuote> flightQuo = flightQuotes.iterator(); flightQuo.hasNext();){
+
+			boolean isADuplicate = false;
+			FlightQuote flightQuote = flightQuo.next();
+			flightQuotesCopy.remove(flightQuote);
+
+			for(FlightQuote flightQ : flightQuotesCopy){
+				if (flightQ.equals(flightQuote)){
+					System.out.println("We found a copy");
+					isADuplicate = true;
+				}
+			}
+			if(isADuplicate){
+				flightQuo.remove();
+			}
+		}
+
+		for (FlightQuote flightQuote : flightQuotes){
+			System.out.println("Price is " + flightQuote.getPrice());
 		}
 
 		// flights = getAirportID(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(), countryOfOriginCode, 
@@ -196,10 +228,10 @@ public class FlightService {
 		return s;
 	}
 	
-	public ArrayList<Flight> findFlights(String countryOfOriginCode, String currency, String locale, String originAirportCode, String destAirportCode, 
+	public ArrayList<FlightQuote> findFlights(String countryOfOriginCode, String currency, String locale, String originAirportCode, String destAirportCode, 
 							String outboundDate) {
-		
-		ArrayList<Flight> flights = new ArrayList();
+
+		ArrayList<FlightQuote> flightQuotes = new ArrayList();
 
 		try{
 			HttpRequest request = HttpRequest.newBuilder()
@@ -224,7 +256,7 @@ public class FlightService {
 			JSONArray placesArray = new JSONArray();
 			placesArray = (JSONArray) placesJson.get("Places");
 
-			ArrayList<FlightQuote> flightQuotes = new ArrayList();
+			
 
 			int index = 0;
 			while (index < flightQuotesArray.size()) {
@@ -285,11 +317,13 @@ public class FlightService {
                   e.printStackTrace();
 		}    
 
-		return flights;
+		return flightQuotes;
 	}
 
 	public Flight createFlight(FlightQuote flightQuote){
-		
+		Flight s = new Flight();
+		return s;
+
 	}
 
 	// GET List Places (skyscanner call)
