@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
+
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -50,6 +53,9 @@ import service.core.ClientBooking;
 public class FlightService {
 	
 	static int referenceNumber = 0;    // unique reference number for each booking
+
+	@Autowired
+	private RestTemplate restTemplate;
 
 	// POST request, handles all booking requests from travel agent
 	@RequestMapping(value="/flights",method=RequestMethod.POST)
