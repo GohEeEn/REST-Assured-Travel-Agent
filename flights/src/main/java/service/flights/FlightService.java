@@ -45,6 +45,7 @@ import org.json.simple.parser.ParseException;
 
 import service.core.Flight; 
 import service.core.ClientBooking;
+import service.flights.NoSuchFlightQuoteException;
 
 import java.util.Iterator;
 
@@ -53,6 +54,7 @@ public class FlightService {
 	
 	static int referenceNumber = 0;    // unique reference number for each booking
 	final String locale = "en-GB";
+	private Map<Integer, Flight []> flights = new HashMap<>();      // Map of all flights created with flight.reference as key
 
 	// POST request, handles all booking requests from travel agent
 	@RequestMapping(value="/flights",method=RequestMethod.POST)
@@ -115,6 +117,42 @@ public class FlightService {
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(flights, headers, HttpStatus.CREATED);     // Returns flights to travel agent
 	} 
+
+	// GET request, returns the flight with the reference passed as argument
+	@RequestMapping(value="/flights/{reference}",method=RequestMethod.GET)
+		public Quotation getResource(@PathVariable("reference") int reference) {
+		Flight flight = flights.get(reference);
+		if (flight == null) throw new NoSuchQuotationException();
+		return flight;
+	}
+
+	@RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.PUT)
+    public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody ClientBooking clientBooking) {
+	  Flight [] clientFlights = flights.get(referenceNumber);
+        if (clientFlights == null) throw new NoSuchFlightQuoteException();
+
+	  clientFlights = createBooking(clientBooking);   // update set of flights for this client
+
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/flights/"+referenceNumber;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Location", path);
+        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+    }
+
+    @RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.DELETE)
+    @ResponseStatus(value=HttpStatus.NO_CONTENT)
+    public void deleteEntity(@PathVariable int referenceNumber) {
+        Flight [] clientFlights = flights.remove(referenceNumber);
+        if (clientFlights == null) throw new NoSuchFlighQuoteException();
+    }
+
+	// If there is no quotation listed with the given reference after calling GET method then throw this exception
+	@ResponseStatus(value = HttpStatus.NOT_FOUND)
+	public class NoSuchQuotationException extends RuntimeException {
+		static final long serialVersionUID = -6516152229878843037L;
+	} 
+
+
 	/**
 	 * TODO Perhaps we should call this method once and then persist the data in MongoDb 
 	 * 	  instead of calling it every time we want to find a countryCode
