@@ -13,14 +13,20 @@ import service.core.Flight;
 
 public class Client {
 	
-	public static void main(String[] args) {
+	public static final String newArgs = "http://localhost:8080/bookings";
+	
+//	public static void main(String[] args) {
 		
+	public static void bookingAdventure(ClientBooking[] clients) {	
 		Flight[] flights = new Flight[10];
 		RestTemplate restTemplate = new RestTemplate();
 		for (ClientBooking booking : clients){
 			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
 			
-			flights = restTemplate.postForObject(args[0],request,Flight[].class);
+//			flights = restTemplate.postForObject(args[0],request,Flight[].class);
+			flights = restTemplate.postForObject(newArgs,request,Flight[].class);
+			
+			System.out.println(flights[0]);
 
 			for (int i=0; i < flights.length; i++){
 				Flight f = flights[i];
@@ -70,7 +76,7 @@ public class Client {
 	/**
 	 * Test Data
 	 */
-	public static final ClientBooking[] clients = {
-		new ClientBooking("Donald Trump", "Dublin", "Ireland", "Paris", "France", false, "2021-01-09", "2021-01-17", "EUR")	
-	};
+//	public static final ClientBooking[] clients = {
+//		new ClientBooking("Donald Trump", "Dublin", "Ireland", "Paris", "France", false, "2021-01-09", "2021-01-17", "EUR")	
+//	};
 }
