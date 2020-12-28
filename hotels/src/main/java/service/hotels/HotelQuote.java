@@ -54,7 +54,7 @@ public class HotelQuote {
             this.address = address;
       }
 
-      public String getAmenities(){
+      public List<String> getAmenities(){
             return amenities;
       }
 

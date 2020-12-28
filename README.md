@@ -25,7 +25,7 @@ All technologies and methodologies used to build this application (eg. Maven, RE
 - [Barry Murphy](https://gitlab.com/murphybt)
 - [Ee En Goh](https://gitlab.com/GohEeEn)
 - [Ciaran Conlon](https://gitlab.com/ciaran.conlon.1)
-- [Ola](https://gitlab.com/Akintola)
+- [Olanipekun Akintola](https://gitlab.com/Akintola)
 
 ### Notable Resources
 

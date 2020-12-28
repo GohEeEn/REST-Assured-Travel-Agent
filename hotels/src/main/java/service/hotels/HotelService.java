@@ -49,6 +49,10 @@ import service.hotels.HotelQuote;
 
 import java.util.Iterator;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+
 @RestController
 public class HotelService {
 	
