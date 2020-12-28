@@ -43,9 +43,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException; 
 
-// cd
 import service.core.ClientBooking;
-import service.flights.NoSuchHotelQuoteException;
+import service.hotels.NoSuchHotelQuoteException;
+import service.hotels.HotelQuote;
 
 import java.util.Iterator;
 
@@ -53,20 +53,23 @@ import java.util.Iterator;
 public class HotelService {
 	
 	static int referenceNumber = 0;    // unique reference number for each booking
-	private Map<Integer, Flight []> flights = new HashMap<>();      // Map of all flights created with flight.reference as key
+	private Map<Integer, HotelQuote[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
 
-	// POST request, handles all booking requests from travel agent
-	@RequestMapping(value="/flights",method=RequestMethod.POST)
-	public ResponseEntity<Flight[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
-
+	// POST request from travel agent
+	@RequestMapping(value="/hotels",method=RequestMethod.POST)
+	public ResponseEntity<HotelQuote[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
 		
+		HotelQuote [] clientHotels = new HotelQuote[10];
+
+
+
 		referenceNumber++;
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/flights/"+referenceNumber;     // Create URI for this flight
+			build().toUriString()+ "/hotels/"+referenceNumber;     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(flights, headers, HttpStatus.CREATED);     // Returns flights to travel agent
+		return new ResponseEntity<>(clientHotels, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
 	} 
 
 	
@@ -116,6 +119,52 @@ public class HotelService {
 			e.printStackTrace();
 		}
 		return jsonObject;
+	}
+
+	/**
+	 * Sends a get request for an access token. An access token is always needed to make a call to Amadeus hotel api 
+	 */
+	public String getToken(){
+
+		String token = "";  // holds our token to gain access to subsequent api calls
+		try {
+
+                  List<String> tokenCommand = new ArrayList<String>();         // list to hold CURL command
+
+                  tokenCommand.add("curl");
+                  tokenCommand.add("https://test.api.amadeus.com/v1/security/oauth2/token");
+                  tokenCommand.add("-H");
+                  tokenCommand.add("Content-Type: application/x-www-form-urlencoded");
+                  tokenCommand.add("-d");
+                  tokenCommand.add("grant_type=client_credentials&client_id=u7gTwvqxHbRyEUbKASMPfdTaHfVFPY7k&client_secret=y1NpUer8LSzWvwNc");
+
+                  ProcessBuilder processBuilder = new ProcessBuilder(tokenCommand);
+                  processBuilder.redirectErrorStream(true);
+                  Process process = processBuilder.start();  
+
+                  BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                  String line = "";
+                  List<String> response = new ArrayList();   // holds response of curl command taken through bufferedReader
+                  int i = 0;      // tells us when we can start adding lines to response as the first few lines are meaningless
+                  while ((line = bufferedReader.readLine()) != null) {
+                  i++;
+                        if(i>8 && i<15 ){
+                              response.add(line.trim());
+                        }
+                  }
+
+                  for(String s : response){
+                        if (s.substring(1,7).equals("access")){   // when we find "access" then we know our token will follow
+                              token = s.substring(17,s.length()-2);  // remove unnecessary characters to leave only the required token
+                        }
+                  }
+                  System.out.println("Final token: " + token);
+      
+            } catch(IOException e) {
+                  e.printStackTrace();
+		}
+		return token;
 	}
 	
 
