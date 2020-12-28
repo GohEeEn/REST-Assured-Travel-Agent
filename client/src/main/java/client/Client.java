@@ -22,6 +22,8 @@ public class Client {
 			
 			flights = restTemplate.postForObject(args[0],request,Flight[].class);
 
+			System.out.println(flights.length);
+
 			for (int i=0; i < flights.length; i++){
 				Flight f = flights[i];
 				if (f != null){

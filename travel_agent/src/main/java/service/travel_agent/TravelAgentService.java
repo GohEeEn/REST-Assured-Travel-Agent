@@ -48,7 +48,7 @@ public class TravelAgentService {
 	public ResponseEntity<Flight[]> getFlightInfo(@RequestBody ClientBooking clientBooking) throws URISyntaxException {
 	
 		Flight[] flights = new Flight[10];
-		for(String uri : URIs){   // Iterate through list of URIs and send clientInfo to each quotation service (1 per URI)
+		for(String uri : URIs){  
 				RestTemplate restTemplate = new RestTemplate();
 				HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
 				flights = restTemplate.postForObject(uri,request, Flight[].class);

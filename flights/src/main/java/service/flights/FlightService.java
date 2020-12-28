@@ -60,8 +60,6 @@ public class FlightService {
 	@RequestMapping(value="/flights",method=RequestMethod.POST)
 	public ResponseEntity<Flight[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
 
-		Flight[] flights = new Flight[10];
-
 		ArrayList<String> originAirportIDs = new ArrayList();
 		ArrayList<String> destinationAirportIDs = new ArrayList();
 		
@@ -107,6 +105,21 @@ public class FlightService {
 			System.out.println("Price is " + flightQuote.getPrice());
 		}
 
+		Flight[] flights = new Flight[flightQuotes.size()];
+
+		int i = 0;
+		for (FlightQuote flightQuote : flightQuotes){
+			Flight flight = new Flight(clientBooking.getCityOfOrigin(), clientBooking.getCityOfDestination(),
+			clientBooking.getOutboundDate(), clientBooking.getReturnDate(), flightQuote.getAirline(), flightQuote.getPrice(),
+			flightQuote.getOriginAirportName(), flightQuote.getDestAirportName());
+			flights[i] = flight;
+			i++;
+		}
+
+		for (Flight m : flights){
+			System.out.println("Next Flight: " +m.toString());
+		}
+
 		// flights = getAirportID(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(), countryOfOriginCode, 
 		// 	clientBooking.getCurrency(), locale);
 		referenceNumber++;
@@ -120,18 +133,18 @@ public class FlightService {
 
 	// GET request, returns the flight with the reference passed as argument
 	@RequestMapping(value="/flights/{reference}",method=RequestMethod.GET)
-		public Quotation getResource(@PathVariable("reference") int reference) {
-		Flight flight = flights.get(reference);
-		if (flight == null) throw new NoSuchQuotationException();
-		return flight;
+		public Flight[] getResource(@PathVariable("reference") int reference) {
+		Flight[] clientFlights = flights.get(reference);
+		if (clientFlights == null) throw new NoSuchQuotationException();
+		return clientFlights;
 	}
 
 	@RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.PUT)
-    public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody ClientBooking clientBooking) {
+    public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody ClientBooking clientBooking) throws URISyntaxException  {
 	  Flight [] clientFlights = flights.get(referenceNumber);
         if (clientFlights == null) throw new NoSuchFlightQuoteException();
 
-	  clientFlights = createBooking(clientBooking);   // update set of flights for this client
+	  ResponseEntity<Flight []> f= createBooking(clientBooking);   // update set of flights for this client
 
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/flights/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();
@@ -143,7 +156,7 @@ public class FlightService {
     @ResponseStatus(value=HttpStatus.NO_CONTENT)
     public void deleteEntity(@PathVariable int referenceNumber) {
         Flight [] clientFlights = flights.remove(referenceNumber);
-        if (clientFlights == null) throw new NoSuchFlighQuoteException();
+        if (clientFlights == null) throw new NoSuchFlightQuoteException();
     }
 
 	// If there is no quotation listed with the given reference after calling GET method then throw this exception
@@ -439,11 +452,11 @@ public class FlightService {
 	//     String place2 = (String) ob2.get("PlaceId");  
 	//     System.out.println("2nd Airport ID is: " + place2);
 	    
-	    Flight f = new Flight(place, place, "BBBB", "BBBB", "BBBB", 125);    // test input
-	    Flight f2 = new Flight(place, place, "CCCC", "CCCC", "CCCC", 375);    // test input
+	//     Flight f = new Flight(place, place, "BBBB", "BBBB", "BBBB", );    // test input
+	//     Flight f2 = new Flight(place, place, "CCCC", "CCCC", "CCCC", 375);    // test input
 	 
-	    list2[0] =f;
-	    list2[1] = f2;
+	//     list2[0] =f;
+	//     list2[1] = f2;
 
 	    return list2;
 	}
