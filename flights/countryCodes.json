@@ -702,4 +702,42 @@
     "Code" : "ZW",
     "Name" : "Zimbabwe"
   } ]
+}cent and the Grenadines"
+  }, {
+    "Code" : "VE",
+    "Name" : "Venezuela"
+  }, {
+    "Code" : "VG",
+    "Name" : "British Virgin Islands"
+  }, {
+    "Code" : "VI",
+    "Name" : "US Virgin Islands"
+  }, {
+    "Code" : "VN",
+    "Name" : "Vietnam"
+  }, {
+    "Code" : "VU",
+    "Name" : "Vanuatu"
+  }, {
+    "Code" : "WF",
+    "Name" : "Wallis and Futuna Islands"
+  }, {
+    "Code" : "WS",
+    "Name" : "Samoa"
+  }, {
+    "Code" : "YE",
+    "Name" : "Yemen"
+  }, {
+    "Code" : "YT",
+    "Name" : "Mayotte"
+  }, {
+    "Code" : "ZA",
+    "Name" : "South Africa"
+  }, {
+    "Code" : "ZM",
+    "Name" : "Zambia"
+  }, {
+    "Code" : "ZW",
+    "Name" : "Zimbabwe"
+  } ]
 }
