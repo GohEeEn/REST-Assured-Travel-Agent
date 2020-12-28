@@ -65,7 +65,7 @@ public class TravelAgentService {
 		// 	}
 		// RestTemplate restTemplate = new RestTemplate();
 		HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
-		flights = restTemplate.postForObject("http://flights_service/flights",request, Flight[].class);
+		flights = restTemplate.postForObject("http://flights-service/flights",request, Flight[].class);
 
 		
 		referenceNumber++;
