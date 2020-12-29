@@ -16,8 +16,7 @@ Step-by-step instructions of how to run this program
 
 Step 1: Run the service in a terminal, for instance, Flight Service - mvn spring-boot:run -pl flights
 
-Step 2: Run in a separate terminal, the Travel Agent - mvn spring-boot:run "-Dspring-boot.run.arguments=http://localhos
-t:8081/flights" -pl travel_agent
+Step 2: Run in a separate terminal, the Travel Agent - mvn spring-boot:run "-Dspring-boot.run.arguments=http://localhost:8081/flights" -pl travel_agent
 
 Step 3: Run in another separate terminal, the Client - mvn spring-boot:run -pl client 
 (The URL was that being passed into this command as an argument is currently hardcoded into Client.java)
