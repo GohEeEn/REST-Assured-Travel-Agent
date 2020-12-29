@@ -38,7 +38,7 @@ import java.text.NumberFormat;
 import service.core.ClientBooking;
 import service.core.Flight;
 import service.core.HotelQuote;
-import service.travel_agent.Booking;
+import service.travel_agent.TravelQuotation;
 
 /**
  * Implementation of the broker service that uses the Service Registry.
@@ -55,8 +55,8 @@ public class TravelAgentService {
 
 	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
 	static int referenceNumber = 0;
-	private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
-	private Map<integer, TravelQuotation> travelQuotations = nw TreeMap();
+	// private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
+	private Map<Integer, TravelQuotation> travelQuotations = new TreeMap();
 
 	// POST Method, handles requests from client for quotations with given clientInfo
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)
@@ -87,8 +87,9 @@ public class TravelAgentService {
 		
 	} 
 
+
 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PUT)
-    public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody String location) throws URISyntaxException  {
+    public ResponseEntity<String> replaceEntity(@PathVariable int referenceNumber, @RequestBody String location) throws URISyntaxException  {
 	  TravelQuotation travelQuotation = travelQuotations.get(referenceNumber);
       //   if (booking == null) throw new NoSuchFlightQuoteException();
 		System.out.println("Hotel PUT");
@@ -96,7 +97,7 @@ public class TravelAgentService {
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Location", path);
-        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+	  return new ResponseEntity<>("Testing PUT",headers, HttpStatus.NO_CONTENT);
     }
 
 
