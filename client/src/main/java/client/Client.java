@@ -20,8 +20,8 @@ public class Client {
 		for (ClientBooking booking : clients){
 			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
 			
-			// flights = restTemplate.postForObject(args[0],request,Flight[].class);
-			flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
+			flights = restTemplate.postForObject(args[0],request,Flight[].class);
+			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
 
 
 			for (int i=0; i < flights.length; i++){
