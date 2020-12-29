@@ -1,3 +1,9 @@
+<<<<<<< HEAD
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\Application.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\TravelAgentService.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\TravelQuotation.java
+=======
+/home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/TravelAgentService.java
+/home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/Application.java
+/home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/TravelQuotation.java
+>>>>>>> 7c78585e6c0ea785fe724db67e7cf68515818107
