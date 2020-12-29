@@ -33,6 +33,10 @@ public class Client {
 				
 			}
 		}
+
+		HttpEntity<String> request = new HttpEntity<>("Johnson");
+			
+			restTemplate.put(args[0],request);
 	} 
 	     
 	// /**
