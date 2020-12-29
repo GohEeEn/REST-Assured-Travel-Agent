@@ -10,18 +10,35 @@ import org.springframework.http.HttpEntity;
  
 import service.core.ClientBooking;
 import service.core.Flight;
+import service.core.ClientRequest;
+import service.core.HotelRequest;
 
 public class Client {
 	
 	public static final String newArgs = "http://localhost:8081/bookings";
+	public static int referenceNumber = 0;
 	
-//	public static void main(String[] args) {
+	public static void main(String[] args) {
 		
-	public static void bookingAdventure(ClientBooking[] clients) {	
+	// public static void bookingAdventure(ClientBooking[] clients) {	
 		Flight[] flights = new Flight[10];
 		RestTemplate restTemplate = new RestTemplate();
-		for (ClientBooking booking : clients){
-			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
+
+		ClientBooking clientBooking = new ClientBooking("Donald Trump", "Dublin", "Ireland", "Paris", "France", false,
+				 "2021-01-09", "2021-01-17", "EUR");
+		HotelRequest hotelRequest = new HotelRequest();
+		hotelRequest.setCityCode("PAR");
+		hotelRequest.setNumberOfGuests(1);
+		int[] stars = {5,4,3};
+		hotelRequest.setNumberOfStarsRequiredForHotel(stars);
+		ClientRequest clientRequest = new ClientRequest();
+		clientRequest.setClientBooking(clientBooking);
+		clientRequest.setHotelRequest(hotelRequest);
+		referenceNumber++;
+		clientRequest.setReferenceNumber(referenceNumber);
+
+
+			HttpEntity<ClientRequest> request = new HttpEntity<>(clientRequest);
 			
 			flights = restTemplate.postForObject(newArgs,request,Flight[].class);
 			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
@@ -32,17 +49,20 @@ public class Client {
 				if (f != null){
 					System.out.println("City of Destination is: " + f.getCityOfDestination());
 					System.out.println("Price of flight is: " + f.getPrice());
-				}
-				
+				}	
 			}
-		}
 
-		
-		  HttpEntity<String> request = new HttpEntity<>("Johnson");
-		  restTemplate.put(newArgs+"/1",request);
+		/**
+		 *  Barry's testing code below
+		 *  */ 
+		 HttpEntity<ClientRequest> request2 = new HttpEntity<>(clientRequest);
+		  restTemplate.put(newArgs+"/1",request2);
+		//   HttpEntity<Integer> request2 = new HttpEntity<>(767);
+		//   restTemplate.put(newArgs+"/1",request2);
+		 
 		 
 	} 
-	     
+   
 	// /**
 	//  * Display the client info nicely.
 	//  * 
@@ -80,7 +100,5 @@ public class Client {
 	/**
 	 * Test Data
 	 */
-//	public static final ClientBooking[] clients = {
-//		new ClientBooking("Donald Trump", "Dublin", "Ireland", "Paris", "France", false, "2021-01-09", "2021-01-17", "EUR")	
-//	};
+	
 }

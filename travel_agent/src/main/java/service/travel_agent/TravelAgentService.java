@@ -38,12 +38,11 @@ import java.text.NumberFormat;
 import service.core.ClientBooking;
 import service.core.Flight;
 import service.core.HotelQuote;
-<<<<<<< HEAD
-import service.travel_agent.TravelQuotation;
-=======
 // import service.travel_agent.Booking;
->>>>>>> 7c78585e6c0ea785fe724db67e7cf68515818107
 
+import service.travel_agent.TravelQuotation;
+import service.core.ClientRequest;
+import service.core.HotelRequest;
 /**
  * Implementation of the broker service that uses the Service Registry.
  * 
@@ -58,13 +57,13 @@ public class TravelAgentService {
 	private RestTemplate restTemplate;
 
 	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
-	static int referenceNumber = 0;
 	// private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
 	private Map<Integer, TravelQuotation> travelQuotations = new TreeMap();
+	private Map<Integer, ClientRequest> clientRequests = new TreeMap();
 
 	// POST Method, handles requests from client for quotations with given clientInfo
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)
-	public ResponseEntity<Flight[]> getFlightInfo(@RequestBody ClientBooking clientBooking) throws URISyntaxException {
+	public ResponseEntity<Flight[]> getFlightInfo(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
 
 	
 		Flight[] flights = new Flight[10];
@@ -74,17 +73,17 @@ public class TravelAgentService {
 		// 		flights = restTemplate.postForObject("http://flights-service/flights/",request, Flight[].class);
 		// 	}
 		// RestTemplate restTemplate = new RestTemplate();
-		HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
+		HttpEntity<ClientBooking> request = new HttpEntity<>(clientRequest.getClientBooking());
 		flights = restTemplate.postForObject("http://flights-service/flights",request, Flight[].class);
 
-		
-		referenceNumber++;
+		clientRequests.put(clientRequest.getReferenceNumber(), clientRequest);  // create a new ClientRequest
+
 		TravelQuotation travelQuotation = new TravelQuotation();
 		travelQuotation.setFlights(flights);
-		travelQuotations.put(referenceNumber,travelQuotation);
+		travelQuotations.put(clientRequest.getReferenceNumber(),travelQuotation);
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/bookings/"+referenceNumber;  // Create new URI for this newly created ClientApplication
+			build().toUriString()+ "/bookings/"+clientRequest.getReferenceNumber();  // Create new URI for this newly created ClientApplication
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(flights, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
@@ -93,16 +92,19 @@ public class TravelAgentService {
 
 
 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PUT)
-    public ResponseEntity<String> replaceEntity(@PathVariable int referenceNumber, @RequestBody String location) throws URISyntaxException  {
+    public ResponseEntity<String> replaceEntity(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
 	  TravelQuotation travelQuotation = travelQuotations.get(referenceNumber);
       //   if (booking == null) throw new NoSuchFlightQuoteException();
-		System.out.println("Hotel PUT");
+		System.out.println(clientRequest + "\n");
+
 		Flight [] fs = new Flight[5];
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Location", path);
 	  return new ResponseEntity<>("Testing PUT",headers, HttpStatus.NO_CONTENT);
     }
+
+    
 
 
 
