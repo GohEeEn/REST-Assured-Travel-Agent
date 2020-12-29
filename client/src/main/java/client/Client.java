@@ -28,6 +28,8 @@ public class Client {
 			
 			System.out.println(flights[0]);
 
+			System.out.println(flights.length);
+
 			for (int i=0; i < flights.length; i++){
 				Flight f = flights[i];
 				if (f != null){
@@ -37,6 +39,10 @@ public class Client {
 				
 			}
 		}
+
+		HttpEntity<String> request = new HttpEntity<>("Johnson");
+			
+			restTemplate.put(args[0],request);
 	} 
 	     
 	// /**

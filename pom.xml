@@ -7,9 +7,14 @@
       
       <modules>
             <module>client</module> 
+             <module>hotels</module>
             <module>travel_agent</module> 
             <module>flights</module>
             <module>core</module>
+<<<<<<< HEAD
+           
+=======
             <module>activities</module>
+>>>>>>> 46639deddf65d29dc47d312b10f35ffd63073b1a
       </modules>      
 </project>

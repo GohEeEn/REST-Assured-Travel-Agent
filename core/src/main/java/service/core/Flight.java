@@ -3,13 +3,15 @@ package service.core;
 public class Flight {
 
       public Flight(String cityOfOrigin, String cityOfDestination, String outboundDate, String returnDate, String airline,
-      int price){
+      String price, String originAirportName, String destinationAirportName){
             this.cityOfOrigin = cityOfOrigin;
             this.cityOfDestination = cityOfDestination;
             this.outboundDate = outboundDate;
             this.returnDate = returnDate;
             this.airline = airline;
             this.price = price;
+            this.originAirportName = originAirportName;
+            this.destinationAirportName = destinationAirportName;
       }
 
       public Flight() {}
@@ -19,7 +21,9 @@ public class Flight {
       private String outboundDate;
       private String returnDate;
       private String airline;
-      private int price;
+      private String price;
+      private String originAirportName;
+      private String destinationAirportName;
 
       public String getCityOfOrigin(){
             return cityOfOrigin;
@@ -61,12 +65,35 @@ public class Flight {
             this.airline = airline;
       }
 
-      public int getPrice(){
+      public String getPrice(){
             return price;
       }
 
-      public void setPrice(int price){
+      public void setPrice(String price){
             this.price = price;
+      }
+
+      public String getOriginAirportName(){
+            return originAirportName;
+      }
+
+      public void setOriginAirportName(String originAirportName){
+            this.originAirportName = originAirportName;
+      }
+
+      public String getDestinationAirportName(){
+            return destinationAirportName;
+      }
+
+      public void setDestinationAirportName(String destinationAirportName){
+            this.destinationAirportName = destinationAirportName;
+      }
+
+      public String toString(){
+            String flightInfo = "";
+            flightInfo += cityOfOrigin + "\n" + cityOfDestination  + "\n" + outboundDate + "\n" + returnDate  + "\n";
+            flightInfo += airline  + "\n" + price  + "\n" + originAirportName  + "\n" + destinationAirportName;
+            return flightInfo;
       }
       
 }
