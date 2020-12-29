@@ -38,7 +38,7 @@ import java.text.NumberFormat;
 import service.core.ClientBooking;
 import service.core.Flight;
 import service.core.HotelQuote;
-import service.travel_agent.Booking;
+// import service.travel_agent.Booking;
 
 /**
  * Implementation of the broker service that uses the Service Registry.
@@ -55,8 +55,8 @@ public class TravelAgentService {
 
 	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
 	static int referenceNumber = 0;
-	private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
-	private Map<integer, TravelQuotation> travelQuotations = nw TreeMap();
+	// private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
+	private Map<Integer, TravelQuotation> travelQuotations = new TreeMap();
 
 	// POST Method, handles requests from client for quotations with given clientInfo
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)

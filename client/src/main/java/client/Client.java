@@ -13,7 +13,7 @@ import service.core.Flight;
 
 public class Client {
 	
-	public static final String newArgs = "http://localhost:8080/bookings";
+	public static final String newArgs = "http://localhost:8081/bookings";
 	
 //	public static void main(String[] args) {
 		
