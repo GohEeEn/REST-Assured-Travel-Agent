@@ -60,9 +60,9 @@ public class TravelAgentService {
 			}
 		
 		referenceNumber++;
-		Booking booking = new Booking();
-		booking.setFlights(flights);
-		bookings.put(referenceNumber,booking);
+		TravelQuotation travelQuotation = new TravelQuotation();
+		travelQuotation.setFlights(flights);
+		travelQuotation.put(referenceNumber,booking);
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/bookings/"+referenceNumber;  // Create new URI for this newly created ClientApplication

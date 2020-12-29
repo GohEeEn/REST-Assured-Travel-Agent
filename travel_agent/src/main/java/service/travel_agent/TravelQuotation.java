@@ -3,9 +3,9 @@ package service.travel_agent;
 import service.core.Flight;
 import service.core.HotelQuote;
 
-public class Booking {
+public class TravelQuotation {
       
-      public Booking() {}
+      public TravelQuotation() {}
 
       private Flight [] flights;
       private HotelQuote [] hotels;
