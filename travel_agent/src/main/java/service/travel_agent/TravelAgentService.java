@@ -56,6 +56,7 @@ public class TravelAgentService {
 	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
 	static int referenceNumber = 0;
 	private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
+	private Map<integer, TravelQuotation> travelQuotations = nw TreeMap();
 
 	// POST Method, handles requests from client for quotations with given clientInfo
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)
@@ -76,7 +77,7 @@ public class TravelAgentService {
 		referenceNumber++;
 		TravelQuotation travelQuotation = new TravelQuotation();
 		travelQuotation.setFlights(flights);
-		travelQuotation.put(referenceNumber,booking);
+		travelQuotations.put(referenceNumber,travelQuotation);
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/bookings/"+referenceNumber;  // Create new URI for this newly created ClientApplication
@@ -88,7 +89,7 @@ public class TravelAgentService {
 
 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PUT)
     public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody String location) throws URISyntaxException  {
-	  Booking booking = bookings.get(referenceNumber);
+	  TravelQuotation travelQuotation = travelQuotations.get(referenceNumber);
       //   if (booking == null) throw new NoSuchFlightQuoteException();
 		System.out.println("Hotel PUT");
 		Flight [] fs = new Flight[5];
