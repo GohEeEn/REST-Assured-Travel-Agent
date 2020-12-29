@@ -10,5 +10,6 @@
             <module>travel_agent</module> 
             <module>flights</module>
             <module>core</module>
+            <module>activities</module>
       </modules>      
 </project>
