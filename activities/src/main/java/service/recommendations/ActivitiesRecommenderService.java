@@ -7,6 +7,9 @@ import com.amadeus.resources.Location;
 import com.amadeus.resources.Activity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import service.core.Destination;
 
 import java.util.HashMap;
@@ -14,6 +17,7 @@ import java.util.Map;
 
 @RestController
 public class ActivitiesRecommenderService {
+
 
     private final String page = "/activities";
     private final Amadeus amadeus = Amadeus
@@ -53,6 +57,11 @@ public class ActivitiesRecommenderService {
      * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
      * @throws ResponseException
      */
+
+    @Autowired
+	private RestTemplate restTemplate;
+
+    
     @GetMapping(value = page)
     public Activity[] getActivities(Destination destination) throws ResponseException {
         Activity[] activities = amadeus.shopping.activities.bySquare.get(Params

@@ -11,7 +11,7 @@
 	<groupId>assignment2</groupId>
 	<artifactId>flights</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>hello-spring</name>
+	<name>flights</name>
 	<description>Demo project for Spring Boot</description>
 
 	<properties>
@@ -103,7 +103,6 @@
             </plugin>
         </plugins>
 	</build>
-
 </project>
       
       

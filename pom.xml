@@ -12,7 +12,7 @@
             <module>flights</module>
             <module>core</module>
             <module>activities</module>
-            <module>eureka-service</module>
+            <module>eureka</module>
             <module>testAPI</module>
             <module>travelService</module>
 
