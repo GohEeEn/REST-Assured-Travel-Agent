@@ -14,10 +14,15 @@
 	<natures>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
 	</natures>
-<<<<<<< HEAD
 	<filteredResources>
 		<filter>
 			<id>1606428916260</id>
+		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+	</natures>
+	<!-- <filteredResources>
+		<filter>
+			<id>1606569890898</id>
 			<name></name>
 			<type>30</type>
 			<matcher>
@@ -25,7 +30,5 @@
 				<arguments>node_modules|.git|__CREATED_BY_JAVA_LANGUAGE_SERVER__</arguments>
 			</matcher>
 		</filter>
-	</filteredResources>
-=======
->>>>>>> 86bf4a5887df0b7464352481b58be10c3b05b7da
+	</filteredResources> -->
 </projectDescription>

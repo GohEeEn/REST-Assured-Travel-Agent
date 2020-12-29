@@ -1,4 +1,6 @@
-/home/sean/Documents/DS/Group_Project/quaranteam/core/src/main/java/service/core/Travel.java
-/home/sean/Documents/DS/Group_Project/quaranteam/core/src/main/java/service/core/ClientBooking.java
-/home/sean/Documents/DS/Group_Project/quaranteam/core/src/main/java/service/core/Flight.java
-/home/sean/Documents/DS/Group_Project/quaranteam/core/src/main/java/service/core/Destination.java
+/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Flight.java
+/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Destination.java
+/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Travel.java
+/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/ClientBooking.java
+/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Event.java
+/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/HotelQuote.java
