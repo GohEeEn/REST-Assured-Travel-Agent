@@ -38,4 +38,26 @@ public class HotelRequest {
             return false;
       }
 
+      public Boolean equalsNumberOfStarsRequiredForHotel(int[] numberOfStarsRequiredForHotel){
+            if (this.numberOfStarsRequiredForHotel.length != numberOfStarsRequiredForHotel.length){
+                  return false;
+            }
+      
+            for (int i=0; i<numberOfStarsRequiredForHotel.length; i++){
+                  if(this.numberOfStarsRequiredForHotel[i] != numberOfStarsRequiredForHotel[i]){
+                       return false;
+                  }
+            }
+
+            return true;
+      }
+
+      public Boolean equals(HotelRequest hotelRequest){
+            if (this.getNumberOfGuests() == hotelRequest.getNumberOfGuests() &&
+                  this.getCityCode().equals(hotelRequest.getCityCode()) &&
+                  this.equalsNumberOfStarsRequiredForHotel(hotelRequest.getNumberOfStarsRequiredForHotel()) ) {
+                         return true;
+                   }
+            return false;
+      }
 }

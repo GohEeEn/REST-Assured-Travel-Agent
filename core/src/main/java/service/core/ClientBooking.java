@@ -100,4 +100,20 @@ public class ClientBooking {
 	public void setCurrency(String currency){
 		this.currency = currency;
 	}
+
+	public Boolean equals(ClientBooking clientBooking){
+		if (this.getName().equals(clientBooking.getName()) &&
+			this.getCityOfOrigin().equals(clientBooking.getCityOfOrigin()) &&
+			this.getCountryOfOrigin().equals(clientBooking.getCountryOfOrigin()) && 
+			this.getCityOfDestination().equals(clientBooking.getCityOfDestination()) &&  
+			this.getCountryOfDestination().equals(clientBooking.getCountryOfDestination()) &&    
+			(this.getOneWayTrip() == clientBooking.getOneWayTrip()) &&    
+			this.getReturnDate().equals(clientBooking.getReturnDate()) &&
+			this.getOutboundDate().equals(clientBooking.getOutboundDate()) &&
+			this.getCurrency().equals(clientBooking.getCurrency()) ) {
+				return true;
+			}
+		return false;
+	}
+
 }

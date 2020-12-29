@@ -55,8 +55,11 @@ public class Client {
 		/**
 		 *  Barry's testing code below
 		 *  */ 
+		// HotelRequest h = clientRequest.getHotelRequest();
+		// h.setNumberOfGuests(14);
+		// clientRequest.setHotelRequest(h);
 		 HttpEntity<ClientRequest> request2 = new HttpEntity<>(clientRequest);
-		  restTemplate.put(newArgs+"/1",request2);
+		 restTemplate.put(newArgs+"/1",request2);
 		//   HttpEntity<Integer> request2 = new HttpEntity<>(767);
 		//   restTemplate.put(newArgs+"/1",request2);
 		 

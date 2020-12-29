@@ -92,17 +92,44 @@ public class TravelAgentService {
 
 
 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PUT)
-    public ResponseEntity<String> replaceEntity(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
+    public ResponseEntity<ClientRequest> updateClientBooking(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
 	  TravelQuotation travelQuotation = travelQuotations.get(referenceNumber);
       //   if (booking == null) throw new NoSuchFlightQuoteException();
 		System.out.println(clientRequest + "\n");
+		
+		ClientRequest previousClientRequest = clientRequests.get(clientRequest.getReferenceNumber());
+		if(clientRequest.getClientBooking().equals(previousClientRequest.getClientBooking())){
+			System.out.println("Client Bookings are the same!\n");
+			// If not the same then call getFlightInfo() 
+		}
+
+		if(clientRequest.getHotelRequest().equals(previousClientRequest.getHotelRequest()) ){
+			System.out.println("HotelRequests are the same!\n");
+			// If not the same then call getHotelInfo()
+		}
 
 		Flight [] fs = new Flight[5];
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Location", path);
-	  return new ResponseEntity<>("Testing PUT",headers, HttpStatus.NO_CONTENT);
+	  return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
+
+//     @RequestMapping(value="/book/{phone_number}", method=RequestMethod.PATCH)
+//     public ResponseEntity<PhoneBookEntry> updateEntity(@PathVariable String phone_number, @RequestBody PhoneBookEntry entry) {
+//         PhoneBookEntry phoneBookEntry = directory.get(phone_number);
+//         if (phoneBookEntry == null) throw new NoSuchPhoneEntryException();
+
+//         if (entry.getPhone() != null && !phone_number.equals(entry.getPhone())) 
+//             throw new InvalidPhoneEntryException();
+        
+//         directory.get(phone_number).update(entry);
+
+//         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/book/"+phone_number;
+//         HttpHeaders headers = new HttpHeaders();
+//         headers.set("Content-Location", path);
+//         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+//     }
 
     
 
