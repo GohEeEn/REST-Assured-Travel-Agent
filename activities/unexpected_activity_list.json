@@ -1,0 +1,508 @@
+{
+    "meta": {
+        "count": 20,
+        "self": "https://test.api.amadeus.com/v1/shopping/activities/by-square?north=13.023577&west=12.923210&south=77.536856&east=77.642256&key=NtWb3s6JM63zuZ4q2X5eLg7F7gnRmW5LZLbzfAsxsGmw9RLQE8QVTvyt3wee"
+    },
+    "data": [
+        {
+            "id": "33437",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/33437",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Ruins of Pompeii & Mt Vesuvius Volcano Day Trip from Rome",
+            "shortDescription": "Hike up Mount Vesuvius and then explore the UNESCO-listed ruins of Pompeii on a must-do day trip from Rome! Going at a steady pace, the hike includes a walk on the ridge of Italy’s famously feisty volcano, allowing incredible views down into the crater itself. After a pizza lunch, head to Pompeii to see the havoc that Mount Vesuvius reaped on it in AD 79. Tour the UNESCO-listed excavations, seeing fossils and well-preserved ruins while hearing the horrors that befell this intriguing ancient city. Mt Vesuvius is inaccessible from November 20 to March 31. During this time, the hike is replaced with a visit to the iconic City of Naples. We’ll take a panoramic bus tour and have some free time to walk around the city centre.",
+            "geoCode": {
+                "latitude": "40.816375",
+                "longitude": "14.425006"
+            },
+            "rating": "4.700000",
+            "pictures": [
+                "https://media.tacdn.com/media/attractions-splice-spp-674x446/07/38/d3/58.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/MHAzK6A8?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "119.00"
+            }
+        },
+        {
+            "id": "96214",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/96214",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Skip the Line: Széchenyi Spa Full-Day Entrance Pass",
+            "shortDescription": "Skip the line at Budapest's world-famous thermal spring spa, Széchenyi Bath. Choose from a weekday or weekend ticket to the elegant spa. The largest thermal spring bath complex in Europe, it comprises 3 outdoor and 15 indoor pools.",
+            "geoCode": {
+                "latitude": "47.518657",
+                "longitude": "19.082379"
+            },
+            "rating": "4.351400",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-231396-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/t81HLPguwo?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "19.00"
+            }
+        },
+        {
+            "id": "96506",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/96506",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Budapest: 1-Hour Sightseeing Cruise with Welcome Drink",
+            "shortDescription": "See the sights of Budapest from the River Danube on a 1-hour sightseeing cruise, and enjoy a seasonal cocktail or soft drink along the way. Glide past landmark monuments such as Buda Castle and the Vigado Concert Hall. Stay connected with free Wi-Fi.",
+            "geoCode": {
+                "latitude": "47.519981",
+                "longitude": "19.050576"
+            },
+            "rating": "4.320600",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-486017-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/M2bQvMIXtf?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "9.00"
+            }
+        },
+        {
+            "id": "100588",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/100588",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Pompeii Fast Track Entrance Ticket",
+            "shortDescription": "Visit the UNESCO world heritage site of Pompeii with a skip-the-line ticket. Gain a comprehensive insight into the life of a Roman city and explore the archeological site at your own pace.",
+            "geoCode": {
+                "latitude": "40.748180",
+                "longitude": "14.481971"
+            },
+            "rating": "4.349800",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-456663-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/2gc7yN2XUO?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "19.00"
+            }
+        },
+        {
+            "id": "105222",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/105222",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Berlin WelcomeCard: Discounts & Transport Berlin Zones (ABC)",
+            "shortDescription": "Explore Berlin with a 48-hour, 72-hour, 4-day, 5-day, or 6-day Berlin WelcomeCard. Ride public transport in the ABC zones, including Schönefeld Airport, receive discounts of up to 50% with over 200 partners, and benefit from the pocket travel guide.",
+            "geoCode": {
+                "latitude": "52.525011",
+                "longitude": "13.369460"
+            },
+            "rating": "4.595800",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-1408487-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/7q55FcPq41?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "23.00"
+            }
+        },
+        {
+            "id": "105539",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/105539",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Walking Tour in German: Gov. District & Reichstag with Dome",
+            "shortDescription": "Enjoy a guided tour of the parliament quarter in Berlin in German and learn more about the troubled and eventful history of the capital.",
+            "geoCode": {
+                "latitude": "52.515938",
+                "longitude": "13.379472"
+            },
+            "rating": "4.759600",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-830280-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/VpSqZMgXTD?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "15.00"
+            }
+        },
+        {
+            "id": "106048",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/106048",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Dubai Burj Khalifa Tickets: Level 124 & 125",
+            "shortDescription": "Witness unforgettable, panoramic views over Dubai from the observation deck of the iconic Burj Khalifa, the world's tallest building. Let your jaw hit the floor as you are elevated up 125 floors to fantastic 360-degree views over the Arabian Gulf.",
+            "geoCode": {
+                "latitude": "25.197405",
+                "longitude": "55.274331"
+            },
+            "rating": "4.602500",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-350353-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/4kPWtJ7Hff?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "38.00"
+            }
+        },
+        {
+            "id": "106053",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/106053",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Dubai Burj Khalifa Tickets & Tour: Level 124, 125 and 148",
+            "shortDescription": "Skip the lines and enjoy incredible views of Dubai from the 124th, 125th and 148th floors of the Burj Khalifa during a 90-minute premium experience. Get access to exclusive observation decks, lounge in luxury and enjoy personalized attention.",
+            "geoCode": {
+                "latitude": "25.197405",
+                "longitude": "55.274331"
+            },
+            "rating": "4.608700",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-312966-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/C2BYbtvY3w?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "96.00"
+            }
+        },
+        {
+            "id": "106134",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/106134",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Discover Red Dune: Camel Ride, BBQ in Exclusive Bedouin Camp",
+            "shortDescription": "Experience a thrilling 4X4 ride through the red Arabian Desert on this evening safari tour. Choose the 4-hour program that includes dune bashing and sandboarding or the 7-hour program with the addition of a BBQ dinner and Bedouin-style camp experience.",
+            "geoCode": {
+                "latitude": "25.204849",
+                "longitude": "55.270783"
+            },
+            "rating": "4.692200",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-1411064-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/Weg6smVZ3j?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "37.00"
+            }
+        },
+        {
+            "id": "106170",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/106170",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Premium Red Dunes & Camel Safari with BBQ at Al Khayma Camp",
+            "shortDescription": "Escape Dubai for the evening and enjoy multiple activities on a 6 to 7-hour red dune desert safari. Drive across the red sand dunes by 4WD vehicle. Watch the sunset over the desert sands. Go to Al Khayma Camp for a BBQ and many other activities.",
+            "geoCode": {
+                "latitude": "25.204849",
+                "longitude": "55.270783"
+            },
+            "rating": "4.856700",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-1380603-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/UBGbHnjEPl?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "64.00"
+            }
+        },
+        {
+            "id": "106205",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/106205",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Abu Dhabi Full-Day Sightseeing Tour from Dubai",
+            "shortDescription": "Explore the history of Abu Dhabi on an 8-hour tour of the largest city in the United Arab Emirates. Visit the Sheikh Zayed Grand Mosque to see a masterpiece of Islamic architecture, marvel at the opulent Emirates Palace, admire the Etihad Towers and more.",
+            "geoCode": {
+                "latitude": "25.204849",
+                "longitude": "55.270783"
+            },
+            "rating": "4.764700",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-2084857-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/eKhtxFc75C?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "64.00"
+            }
+        },
+        {
+            "id": "106228",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/106228",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Dubai Aquarium & Level 124 Burj Khalifa Combo Tickets",
+            "shortDescription": "See 2 of Dubai’s most significant sights with a combo ticket to the Dubai Aquarium and Burj Khalifa. Ascend the Burj Khalifa for panoramic views from level 124. Then, discover marine life from around the world in the unique tunnels of the underwater zoo.",
+            "geoCode": {
+                "latitude": "25.197405",
+                "longitude": "55.274331"
+            },
+            "rating": "4.584400",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-1736992-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/8ej8T3aQC6?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "57.00"
+            }
+        },
+        {
+            "id": "106306",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/106306",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Dubai Desert Safari Red Dune: BBQ, Camel Ride & Sandboarding",
+            "shortDescription": "Escape Dubai and drive across the Red Arabian Desert in a 4WD vehicle. Enjoy the sunset, sandboarding, camel ride and visit the camel firm. Choose the 4-hour program or the 7-hour program with the addition of a BBQ dinner.",
+            "geoCode": {
+                "latitude": "25.211295",
+                "longitude": "55.275675"
+            },
+            "rating": "4.884600",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-1729450-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/7kmRPIDYqv?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "35.00"
+            }
+        },
+        {
+            "id": "115231",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/115231",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Hurghada: Swimming with Dolphins & Snorkeling Tour & Lunch",
+            "shortDescription": "Get up close to dolphins on this fantastic 9-hour snorkel trip from Hurghada. Enjoy a boat cruise to areas in the open sea where dolphins can be found. Admire the colorful coral reefs, and enjoy swimming or snorkeling with dolphins.",
+            "geoCode": {
+                "latitude": "27.257896",
+                "longitude": "33.811607"
+            },
+            "rating": "4.632000",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-442644-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/4phxkvlDtc?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "28.00"
+            }
+        },
+        {
+            "id": "117648",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/117648",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "From Krakow: Auschwitz-Birkenau Museum & Camp Guided Tour",
+            "shortDescription": "Visit the Auschwitz Museum, site of the largest Third Reich concentration camp. Learn how the complex functioned and see the barracks where prisoners were kept. Well-informed staff will recount the site's history and answer your questions.",
+            "geoCode": {
+                "latitude": "50.038338",
+                "longitude": "19.892206"
+            },
+            "rating": "4.562500",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-237630-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/lWvmv9iyvS?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "36.00"
+            }
+        },
+        {
+            "id": "117692",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/117692",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Auschwitz Birkenau Museum: Guided Minivan Tour from Krakow",
+            "shortDescription": "Visit the largest former concentration camp Auschwitz-Birkenau on a 8-hour tour by minivan from Krakow. Learn about the genocide of World War II from your knowledgeable guide.",
+            "geoCode": {
+                "latitude": "50.060192",
+                "longitude": "19.941289"
+            },
+            "rating": "4.501400",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-2346350-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/GXRYE4UyYm?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "47.00"
+            }
+        },
+        {
+            "id": "117717",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/117717",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "From Krakow: Auschwitz-Birkenau Full-Day Guided Tour",
+            "shortDescription": "Visit one of the most significant places in Poland on a 7-hour tour of the Auschwitz Museum and Birkenau Camp in Oświęcim. Explore a symbol of the Holocaust and memorial to the victims of the Nazis.",
+            "geoCode": {
+                "latitude": "50.057535",
+                "longitude": "19.933705"
+            },
+            "rating": "4.551100",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-1069895-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/hSW0YRl7nQ?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "32.00"
+            }
+        },
+        {
+            "id": "117786",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/117786",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "From Krakow: Auschwitz-Birkenau Guided Tour",
+            "shortDescription": "Visit Auschwitz-Birkenau concentration camps with a professional educator to learn about its inhumane history and the fate of the Holocaust victims.",
+            "geoCode": {
+                "latitude": "50.059841",
+                "longitude": "19.935968"
+            },
+            "rating": "4.507100",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-1075187-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/Ij147wsUwC?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "34.00"
+            }
+        },
+        {
+            "id": "203783",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/203783",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Berlin TV Tower: Fast View & Window Seat Restaurant Ticket",
+            "shortDescription": "Enjoy VIP entry to the panorama floor of Berlin's TV Tower and take a seat at the window. See the city and all its sights such as Potsdamer Platz, the Brandenburg Gate, the cathedral and the Olympic Stadium, from 200 meters above.",
+            "geoCode": {
+                "latitude": "52.520815",
+                "longitude": "13.409419"
+            },
+            "rating": "4.727500",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-2338405-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/DVsDphBR9m?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "25.00"
+            }
+        },
+        {
+            "id": "203809",
+            "type": "activity",
+            "self": {
+                "href": "https://test.api.amadeus.com/v1/shopping/activities/203809",
+                "methods": [
+                    "GET"
+                ]
+            },
+            "name": "Berlin: TV Tower Fast View Ticket",
+            "shortDescription": "Offering breathtaking views over the German capital, the TV Tower cuts a striking image against the Berlin skyline. Secure yourself a hassle-free entrance ticket to this famous city attraction and bypass the infamous queues of people lining up outside.",
+            "geoCode": {
+                "latitude": "52.520815",
+                "longitude": "13.409419"
+            },
+            "rating": "4.464500",
+            "pictures": [
+                "https://cdn.getyourguide.com/img/tour_img-2119950-145.jpg"
+            ],
+            "bookingLink": "https://b2c.mla.cloud/c/UqqAurS7Dm?c=2WxbgL36",
+            "price": {
+                "currencyCode": "EUR",
+                "amount": "22.00"
+            }
+        }
+    ]
+}
