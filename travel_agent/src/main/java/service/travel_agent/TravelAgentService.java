@@ -38,7 +38,11 @@ import java.text.NumberFormat;
 import service.core.ClientBooking;
 import service.core.Flight;
 import service.core.HotelQuote;
+<<<<<<< HEAD
+import service.travel_agent.TravelQuotation;
+=======
 // import service.travel_agent.Booking;
+>>>>>>> 7c78585e6c0ea785fe724db67e7cf68515818107
 
 /**
  * Implementation of the broker service that uses the Service Registry.
@@ -87,8 +91,9 @@ public class TravelAgentService {
 		
 	} 
 
+
 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PUT)
-    public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody String location) throws URISyntaxException  {
+    public ResponseEntity<String> replaceEntity(@PathVariable int referenceNumber, @RequestBody String location) throws URISyntaxException  {
 	  TravelQuotation travelQuotation = travelQuotations.get(referenceNumber);
       //   if (booking == null) throw new NoSuchFlightQuoteException();
 		System.out.println("Hotel PUT");
@@ -96,7 +101,7 @@ public class TravelAgentService {
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();
         headers.set("Content-Location", path);
-        return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+	  return new ResponseEntity<>("Testing PUT",headers, HttpStatus.NO_CONTENT);
     }
 
 
