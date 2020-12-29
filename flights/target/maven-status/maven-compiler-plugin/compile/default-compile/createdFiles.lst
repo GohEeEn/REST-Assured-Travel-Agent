@@ -1,0 +1,3 @@
+service/flights/Application.class
+service/flights/ServiceInstanceRestController.class
+service/flights/FlightService.class

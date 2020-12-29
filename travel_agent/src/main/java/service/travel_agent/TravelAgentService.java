@@ -13,6 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+
+
+
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -43,6 +49,10 @@ import service.travel_agent.Booking;
 @RestController
 public class TravelAgentService {
 
+	@Autowired
+	@LoadBalanced
+	private RestTemplate restTemplate;
+
 	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
 	static int referenceNumber = 0;
 	private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
@@ -53,11 +63,15 @@ public class TravelAgentService {
 
 	
 		Flight[] flights = new Flight[10];
-		for(String uri : URIs){  
-				RestTemplate restTemplate = new RestTemplate();
-				HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
-				flights = restTemplate.postForObject(uri,request, Flight[].class);
-			}
+		// for(String uri : URIs){   // Iterate through list of URIs and send clientInfo to each quotation service (1 per URI)
+		// 		RestTemplate restTemplate = new RestTemplate();
+		// 		HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
+		// 		flights = restTemplate.postForObject("http://flights-service/flights/",request, Flight[].class);
+		// 	}
+		// RestTemplate restTemplate = new RestTemplate();
+		HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
+		flights = restTemplate.postForObject("http://flights-service/flights",request, Flight[].class);
+
 		
 		referenceNumber++;
 		TravelQuotation travelQuotation = new TravelQuotation();
