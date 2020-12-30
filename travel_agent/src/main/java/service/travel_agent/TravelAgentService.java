@@ -39,7 +39,6 @@ import service.core.ClientBooking;
 import service.core.Flight;
 import service.core.HotelQuote;
 import service.travel_agent.TravelQuotation;
-// import service.travel_agent.Booking;
 
 /**
  * Implementation of the broker service that uses the Service Registry.
