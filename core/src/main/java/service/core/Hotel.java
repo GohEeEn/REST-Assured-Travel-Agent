@@ -1,11 +1,11 @@
-package service.hotels;
+package service.core;
 
 import java.util.List;
 import java.util.ArrayList;
 
-public class HotelQuote {
+public class Hotel{
 
-      public HotelQuote() {}
+      public Hotel() {}
 
       private String price;
       private String roomType;
@@ -22,7 +22,7 @@ public class HotelQuote {
             this.price = price;
       }
 
-      public String getroomType(){
+      public String getRoomType(){
             return roomType;
       }
 

@@ -37,12 +37,13 @@ import java.text.NumberFormat;
 
 import service.core.ClientBooking;
 import service.core.Flight;
-import service.core.HotelQuote;
+
 // import service.travel_agent.Booking;
 
 import service.travel_agent.TravelQuotation;
 import service.core.ClientRequest;
 import service.core.HotelRequest;
+import service.core.Hotel;
 /**
  * Implementation of the broker service that uses the Service Registry.
  * 
@@ -103,15 +104,24 @@ public class TravelAgentService {
 			// If not the same then call getFlightInfo() 
 		}
 
+		Hotel [] hotels = new Hotel[10];
 		if(clientRequest.getHotelRequest().equals(previousClientRequest.getHotelRequest()) ){
 			System.out.println("HotelRequests are the same!\n");
 			// If not the same then call getHotelInfo()
+			
+			// RestTemplate restTemplate = new RestTemplate();
+			// HttpEntity<HotelRequest> request = new HttpEntity<>(clientRequest.getHotelRequest());
+			// hotels = restTemplate.postForObject("http://localhost:8087/hotels",request, Hotel[].class);
 		}
 
+		RestTemplate restTemplate = new RestTemplate();
+			HttpEntity<HotelRequest> request = new HttpEntity<>(clientRequest.getHotelRequest());
+			hotels = restTemplate.postForObject("http://localhost:8087/hotels",request, Hotel[].class);
 		Flight [] fs = new Flight[5];
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Content-Location", path);
+	  headers.set("Content-Location", path); 
+	  
 	  return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
     }
 

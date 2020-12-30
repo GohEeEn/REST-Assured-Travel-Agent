@@ -95,5 +95,9 @@ public class Flight {
             flightInfo += airline  + "\n" + price  + "\n" + originAirportName  + "\n" + destinationAirportName;
             return flightInfo;
       }
+
+      /**
+	 * TODO (Barry): Must iimplement equals method 
+	 */
       
 }

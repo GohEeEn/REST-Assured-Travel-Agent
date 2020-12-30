@@ -1,14 +1,14 @@
 package service.travel_agent;
 
 import service.core.Flight;
-import service.core.HotelQuote;
+import service.core.Hotel;
 
 public class TravelQuotation {
       
       public TravelQuotation() {}
 
       private Flight [] flights;
-      private HotelQuote [] hotels;
+      private Hotel [] hotels;
 
       public Flight [] getFlights(){
       return flights;
@@ -18,11 +18,11 @@ public class TravelQuotation {
             this.flights = flights;
       }
 
-      public HotelQuote [] getHotels(){
+      public Hotel [] getHotels(){
             return hotels;
       }
 
-      public void setHotels(HotelQuote [] hotels){
+      public void setHotels(Hotel [] hotels){
             this.hotels = hotels;
       }
 }

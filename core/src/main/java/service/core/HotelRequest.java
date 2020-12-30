@@ -9,6 +9,7 @@ public class HotelRequest {
       private String cityCode;
       private int numberOfGuests;
       private int[] numberOfStarsRequiredForHotel; //hotel stars. Up to four values can be requested at the same time in a comma separated list. Permitted values: 5,4,3,2,1
+      private int referenceNumber;
 
       public String getCityCode(){
             return cityCode;
@@ -38,6 +39,14 @@ public class HotelRequest {
             return false;
       }
 
+      public int getReferenceNumber(){
+            return referenceNumber;
+      }
+
+      public void setReferenceNumber(int referenceNumber){
+            this.referenceNumber = referenceNumber;
+      }
+
       public Boolean equalsNumberOfStarsRequiredForHotel(int[] numberOfStarsRequiredForHotel){
             if (this.numberOfStarsRequiredForHotel.length != numberOfStarsRequiredForHotel.length){
                   return false;
@@ -51,6 +60,10 @@ public class HotelRequest {
 
             return true;
       }
+
+      /**
+	 * TODO (Barry): Must update equals method with ref num
+	 */
 
       public Boolean equals(HotelRequest hotelRequest){
             if (this.getNumberOfGuests() == hotelRequest.getNumberOfGuests() &&
