@@ -42,8 +42,8 @@ services:
     expose:
       - "8082"
 
-networks:
-    custom-network:
-        driver: bridge
+# networks:
+#     custom-network:
+#         driver: bridge
 
   

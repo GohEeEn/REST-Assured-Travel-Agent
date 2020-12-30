@@ -58,8 +58,8 @@ public class ActivitiesRecommenderService {
      * @throws ResponseException
      */
 
-    @Autowired
-	private RestTemplate restTemplate;
+    // @Autowired
+	// private RestTemplate restTemplate;
 
     
     @GetMapping(value = page)
