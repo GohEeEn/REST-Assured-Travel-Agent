@@ -37,8 +37,13 @@ import java.text.NumberFormat;
 
 import service.core.ClientBooking;
 import service.core.Flight;
+<<<<<<< HEAD
 
 // import service.travel_agent.Booking;
+=======
+import service.core.HotelQuote;
+import service.travel_agent.TravelQuotation;
+>>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d
 
 import service.travel_agent.TravelQuotation;
 import service.core.ClientRequest;
