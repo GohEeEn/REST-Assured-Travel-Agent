@@ -1,17 +1,7 @@
-<<<<<<< HEAD
-service\core\ClientRequest.class
-service\core\HotelRequest.class
-service\core\Travel.class
-service\core\Flight.class
 service\core\ClientBooking.class
-service\core\Hotel.class
 service\core\Destination.class
+service\core\Travel.class
 service\core\Event.class
-=======
-service/core/ClientBooking.class
-service/core/Destination.class
-service/core/Flight.class
-service/core/HotelQuote.class
-service/core/Travel.class
-service/core/Event.class
->>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d
+service\core\Flight.class
+service\core\HotelQuote.class
+

@@ -1,11 +1,4 @@
-<<<<<<< HEAD
 service\travel_agent\ServiceInstanceRestController.class
 service\travel_agent\TravelQuotation.class
 service\travel_agent\Application.class
 service\travel_agent\TravelAgentService.class
-=======
-service/travel_agent/TravelAgentService.class
-service/travel_agent/ServiceInstanceRestController.class
-service/travel_agent/Application.class
-service/travel_agent/TravelQuotation.class
->>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d

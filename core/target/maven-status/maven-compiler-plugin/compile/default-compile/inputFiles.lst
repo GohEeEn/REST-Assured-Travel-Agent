@@ -1,17 +1,7 @@
-<<<<<<< HEAD
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Hotel.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ClientBooking.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Travel.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Destination.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Event.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ClientRequest.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Flight.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\HotelRequest.java
-=======
-/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Flight.java
-/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Destination.java
-/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Travel.java
-/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/ClientBooking.java
-/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Event.java
-/home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/HotelQuote.java
->>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\ClientBooking.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Flight.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Event.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Destination.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\HotelQuote.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Travel.java
+
