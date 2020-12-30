@@ -1,5 +1,6 @@
 package client;
 
+import org.apache.commons.lang3.SystemUtils;
 import java.text.NumberFormat;
 import java.util.List;
 import java.util.ArrayList;
@@ -14,6 +15,9 @@ import service.core.Flight;
 public class Client {
 	
 	public static final String newArgs = "http://localhost:8081/bookings";
+	public static final String winArgs = "http://localhost:192.168.99.100:8081/bookings";
+
+	
 	
 //	public static void main(String[] args) {
 		
@@ -22,8 +26,15 @@ public class Client {
 		RestTemplate restTemplate = new RestTemplate();
 		for (ClientBooking booking : clients){
 			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
+
 			
-			flights = restTemplate.postForObject(newArgs,request,Flight[].class);
+			if(SystemUtils.IS_OS_WINDOWS){
+				flights = restTemplate.postForObject(winArgs,request,Flight[].class);
+			}
+			else{
+				flights = restTemplate.postForObject(newArgs,request,Flight[].class);
+
+			}
 			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
 
 
