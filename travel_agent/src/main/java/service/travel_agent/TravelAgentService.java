@@ -38,11 +38,8 @@ import java.text.NumberFormat;
 import service.core.ClientBooking;
 import service.core.Flight;
 import service.core.HotelQuote;
-<<<<<<< HEAD
 import service.travel_agent.TravelQuotation;
-=======
 // import service.travel_agent.Booking;
->>>>>>> 7c78585e6c0ea785fe724db67e7cf68515818107
 
 /**
  * Implementation of the broker service that uses the Service Registry.
