@@ -7,7 +7,7 @@
       
       <modules>
             <module>client</module> 
-             <module>hotels</module>
+            <module>hotels</module>
             <module>travel_agent</module> 
             <module>flights</module>
             <module>core</module>
@@ -15,7 +15,5 @@
             <module>eureka</module>
             <module>testAPI</module>
             <module>travelService</module>
-
-
       </modules>      
 </project>
