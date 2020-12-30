@@ -17,20 +17,13 @@ import service.core.HotelRequest;
 public class Client {
 	
 	public static final String newArgs = "http://localhost:8081/bookings";
-<<<<<<< HEAD
 	public static int referenceNumber = 0;
-=======
-	public static final String winArgs = "http://localhost:192.168.99.100:8081/bookings";
-
-	
->>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d
 	
 	public static void main(String[] args) {
 		
 	// public static void bookingAdventure(ClientBooking[] clients) {	
 		Flight[] flights = new Flight[10];
 		RestTemplate restTemplate = new RestTemplate();
-<<<<<<< HEAD
 
 		ClientBooking clientBooking = new ClientBooking("Donald Trump", "Dublin", "Ireland", "Paris", "France", false,
 				 "2021-01-09", "2021-01-17", "EUR");
@@ -47,11 +40,6 @@ public class Client {
 
 
 			HttpEntity<ClientRequest> request = new HttpEntity<>(clientRequest);
-=======
-		for (ClientBooking booking : clients){
-			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
-
->>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d
 			
 			// if(SystemUtils.IS_OS_WINDOWS){
 			// 	flights = restTemplate.postForObject(winArgs,request,Flight[].class);
@@ -71,7 +59,6 @@ public class Client {
 				}	
 			}
 
-<<<<<<< HEAD
 		/**
 		 *  Barry's testing code below
 		 *  */ 
@@ -84,13 +71,6 @@ public class Client {
 		//   restTemplate.put(newArgs+"/1",request2);
 		 
 		 
-=======
-		/*
-		 * HttpEntity<String> request = new HttpEntity<>("Johnson");
-		 * 
-		 * restTemplate.put(args[0],request);
-		 */
->>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d
 	} 
    
 	// /**

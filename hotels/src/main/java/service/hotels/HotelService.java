@@ -81,7 +81,7 @@ public class HotelService {
 		try{
                   HttpRequest request = HttpRequest.newBuilder()
                   .uri(URI.create("https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=PAR&roomQuantity=1&adults=2&radius=5&radiusUnit=KM&paymentPolicy=NONE&includeClosed=false&bestRateOnly=true&view=FULL&sort=NONE"))
-                  .header("Authorization", "Bearer " + getToken())
+                  .header("Authorization", "Bearer " + token)
                   .method("GET", HttpRequest.BodyPublishers.noBody())
                   .build();
                   HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
@@ -104,8 +104,77 @@ public class HotelService {
                         JSONArray offers = (JSONArray) jsonObject.get("offers");
                         System.out.println("offers: "+offers +"\n");
                         jsonObject = (JSONObject) offers.get(0);
-                        JSONObject j = (JSONObject) jsonObject.get("price");
                         
+                        /**
+                         * Finds price of room
+                         */
+                        JSONObject price = (JSONObject) jsonObject.get("price");
+                        System.out.println("Price: "+ price.get("total"));
+
+                        /**
+                         * Finds Room Type and Bed Type
+                         */
+                        JSONObject room = (JSONObject) jsonObject.get("room");
+                        Object typeEstimated = room.get("typeEstimated");
+                        String typeEstimatedString = String.valueOf(typeEstimated);
+                        JSONObject typeEstimatedJSON = parseJSONObject(typeEstimatedString);
+                        System.out.println("Room Type: " + typeEstimatedJSON.get("category"));
+                        System.out.println("Bed Type: " + typeEstimatedJSON.get("bedType"));
+
+                        /**
+                         * Finds description of room
+                         */
+                        Object description = room.get("description");
+                        String descriptionString = String.valueOf(description);
+                        JSONObject descriptionJSON = parseJSONObject(descriptionString);
+                        System.out.println("Description: " + descriptionJSON.get("text") + "\n");
+
+                        /**
+                         * Finds address of hotel
+                         */
+                        JSONObject address = (JSONObject) hotel.get("address");
+                        JSONArray addressArray = (JSONArray) address.get("lines");
+                        System.out.println(addressArray.get(0));
+
+                        /**
+                         * Finds hotel amenities
+                         */
+                        JSONArray amenities = (JSONArray) hotel.get("amenities");
+                        int j = 0;
+                        List<String> amenitiesList = new ArrayList();
+                        while(j < amenities.size()){
+                              System.out.println(amenities.get(j));
+                              amenitiesList.add(String.valueOf(amenities.get(j)));
+                              j++;
+                        }
+
+                        /**
+                         * Finds hotel rating 
+                         */
+                        System.out.println("Rating: "+hotel.get("rating"));
+
+                        /**
+                         * Finds uri for hotel
+                         */
+                        // JSONArray media = (JSONArray) hotel.get("media");
+                        // int k = 0;
+                        // while (k < media.size()){
+                        //       System.out.println(media.get(k));
+                        //       k++;
+                        // }
+
+                        /**
+                         * Finds phone number of hotel
+                         */
+                        JSONObject contact = (JSONObject) hotel.get("contact");
+                        System.out.println(contact.get("phone"));
+
+                        /**
+                         * Finds name of hotel
+                         */
+                        System.out.println("Name of hotel: "+hotel.get("name"));
+
+
                         index++;
                   }
                         
@@ -115,7 +184,7 @@ public class HotelService {
             }
             catch(InterruptedException e) {
                   e.printStackTrace();
-		}
+            }
 		return hotels;
 	}
 
