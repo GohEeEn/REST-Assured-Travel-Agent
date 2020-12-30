@@ -45,7 +45,8 @@ import org.json.simple.parser.ParseException;
 
 import service.core.ClientBooking;
 import service.hotels.NoSuchHotelQuoteException;
-import service.hotels.HotelQuote;
+import service.core.Hotel;
+import service.core.HotelRequest;
 
 import java.util.Iterator;
 
@@ -56,25 +57,67 @@ import java.io.InputStreamReader;
 @RestController
 public class HotelService {
 	
-	static int referenceNumber = 0;    // unique reference number for each booking
-	private Map<Integer, HotelQuote[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
+	private Map<Integer, Hotel[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
 
 	// POST request from travel agent
 	@RequestMapping(value="/hotels",method=RequestMethod.POST)
-	public ResponseEntity<HotelQuote[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
+	public ResponseEntity<Hotel[]> getHotelInfo(@RequestBody HotelRequest hotelRequest)  throws URISyntaxException {
 		
-		HotelQuote [] clientHotels = new HotelQuote[10];
-
-
-
-		referenceNumber++;
+		Hotel [] clientHotels = new Hotel[10];
+		System.out.println("getHotelInfo method \n");
+		clientHotels = findHotels(hotelRequest);
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/hotels/"+referenceNumber;     // Create URI for this hotel
+			build().toUriString()+ "/hotels/"+hotelRequest.getReferenceNumber();     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(clientHotels, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
 	} 
+
+	public Hotel[] findHotels(HotelRequest hotelRequest){
+
+		Hotel [] hotels = new Hotel[10];
+		System.out.println("findHotels method \n");
+		try{
+                  HttpRequest request = HttpRequest.newBuilder()
+                  .uri(URI.create("https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=PAR&roomQuantity=1&adults=2&radius=5&radiusUnit=KM&paymentPolicy=NONE&includeClosed=false&bestRateOnly=true&view=FULL&sort=NONE"))
+                  .header("Authorization", "Bearer " + getToken())
+                  .method("GET", HttpRequest.BodyPublishers.noBody())
+                  .build();
+                  HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                 
+                  JSONObject hotelInfo = new JSONObject();
+                  hotelInfo = parseJSONObject(response.body());
+
+                  JSONArray hotelInfoArray = new JSONArray();
+	    		hotelInfoArray = (JSONArray) hotelInfo.get("data");
+
+                  System.out.println(hotelInfoArray + "\n");
+                  System.out.println("Response \n");
+                  int index = 0;
+                  while(index < hotelInfoArray.size()){
+                        JSONObject jsonObject = (JSONObject) hotelInfoArray.get(index);
+
+                        JSONObject hotel = (JSONObject) jsonObject.get("hotel");
+                        System.out.println("hotel: "+hotel+"\n");
+
+                        JSONArray offers = (JSONArray) jsonObject.get("offers");
+                        System.out.println("offers: "+offers +"\n");
+                        jsonObject = (JSONObject) offers.get(0);
+                        JSONObject j = (JSONObject) jsonObject.get("price");
+                        
+                        index++;
+                  }
+                        
+            }
+            catch(IOException e) {
+                  e.printStackTrace();
+            }
+            catch(InterruptedException e) {
+                  e.printStackTrace();
+		}
+		return hotels;
+	}
 
 	
 

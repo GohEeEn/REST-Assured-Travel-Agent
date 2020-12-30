@@ -4,3 +4,4 @@ service\core\Travel.class
 service\core\Event.class
 service\core\Flight.class
 service\core\HotelQuote.class
+
