@@ -1,0 +1,49 @@
+version: '3'
+
+services:
+  eureka:
+    build: eureka
+    # networks: 
+    #   - custom-network
+
+    ports: 
+      - "8761:8761"
+    expose:
+      - "8761"
+
+  travel_agent:
+    build: travel_agent
+    depends_on:
+      - eureka
+      - flights
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+    links:
+      - eureka
+    # networks: 
+    #   - custom-network
+    ports:
+      - "8081:8081"
+    expose:
+      - "8081"
+
+  flights:
+    build: flights
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    # networks: 
+    #   - custom-network
+    ports:
+      - "8082:8082"
+    expose:
+      - "8082"
+
+networks:
+    custom-network:
+        driver: bridge
+
+  
