@@ -63,25 +63,27 @@ public class HotelService {
 	@RequestMapping(value="/hotels",method=RequestMethod.POST)
 	public ResponseEntity<Hotel[]> getHotelInfo(@RequestBody HotelRequest hotelRequest)  throws URISyntaxException {
 		
-		Hotel [] clientHotels = new Hotel[10];
+		List<Hotel> clientHotels = new ArrayList<>();
 		System.out.println("getHotelInfo method \n");
 		clientHotels = findHotels(hotelRequest);
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/hotels/"+hotelRequest.getReferenceNumber();     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(clientHotels, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
+            headers.setLocation(new URI(path));
+            
+            Hotel [] hot = new Hotel[10];
+		return new ResponseEntity<>(hot, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
 	} 
 
-	public Hotel[] findHotels(HotelRequest hotelRequest){
+	public List<Hotel> findHotels(HotelRequest hotelRequest){
 
-		Hotel [] hotels = new Hotel[10];
+		List<Hotel> hotelList = new ArrayList<>();
 		System.out.println("findHotels method \n");
 		try{
                   HttpRequest request = HttpRequest.newBuilder()
                   .uri(URI.create("https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=PAR&roomQuantity=1&adults=2&radius=5&radiusUnit=KM&paymentPolicy=NONE&includeClosed=false&bestRateOnly=true&view=FULL&sort=NONE"))
-                  .header("Authorization", "Bearer " + token)
+                  .header("Authorization", "Bearer " + getToken())
                   .method("GET", HttpRequest.BodyPublishers.noBody())
                   .build();
                   HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
@@ -95,6 +97,8 @@ public class HotelService {
                   System.out.println(hotelInfoArray + "\n");
                   System.out.println("Response \n");
                   int index = 0;
+
+                  
                   while(index < hotelInfoArray.size()){
                         JSONObject jsonObject = (JSONObject) hotelInfoArray.get(index);
 
@@ -104,12 +108,15 @@ public class HotelService {
                         JSONArray offers = (JSONArray) jsonObject.get("offers");
                         System.out.println("offers: "+offers +"\n");
                         jsonObject = (JSONObject) offers.get(0);
+
+                        Hotel currentHotel = new Hotel();
                         
                         /**
                          * Finds price of room
                          */
                         JSONObject price = (JSONObject) jsonObject.get("price");
                         System.out.println("Price: "+ price.get("total"));
+                        currentHotel.setPrice(String.valueOf(price.get("total")));
 
                         /**
                          * Finds Room Type and Bed Type
@@ -120,6 +127,8 @@ public class HotelService {
                         JSONObject typeEstimatedJSON = parseJSONObject(typeEstimatedString);
                         System.out.println("Room Type: " + typeEstimatedJSON.get("category"));
                         System.out.println("Bed Type: " + typeEstimatedJSON.get("bedType"));
+                        currentHotel.setRoomType(String.valueOf(typeEstimatedJSON.get("category")));
+                        currentHotel.setBedType(String.valueOf(typeEstimatedJSON.get("bedType")));
 
                         /**
                          * Finds description of room
@@ -128,6 +137,7 @@ public class HotelService {
                         String descriptionString = String.valueOf(description);
                         JSONObject descriptionJSON = parseJSONObject(descriptionString);
                         System.out.println("Description: " + descriptionJSON.get("text") + "\n");
+                        currentHotel.setDescription(String.valueOf(descriptionJSON.get("text")));
 
                         /**
                          * Finds address of hotel
@@ -135,6 +145,7 @@ public class HotelService {
                         JSONObject address = (JSONObject) hotel.get("address");
                         JSONArray addressArray = (JSONArray) address.get("lines");
                         System.out.println(addressArray.get(0));
+                        currentHotel.setAddress(String.valueOf(addressArray.get(0)));
 
                         /**
                          * Finds hotel amenities
@@ -145,13 +156,16 @@ public class HotelService {
                         while(j < amenities.size()){
                               System.out.println(amenities.get(j));
                               amenitiesList.add(String.valueOf(amenities.get(j)));
+                              currentHotel.setAmenities(String.valueOf(amenities.get(j)));
                               j++;
                         }
+                        
 
                         /**
                          * Finds hotel rating 
                          */
                         System.out.println("Rating: "+hotel.get("rating"));
+                        currentHotel.setRating(String.valueOf(hotel.get("rating")));
 
                         /**
                          * Finds uri for hotel
@@ -168,13 +182,17 @@ public class HotelService {
                          */
                         JSONObject contact = (JSONObject) hotel.get("contact");
                         System.out.println(contact.get("phone"));
+                        currentHotel.setPhoneNumber(String.valueOf(contact.get("phone")));
 
                         /**
                          * Finds name of hotel
                          */
                         System.out.println("Name of hotel: "+hotel.get("name"));
+                        currentHotel.setName(String.valueOf(hotel.get("name")));
 
+                        System.out.println("\n" + currentHotel.toString());
 
+                        hotelList.add(currentHotel);
                         index++;
                   }
                         
@@ -185,7 +203,7 @@ public class HotelService {
             catch(InterruptedException e) {
                   e.printStackTrace();
             }
-		return hotels;
+		return hotelList;
 	}
 
 	
