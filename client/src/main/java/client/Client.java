@@ -28,13 +28,13 @@ public class Client {
 			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
 
 			
-			if(SystemUtils.IS_OS_WINDOWS){
-				flights = restTemplate.postForObject(winArgs,request,Flight[].class);
-			}
-			else{
+			// if(SystemUtils.IS_OS_WINDOWS){
+			// 	flights = restTemplate.postForObject(winArgs,request,Flight[].class);
+			// }
+			// else{
 				flights = restTemplate.postForObject(newArgs,request,Flight[].class);
 
-			}
+			// }
 			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
 
 
