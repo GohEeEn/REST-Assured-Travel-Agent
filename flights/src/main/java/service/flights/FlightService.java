@@ -47,7 +47,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException; 
 
 import service.core.Flight; 
-import service.core.ClientBooking;
+import service.core.FlightRequest;
 import service.flights.NoSuchFlightQuoteException;
 
 import java.util.Iterator;
@@ -64,25 +64,25 @@ public class FlightService {
 
 	// POST request, handles all booking requests from travel agent
 	@RequestMapping(value="/flights",method=RequestMethod.POST)
-	public ResponseEntity<Flight[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
+	public ResponseEntity<Flight[]> createBooking(@RequestBody FlightRequest flightRequest)  throws URISyntaxException {
 
 		ArrayList<String> originAirportIDs = new ArrayList();
 		ArrayList<String> destinationAirportIDs = new ArrayList();
 		
-		String countryOfOriginCode = getListMarkets(clientBooking.getCountryOfOrigin());         //find country code
-		String countryOfDestinationCode = getListMarkets(clientBooking.getCountryOfDestination());         //find country code 
+		String countryOfOriginCode = getListMarkets(flightRequest.getCountryOfOrigin());         //find country code
+		String countryOfDestinationCode = getListMarkets(flightRequest.getCountryOfDestination());         //find country code 
 
-		originAirportIDs = getListPlaces(clientBooking.getCityOfOrigin(), clientBooking.getCountryOfOrigin(),
-					countryOfOriginCode, clientBooking.getCurrency());
-		destinationAirportIDs = getListPlaces(clientBooking.getCityOfDestination(), clientBooking.getCountryOfDestination(),
-					countryOfDestinationCode, clientBooking.getCurrency());
+		originAirportIDs = getListPlaces(flightRequest.getCityOfOrigin(), flightRequest.getCountryOfOrigin(),
+					countryOfOriginCode, flightRequest.getCurrency());
+		destinationAirportIDs = getListPlaces(flightRequest.getCityOfDestination(), flightRequest.getCountryOfDestination(),
+					countryOfDestinationCode, flightRequest.getCurrency());
 
 		ArrayList<FlightQuote> flightQuotes = new ArrayList();
 
 		for (String airportID : destinationAirportIDs){
 			System.out.println(airportID);
-			flightQuotes.addAll(findFlights(countryOfOriginCode,clientBooking.getCurrency(),locale,originAirportIDs.get(0),airportID,
-				clientBooking.getOutboundDate()));
+			flightQuotes.addAll(findFlights(countryOfOriginCode,flightRequest.getCurrency(),locale,originAirportIDs.get(0),airportID,
+			flightRequest.getOutboundDate()));
 		}
 
 		ArrayList<FlightQuote> flightQuotesCopy = new ArrayList();
@@ -115,8 +115,8 @@ public class FlightService {
 
 		int i = 0;
 		for (FlightQuote flightQuote : flightQuotes){
-			Flight flight = new Flight(clientBooking.getCityOfOrigin(), clientBooking.getCityOfDestination(),
-			clientBooking.getOutboundDate(), clientBooking.getReturnDate(), flightQuote.getAirline(), flightQuote.getPrice(),
+			Flight flight = new Flight(flightRequest.getCityOfOrigin(), flightRequest.getCityOfDestination(),
+			flightRequest.getOutboundDate(), flightRequest.getReturnDate(), flightQuote.getAirline(), flightQuote.getPrice(),
 			flightQuote.getOriginAirportName(), flightQuote.getDestAirportName());
 			flights[i] = flight;
 			i++;
@@ -146,11 +146,11 @@ public class FlightService {
 	}
 
 	@RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.PUT)
-    public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody ClientBooking clientBooking) throws URISyntaxException  {
+    public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody FlightRequest flightRequest) throws URISyntaxException  {
 	  Flight [] clientFlights = flights.get(referenceNumber);
         if (clientFlights == null) throw new NoSuchFlightQuoteException();
 
-	  ResponseEntity<Flight []> f= createBooking(clientBooking);   // update set of flights for this client
+	  ResponseEntity<Flight []> f= createBooking(flightRequest);   // update set of flights for this client
 
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/flights/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();

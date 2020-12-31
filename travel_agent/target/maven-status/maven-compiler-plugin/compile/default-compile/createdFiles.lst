@@ -1,4 +1,3 @@
 service\travel_agent\ServiceInstanceRestController.class
-service\travel_agent\TravelQuotation.class
 service\travel_agent\Application.class
 service\travel_agent\TravelAgentService.class

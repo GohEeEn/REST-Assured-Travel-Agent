@@ -18,8 +18,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 
 
-
-
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -35,11 +33,10 @@ import java.util.List;
  
 import java.text.NumberFormat;
 
-import service.core.ClientBooking;
+import service.core.FlightRequest;
 import service.core.Flight;
-import service.travel_agent.TravelQuotation;
 
-import service.travel_agent.TravelQuotation;
+import service.core.TravelPackage;
 import service.core.ClientRequest;
 import service.core.HotelRequest;
 import service.core.Hotel;
@@ -58,78 +55,59 @@ public class TravelAgentService {
 
 	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
 	// private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
-	private Map<Integer, TravelQuotation> travelQuotations = new TreeMap();
+	private Map<Integer, TravelPackage> travelPackages = new TreeMap();
 	private Map<Integer, ClientRequest> clientRequests = new TreeMap();
+	private int referenceNumber = 0;
 
 	// POST Method, handles requests from client for quotations with given clientInfo
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)
-	public ResponseEntity<Flight[]> getFlightInfo(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
+	public ResponseEntity<TravelPackage> getFlightInfo(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
 
-	
-		Flight[] flights = new Flight[10];
-		// for(String uri : URIs){   // Iterate through list of URIs and send clientInfo to each quotation service (1 per URI)
-		// 		RestTemplate restTemplate = new RestTemplate();
-		// 		HttpEntity<ClientBooking> request = new HttpEntity<>(clientBooking);
-		// 		flights = restTemplate.postForObject("http://flights-service/flights/",request, Flight[].class);
-		// 	}
-		// RestTemplate restTemplate = new RestTemplate();
-		HttpEntity<ClientBooking> request = new HttpEntity<>(clientRequest.getClientBooking());
+		referenceNumber++;
+		/**
+		 * POST request to Flight service
+		 */
+		Flight[] flights = new Flight[10];	
+		HttpEntity<FlightRequest> request = new HttpEntity<>(clientRequest.getFlightRequest());
 		flights = restTemplate.postForObject("http://flights-service/flights",request, Flight[].class);
 
-		clientRequests.put(clientRequest.getReferenceNumber(), clientRequest);  // create a new ClientRequest
-
-		TravelQuotation travelQuotation = new TravelQuotation();
-		travelQuotation.setFlights(flights);
-		travelQuotations.put(clientRequest.getReferenceNumber(),travelQuotation);
-
+		clientRequests.put(referenceNumber, clientRequest);  // create a new ClientRequest
 
 		/**
-		 * Call HotelService
+		 * POST request to Hotel Service
 		 */
 
 		Hotel [] hotels = new Hotel[10];
-			HttpEntity<HotelRequest> request2 = new HttpEntity<>(clientRequest.getHotelRequest());
-			hotels = restTemplate.postForObject("http://hotels-service/hotels",request2, Hotel[].class);
-			System.out.println("TESTING TA");
-                  System.out.println("\n"+hotels[0].getPrice()+"\n");
+		HttpEntity<HotelRequest> request2 = new HttpEntity<>(clientRequest.getHotelRequest());
+		hotels = restTemplate.postForObject("http://hotels-service/hotels",request2, Hotel[].class);
+		System.out.println("TESTING TA");
+		System.out.println("\n"+hotels[0].getPrice()+"\n");
 
+		/**
+		 * Create a new TravelPackage for client
+		 */
+		TravelPackage travelPackage = new TravelPackage();
+		travelPackage.setFlights(flights);
+		travelPackage.setHotels(hotels);
+		travelPackages.put(referenceNumber,travelPackage);
 
-
+		/**
+		 * Send response back to the client
+		 */
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/bookings/"+clientRequest.getReferenceNumber();  // Create new URI for this newly created ClientApplication
+			build().toUriString()+ "/bookings/"+referenceNumber;  // Create new URI for this newly created ClientApplication
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(flights, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
+		return new ResponseEntity<>(travelPackage, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
 		
 	} 
 
 
 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PUT)
-    public ResponseEntity<ClientRequest> updateClientBooking(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
-	  TravelQuotation travelQuotation = travelQuotations.get(referenceNumber);
+    public ResponseEntity<TravelPackage> updateClientBooking(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
+	  TravelPackage travelPackage = travelPackages.get(referenceNumber);
       //   if (booking == null) throw new NoSuchFlightQuoteException();
-		System.out.println(clientRequest + "\n");
 		
-		ClientRequest previousClientRequest = clientRequests.get(clientRequest.getReferenceNumber());
-		if(clientRequest.getClientBooking().equals(previousClientRequest.getClientBooking())){
-			System.out.println("Client Bookings are the same!\n");
-			// If not the same then call getFlightInfo() 
-		}
-
-		Hotel [] hotels = new Hotel[10];
-		if(clientRequest.getHotelRequest().equals(previousClientRequest.getHotelRequest()) ){
-			System.out.println("HotelRequests are the same!\n");
-			// If not the same then call getHotelInfo()
-			
-			// RestTemplate restTemplate = new RestTemplate();
-			// HttpEntity<HotelRequest> request = new HttpEntity<>(clientRequest.getHotelRequest());
-			// hotels = restTemplate.postForObject("http://localhost:8087/hotels",request, Hotel[].class);
-		}
-
-		RestTemplate restTemplate = new RestTemplate();
-			HttpEntity<HotelRequest> request = new HttpEntity<>(clientRequest.getHotelRequest());
-			hotels = restTemplate.postForObject("http://localhost:hotels-service/hotels",request, Hotel[].class);
-		Flight [] fs = new Flight[5];
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();
 	  headers.set("Content-Location", path); 

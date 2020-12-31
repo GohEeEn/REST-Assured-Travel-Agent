@@ -43,7 +43,7 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException; 
 
-import service.core.ClientBooking;
+import service.core.FlightRequest;
 import service.core.Hotel;
 import service.hotels.NoSuchHotelQuoteException;
 import service.core.HotelRequest;
