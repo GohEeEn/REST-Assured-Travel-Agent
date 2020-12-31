@@ -46,7 +46,6 @@ import org.json.simple.parser.ParseException;
 import service.core.ClientBooking;
 import service.core.Hotel;
 import service.hotels.NoSuchHotelQuoteException;
-import service.core.Hotel;
 import service.core.HotelRequest;
 
 import java.util.Iterator;
@@ -83,15 +82,18 @@ public class HotelService {
              */
             Hotel [] hotelsArray = new Hotel[clientHotels.size()];
             int counter = 0;
-            while (counter < clientHotels.size()){
-                  hotelsArray[counter] = clientHotels.get(counter);
-            }
+            // System.out.println("\nNo. of hotels: "+clientHotels.size()+"\n");
+            // while (counter < clientHotels.size()){
+            //       hotelsArray[counter] = clientHotels.get(counter);
+            //       counter++;
+            // }
 
-            for (Hotel h : hotelsArray){
-                  h.toString();
-            }
+            // for (Hotel h : hotelsArray){
+            //       h.toString();
+            // }
 
-
+            System.out.println("\n TESTING \n");
+            System.out.println(hotelsArray.length);
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/hotels/"+hotelRequest.getReferenceNumber();     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();

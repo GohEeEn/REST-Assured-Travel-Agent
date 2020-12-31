@@ -1,13 +1,19 @@
 package client;
 
 import java.io.IOException;
+<<<<<<< HEAD
+=======
 import java.io.PrintWriter;
+>>>>>>> 8a3675545a4fb007e34a27c0e0019b23399c444f
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import service.core.ClientBooking;
+<<<<<<< HEAD
+=======
 import service.core.HotelRequest;
+>>>>>>> 8a3675545a4fb007e34a27c0e0019b23399c444f
 import client.Client;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +36,21 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class ClientController { 
+<<<<<<< HEAD
+	
+//	@RequestMapping(value="/",method=RequestMethod.GET)
+//	@ResponseBody 
+	@GetMapping("/")
+	public String greeting(){
+		return "index.html";
+	}
+
+	@RequestMapping(value="/processForm",method=RequestMethod.POST)  
+	public void processForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
+
+			ClientBooking[] clientArray = new ClientBooking[1] ;
+			ClientBooking clientBooking = new ClientBooking();
+=======
     private HashMap<String, String> cityCodes = new HashMap<String, String>();
     private ClientBooking clientBooking = new ClientBooking();
     private HotelRequest hotelRequest = new HotelRequest();
@@ -51,6 +72,7 @@ public class ClientController {
 
 			// ClientBooking[] clientArray = new ClientBooking[1] ;
 			// ClientBooking clientBooking = new ClientBooking();
+>>>>>>> 8a3675545a4fb007e34a27c0e0019b23399c444f
 			clientBooking.setName(name);
 			clientBooking.setCityOfOrigin(cityOfOrigin);
 			clientBooking.setCountryOfOrigin(countryOfOrigin);
@@ -60,6 +82,14 @@ public class ClientController {
 			clientBooking.setReturnDate(returnDate);
 			clientBooking.setOutboundDate(outboundDate);
 			clientBooking.setCurrency(currency);
+<<<<<<< HEAD
+			clientArray[0] = clientBooking;
+			Client.bookingAdventure(clientArray);
+			response.sendRedirect("/");
+	}
+}
+
+=======
             // clientArray[0] = clientBooking;
             cityCodeGenerator();
 			response.sendRedirect("/hotels");
@@ -152,6 +182,7 @@ public class ClientController {
 // 	}
 // }
 // 
+>>>>>>> 8a3675545a4fb007e34a27c0e0019b23399c444f
 
 
 
