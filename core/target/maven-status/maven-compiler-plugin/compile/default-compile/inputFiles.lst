@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Hotel.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ClientBooking.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Travel.java
@@ -6,3 +7,13 @@ C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\serv
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ClientRequest.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Flight.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\HotelRequest.java
+=======
+/home/tam/Desktop/CLEAN/quaranteam/core/src/main/java/service/core/Travel.java
+/home/tam/Desktop/CLEAN/quaranteam/core/src/main/java/service/core/Activity.java
+/home/tam/Desktop/CLEAN/quaranteam/core/src/main/java/service/core/Hotel.java
+/home/tam/Desktop/CLEAN/quaranteam/core/src/main/java/service/core/ClientBooking.java
+/home/tam/Desktop/CLEAN/quaranteam/core/src/main/java/service/core/ClientRequest.java
+/home/tam/Desktop/CLEAN/quaranteam/core/src/main/java/service/core/HotelRequest.java
+/home/tam/Desktop/CLEAN/quaranteam/core/src/main/java/service/core/Event.java
+/home/tam/Desktop/CLEAN/quaranteam/core/src/main/java/service/core/Flight.java
+>>>>>>> 6fb385cf35522dbe709b42100c89826fd85c1a58
