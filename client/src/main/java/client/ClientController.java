@@ -3,7 +3,8 @@ package client;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-
+import java.io.File;
+import java.io.FileNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import service.core.ClientBooking;
 import service.core.HotelRequest;
@@ -65,20 +66,28 @@ public class ClientController {
     }
     
     private void cityCodeGenerator(){
-        Scanner sc = new Scanner("city_codes.txt");
-        while(sc.hasNextLine()) 
-        {   
-            String line = sc.nextLine();
-            int index = line.lastIndexOf(" ")+1;
-            String cityCode = line.substring(index);
-            String cityName = line.substring(0,index);
-	        cityCodes.put(cityName.toLowerCase() , cityCode );
+        File file = new File("city_codes.txt");
+        try{
+            int i = 0;
+            Scanner sc = new Scanner(file);
+            while(sc.hasNextLine()) 
+            {   i++;
+                String line = sc.nextLine();
+                int index = line.lastIndexOf(" ")+1;
+                String cityCode = line.substring(index);
+                String cityName = line.substring(0,index);
+                cityCodes.put(cityName.toLowerCase().trim() , cityCode.trim() );
+            }
+        }   
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     @RequestMapping(value="/processHotelsForm",method=RequestMethod.POST)
-    public void processHotelsForm(String location, String rooms, String checkIn, String checkOut, String minRating, HttpServletResponse response) throws IOException
+    public void processHotelsForm(String location, String guests, String checkIn, String checkOut, String minRatings, HttpServletResponse response) throws IOException
     {
+        System.out.println("minrating is "+minRatings);
         if(cityCodes.get(location.toLowerCase())==null){
             PrintWriter out = response.getWriter();
             out.println("<script>");
@@ -86,6 +95,30 @@ public class ClientController {
             out.println("window.location.replace('" + "/hotels" + "');");
             out.println("</script>");
         }else {
+            hotelRequest.setCityCode(cityCodes.get(location.toLowerCase()));
+            hotelRequest.setNumberOfGuests(Integer.parseInt(guests));
+            
+            int minNumOfStars;
+            switch (minRatings){
+                case "oneStar":
+                    minNumOfStars = 1;
+                    break;
+                case "twoStar":
+                    minNumOfStars = 2;
+                    break;
+                case "threeStar":
+                    minNumOfStars = 3;
+                    break;
+                case "fourStar":
+                    minNumOfStars = 4;
+                    break;
+                case "fiveStar":
+                    minNumOfStars = 5;
+                    break;
+            }
+
+            hotelRequest.setMinNumberOfStarsRequiredForHotel(minNumOfStars);
+            
 			response.sendRedirect("/");
         }
         
