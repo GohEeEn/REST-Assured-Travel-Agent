@@ -20,25 +20,25 @@ import java.util.List;
 @SpringBootApplication
 public class Application {
 
-      // @Bean
-      // @LoadBalanced
-      // public RestTemplate restTemplate(){
-      //       return new RestTemplate();
-// }
+      @Bean
+      @LoadBalanced
+      public RestTemplate restTemplate(){
+            return new RestTemplate();
+}
 
       public static void main(String[] args) {
             SpringApplication.run(Application.class, args);
       }
 } 
-// @RestController
-// class ServiceInstanceRestController {
+@RestController
+class ServiceInstanceRestController {
 
-// 	@Autowired
-// 	private DiscoveryClient discoveryClient;
+	@Autowired
+	private DiscoveryClient discoveryClient;
 
-// 	@RequestMapping("/service-instances/{applicationName}")
-// 	public List<ServiceInstance> serviceInstancesByApplicationName(
-// 			@PathVariable String applicationName) {
-// 		return this.discoveryClient.getInstances(applicationName);
-// 	}
-// }
+	@RequestMapping("/service-instances/{applicationName}")
+	public List<ServiceInstance> serviceInstancesByApplicationName(
+			@PathVariable String applicationName) {
+		return this.discoveryClient.getInstances(applicationName);
+	}
+}

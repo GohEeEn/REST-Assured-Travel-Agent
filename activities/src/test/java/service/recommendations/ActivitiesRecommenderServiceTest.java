@@ -32,17 +32,17 @@ public class ActivitiesRecommenderServiceTest {
 //        assertNotEquals("Error : Location objects should be returned", 0, locations.length);
 //    }
 
-    @Test
-    public void getActivitiesWithGeolocation() throws ResponseException {
+    // @Test
+    // public void getActivitiesWithGeolocation() throws ResponseException {
 
-        Activity[] barcelona = recommender.getActivities(41.39715, 2.160873); // Barcelona
-        assertNotNull("Error : There should have activity instances available", barcelona);
-        assertNotEquals("Error : This list shouldn't be empty", 0, barcelona.length);
+    //     Activity[] barcelona = recommender.getActivities(41.39715, 2.160873); // Barcelona
+    //     assertNotNull("Error : There should have activity instances available", barcelona);
+    //     assertNotEquals("Error : This list shouldn't be empty", 0, barcelona.length);
 
-        Activity[] beijing = recommender.getActivities(39.9020803, 116.7185213); // Beijing
-        assertNotNull("Error : The activity array instance should be returned", beijing);
-        assertEquals("Error : This list should be empty since this location is not supported", 0, beijing.length);
-    }
+    //     Activity[] beijing = recommender.getActivities(39.9020803, 116.7185213); // Beijing
+    //     assertNotNull("Error : The activity array instance should be returned", beijing);
+    //     assertEquals("Error : This list should be empty since this location is not supported", 0, beijing.length);
+    // }
 
 //    @Test
 //    public void getActivities() {

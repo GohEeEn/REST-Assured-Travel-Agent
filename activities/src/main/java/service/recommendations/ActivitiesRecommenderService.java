@@ -8,8 +8,17 @@ import com.amadeus.resources.Activity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+
+
 @RestController
 public class ActivitiesRecommenderService {
+
+    @Autowired
+	private RestTemplate restTemplate;
+
 
     private final Amadeus amadeus;
 
@@ -99,25 +108,25 @@ public class ActivitiesRecommenderService {
      * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
      * @throws ResponseException
      */
-    @GetMapping(value = PAGE)
-    public Activity[] getActivities(double latitude, double longitude) throws ResponseException {
-        if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
-            System.out.println("Invalid coordinate(s) given");
-            return new Activity[0];
-        }
+    // @GetMapping(value = PAGE)
+    // public Activity[] getActivities(double latitude, double longitude) throws ResponseException {
+    //     if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
+    //         System.out.println("Invalid coordinate(s) given");
+    //         return new Activity[0];
+    //     }
 
-        Activity[] activities = amadeus.shopping.activities.get(Params
-                .with("latitude", Double.toString(latitude))
-                .and("longitude", Double.toString(longitude)));
+    //     Activity[] activities = amadeus.shopping.activities.get(Params
+    //             .with("latitude", Double.toString(latitude))
+    //             .and("longitude", Double.toString(longitude)));
 
-        if(activities.length != 0) {
-            if(activities[0].getResponse().getStatusCode() != 200) {
-                System.out.println(STATUS_CODE_ERROR + activities[0].getResponse().getStatusCode());
-            }
-        } else {
-            System.out.println(EMPTY_RECOMMENDATION);
-        }
+    //     if(activities.length != 0) {
+    //         if(activities[0].getResponse().getStatusCode() != 200) {
+    //             System.out.println(STATUS_CODE_ERROR + activities[0].getResponse().getStatusCode());
+    //         }
+    //     } else {
+    //         System.out.println(EMPTY_RECOMMENDATION);
+    //     }
 
-        return activities;
-    }
+    //     return activities;
+    // }
 }
