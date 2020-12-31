@@ -44,6 +44,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException; 
 
 import service.core.ClientBooking;
+import service.core.Hotel;
 import service.hotels.NoSuchHotelQuoteException;
 import service.core.Hotel;
 import service.core.HotelRequest;
@@ -65,15 +66,29 @@ public class HotelService {
 		
 		List<Hotel> clientHotels = new ArrayList<>();
 		System.out.println("getHotelInfo method \n");
-		clientHotels = findHotels(hotelRequest);
+            clientHotels = findHotels(hotelRequest);
+            
+            /**
+             * Converts Hotel ArrayList to Hotel array as it is not possible to send a list so it must be converted 
+             */
+            Hotel [] hotelsArray = new Hotel[clientHotels.size()];
+            int counter = 0;
+            while (counter < clientHotels.size()){
+                  hotelsArray[counter] = clientHotels.get(counter);
+            }
+
+            for (Hotel h : hotelsArray){
+                  h.toString();
+            }
+
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/hotels/"+hotelRequest.getReferenceNumber();     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();
             headers.setLocation(new URI(path));
             
-            Hotel [] hot = new Hotel[10];
-		return new ResponseEntity<>(hot, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
+            
+		return new ResponseEntity<>(hotelsArray, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
 	} 
 
 	public List<Hotel> findHotels(HotelRequest hotelRequest){

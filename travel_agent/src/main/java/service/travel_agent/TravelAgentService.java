@@ -37,13 +37,7 @@ import java.text.NumberFormat;
 
 import service.core.ClientBooking;
 import service.core.Flight;
-<<<<<<< HEAD
-
-// import service.travel_agent.Booking;
-=======
-import service.core.HotelQuote;
 import service.travel_agent.TravelQuotation;
->>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d
 
 import service.travel_agent.TravelQuotation;
 import service.core.ClientRequest;
@@ -87,6 +81,17 @@ public class TravelAgentService {
 		TravelQuotation travelQuotation = new TravelQuotation();
 		travelQuotation.setFlights(flights);
 		travelQuotations.put(clientRequest.getReferenceNumber(),travelQuotation);
+
+
+		/**
+		 * Call HotelService
+		 */
+
+		Hotel [] hotels = new Hotel[10];
+			HttpEntity<HotelRequest> request2 = new HttpEntity<>(clientRequest.getHotelRequest());
+			// hotels = restTemplate.postForObject("http://localhost:8089/hotels",request2, Hotel[].class);
+
+
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/bookings/"+clientRequest.getReferenceNumber();  // Create new URI for this newly created ClientApplication
