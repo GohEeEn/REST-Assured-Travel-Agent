@@ -2,6 +2,18 @@
 
 A feature that generates a list of activities available in a given location. In ideal, this feature will links the destination of booked flight, and generate relevant activities to do for the customer.
 
+## About this module
+
+This module is meant to be an acivity finder for users who have booked their flight, and generate a list of activities according to their flight destination. Here is the design stages :
+
+| Step | TODO                                               | Purpose + HOW TO                                                                                               | Progress          |
+| ---- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------- |
+| 1    | Get useful destination info from the flight object | Link the flight booking from `flight` module to this module,                                                   |                   |
+| 2    | Use the info above to get a location (skippable)   | Use the location as the center to search for activities, finding destination with Geo-coordinates or IATA Code | Testing Responses |
+| 3    | Use the location above to find activities          | Required parameter : Geo-coordinate^                                                                           | Functioning       |
+
+^ Reference [here]([reference](https://amadeus4dev.github.io/amadeus-java/reference/com/amadeus/shopping/Activities.html))
+
 ## Tools & Libraries
 
 - IntelliJ IDEA Community Edition
@@ -9,7 +21,7 @@ A feature that generates a list of activities available in a given location. In 
 - Postman
 - [Amadeus API](https://developers.amadeus.com)
 
-## Notes
+### Notes
 
 1. API Credentials
 
@@ -50,7 +62,31 @@ Tests for `https://test.api.amadeus.com/v1/shopping/activities?latitude=&longitu
 | &#9745; | Geolocation of location doesn't included in the link above | Malacca(2.2245111, 102.2614662)      | No          |
 | &#9745; | Geolocation of location doesn't included in the link above | Beijing(39.9020803,116.7185213)      | No          |
 
+It turns out _searching/representing location with their geolocation is the most efficient way_, while not recommended for the UX, unless include another API to convert location string to the correponding geo-coordinate.
+
 **Note** : GPS coordinates checked with this [checker](https://www.gps-coordinates.net)
+
+Tests for `Location location = amadeus.referenceData.location(id).get();`
+
+| Test    | locationId | Location? | subType | Name                           | IATA code | Description                     |
+| ------- | ---------- | --------- | ------- | ------------------------------ | --------- | ------------------------------- |
+| &#9745; | ALHR       | Yes       | Airport |                                |           |                                 |
+| &#9745; | ABCN       | Yes       | Airport |                                | BCN       |                                 |
+| &#9745; | CBCN       | Yes       | City    |                                | BCN       |                                 |
+| &#9745; | CLON       | Yes       | City    |                                | LON       |                                 |
+| &#9745; | ALON       | No        | -       |                                |           | No airport with IATA code `LON` |
+| &#9745; | ALAS       | Yes       | Airport | LAS VEGAS/NV/US:MCCARRAN INTER | LAS       |                                 |
+| &#9745; | CLAS       | Yes       | City    | LAS VEGAS/NV/US:MCCARRAN INTER | LAS       |                                 |
+| &#9745; | AJFK       | Yes       | Airport | NEW YORK/NY/US:JOHN F KENNEDY  | JFK       |                                 |
+| &#9745; | CJFK       | No        | -       |                                |           | No city with IATA code `JFK`    |
+| &#9745; | ALGA       | Yes       | Airport | NEW YORK/NY/US:LAGUARDIA       | LAS       |                                 |
+| &#9745; | CLGA       | No        | -       |                                |           | No city with IATA code `JFK`    |
+| &#9745; | CBLR       | Yes       | City    | BENGALURU/KA/IN:KEMPEGOWDA INT | BLR       |                                 |
+| &#9745; | ABLR       | Yes       | Airport | BENGALURU/KA/IN:KEMPEGOWDA INT | BLR       |                                 |
+| &#9745; | ABER       | Yes       | Airport | BERLIN/DE:BRANDENBURG          | BER       |                                 |
+| &#9745; | CBER       | Yes       | City    | BERLIN/DE:BRANDENBURG          | BER       |                                 |
+
+The String parameter seems to be __subType_prefix + IATA_code__
 
 ### References
 
@@ -58,5 +94,5 @@ Tests for `https://test.api.amadeus.com/v1/shopping/activities?latitude=&longitu
 - [Amadeus API Java SDK Documentation](https://amadeus4dev.github.io/amadeus-java/reference/packages.html)
 - [Amadeus Tours & Activities API Reference](https://developers.amadeus.com/self-service/category/destination-content/api-doc/tours-and-activities/api-reference)
 - [Amadeus for Developers Documentation](https://documenter.getpostman.com/view/2672636/RWEcPfuJ?version=latest)
-- [Airport Code Database](https://www.airportcodedb.com)
+- [IATA Airline and Location Code Search](https://www.iata.org/en/publications/directories/code-search/)
 - [GPS Coordinates Checker](https://www.gps-coordinates.net)
