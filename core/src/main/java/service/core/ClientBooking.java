@@ -27,6 +27,7 @@ public class ClientBooking {
 	private String returnDate;  //format: yyyy-mm-dd
 	private String outboundDate; //format: yyyy-mm-dd or null
 	private String currency;
+	private int referenceNumber;
 
 	public String getName(){
 		return name;
@@ -100,4 +101,30 @@ public class ClientBooking {
 	public void setCurrency(String currency){
 		this.currency = currency;
 	}
+
+	public int getReferenceNumber(){
+            return referenceNumber;
+      }
+
+      public void setReferenceNumber(int referenceNumber){
+            this.referenceNumber = referenceNumber;
+      }
+	/**
+	 * TODO (Barry): Must update equals method with ref num
+	 */
+	public Boolean equals(ClientBooking clientBooking){
+		if (this.getName().equals(clientBooking.getName()) &&
+			this.getCityOfOrigin().equals(clientBooking.getCityOfOrigin()) &&
+			this.getCountryOfOrigin().equals(clientBooking.getCountryOfOrigin()) && 
+			this.getCityOfDestination().equals(clientBooking.getCityOfDestination()) &&  
+			this.getCountryOfDestination().equals(clientBooking.getCountryOfDestination()) &&    
+			(this.getOneWayTrip() == clientBooking.getOneWayTrip()) &&    
+			this.getReturnDate().equals(clientBooking.getReturnDate()) &&
+			this.getOutboundDate().equals(clientBooking.getOutboundDate()) &&
+			this.getCurrency().equals(clientBooking.getCurrency()) ) {
+				return true;
+			}
+		return false;
+	}
+
 }

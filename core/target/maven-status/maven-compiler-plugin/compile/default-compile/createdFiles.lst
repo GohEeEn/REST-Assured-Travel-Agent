@@ -1,6 +1,8 @@
-service/core/ClientBooking.class
-service/core/Destination.class
-service/core/Flight.class
-service/core/HotelQuote.class
-service/core/Travel.class
-service/core/Event.class
+service\core\ClientRequest.class
+service\core\HotelRequest.class
+service\core\Travel.class
+service\core\Flight.class
+service\core\ClientBooking.class
+service\core\Hotel.class
+service\core\Destination.class
+service\core\Event.class

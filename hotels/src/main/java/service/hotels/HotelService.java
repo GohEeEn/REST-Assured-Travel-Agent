@@ -44,8 +44,10 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException; 
 
 import service.core.ClientBooking;
+import service.core.Hotel;
 import service.hotels.NoSuchHotelQuoteException;
-import service.hotels.HotelQuote;
+import service.core.Hotel;
+import service.core.HotelRequest;
 
 import java.util.Iterator;
 
@@ -56,25 +58,168 @@ import java.io.InputStreamReader;
 @RestController
 public class HotelService {
 	
-	static int referenceNumber = 0;    // unique reference number for each booking
-	private Map<Integer, HotelQuote[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
+	private Map<Integer, Hotel[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
 
 	// POST request from travel agent
 	@RequestMapping(value="/hotels",method=RequestMethod.POST)
-	public ResponseEntity<HotelQuote[]> createBooking(@RequestBody ClientBooking clientBooking)  throws URISyntaxException {
+	public ResponseEntity<Hotel[]> getHotelInfo(@RequestBody HotelRequest hotelRequest)  throws URISyntaxException {
 		
-		HotelQuote [] clientHotels = new HotelQuote[10];
+		List<Hotel> clientHotels = new ArrayList<>();
+		System.out.println("getHotelInfo method \n");
+            clientHotels = findHotels(hotelRequest);
+            
+            /**
+             * Converts Hotel ArrayList to Hotel array as it is not possible to send a list so it must be converted 
+             */
+            Hotel [] hotelsArray = new Hotel[clientHotels.size()];
+            int counter = 0;
+            while (counter < clientHotels.size()){
+                  hotelsArray[counter] = clientHotels.get(counter);
+            }
 
+            for (Hotel h : hotelsArray){
+                  h.toString();
+            }
 
-
-		referenceNumber++;
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/hotels/"+referenceNumber;     // Create URI for this hotel
+			build().toUriString()+ "/hotels/"+hotelRequest.getReferenceNumber();     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();
-		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(clientHotels, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
+            headers.setLocation(new URI(path));
+            
+            
+		return new ResponseEntity<>(hotelsArray, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
 	} 
+
+	public List<Hotel> findHotels(HotelRequest hotelRequest){
+
+		List<Hotel> hotelList = new ArrayList<>();
+		System.out.println("findHotels method \n");
+		try{
+                  HttpRequest request = HttpRequest.newBuilder()
+                  .uri(URI.create("https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode=PAR&roomQuantity=1&adults=2&radius=5&radiusUnit=KM&paymentPolicy=NONE&includeClosed=false&bestRateOnly=true&view=FULL&sort=NONE"))
+                  .header("Authorization", "Bearer " + getToken())
+                  .method("GET", HttpRequest.BodyPublishers.noBody())
+                  .build();
+                  HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+                 
+                  JSONObject hotelInfo = new JSONObject();
+                  hotelInfo = parseJSONObject(response.body());
+
+                  JSONArray hotelInfoArray = new JSONArray();
+	    		hotelInfoArray = (JSONArray) hotelInfo.get("data");
+
+                  System.out.println(hotelInfoArray + "\n");
+                  System.out.println("Response \n");
+                  int index = 0;
+
+                  
+                  while(index < hotelInfoArray.size()){
+                        JSONObject jsonObject = (JSONObject) hotelInfoArray.get(index);
+
+                        JSONObject hotel = (JSONObject) jsonObject.get("hotel");
+                        System.out.println("hotel: "+hotel+"\n");
+
+                        JSONArray offers = (JSONArray) jsonObject.get("offers");
+                        System.out.println("offers: "+offers +"\n");
+                        jsonObject = (JSONObject) offers.get(0);
+
+                        Hotel currentHotel = new Hotel();
+                        
+                        /**
+                         * Finds price of room
+                         */
+                        JSONObject price = (JSONObject) jsonObject.get("price");
+                        System.out.println("Price: "+ price.get("total"));
+                        currentHotel.setPrice(String.valueOf(price.get("total")));
+
+                        /**
+                         * Finds Room Type and Bed Type
+                         */
+                        JSONObject room = (JSONObject) jsonObject.get("room");
+                        Object typeEstimated = room.get("typeEstimated");
+                        String typeEstimatedString = String.valueOf(typeEstimated);
+                        JSONObject typeEstimatedJSON = parseJSONObject(typeEstimatedString);
+                        System.out.println("Room Type: " + typeEstimatedJSON.get("category"));
+                        System.out.println("Bed Type: " + typeEstimatedJSON.get("bedType"));
+                        currentHotel.setRoomType(String.valueOf(typeEstimatedJSON.get("category")));
+                        currentHotel.setBedType(String.valueOf(typeEstimatedJSON.get("bedType")));
+
+                        /**
+                         * Finds description of room
+                         */
+                        Object description = room.get("description");
+                        String descriptionString = String.valueOf(description);
+                        JSONObject descriptionJSON = parseJSONObject(descriptionString);
+                        System.out.println("Description: " + descriptionJSON.get("text") + "\n");
+                        currentHotel.setDescription(String.valueOf(descriptionJSON.get("text")));
+
+                        /**
+                         * Finds address of hotel
+                         */
+                        JSONObject address = (JSONObject) hotel.get("address");
+                        JSONArray addressArray = (JSONArray) address.get("lines");
+                        System.out.println(addressArray.get(0));
+                        currentHotel.setAddress(String.valueOf(addressArray.get(0)));
+
+                        /**
+                         * Finds hotel amenities
+                         */
+                        JSONArray amenities = (JSONArray) hotel.get("amenities");
+                        int j = 0;
+                        List<String> amenitiesList = new ArrayList();
+                        while(j < amenities.size()){
+                              System.out.println(amenities.get(j));
+                              amenitiesList.add(String.valueOf(amenities.get(j)));
+                              currentHotel.setAmenities(String.valueOf(amenities.get(j)));
+                              j++;
+                        }
+                        
+
+                        /**
+                         * Finds hotel rating 
+                         */
+                        System.out.println("Rating: "+hotel.get("rating"));
+                        currentHotel.setRating(String.valueOf(hotel.get("rating")));
+
+                        /**
+                         * Finds uri for hotel
+                         */
+                        // JSONArray media = (JSONArray) hotel.get("media");
+                        // int k = 0;
+                        // while (k < media.size()){
+                        //       System.out.println(media.get(k));
+                        //       k++;
+                        // }
+
+                        /**
+                         * Finds phone number of hotel
+                         */
+                        JSONObject contact = (JSONObject) hotel.get("contact");
+                        System.out.println(contact.get("phone"));
+                        currentHotel.setPhoneNumber(String.valueOf(contact.get("phone")));
+
+                        /**
+                         * Finds name of hotel
+                         */
+                        System.out.println("Name of hotel: "+hotel.get("name"));
+                        currentHotel.setName(String.valueOf(hotel.get("name")));
+
+                        System.out.println("\n" + currentHotel.toString());
+
+                        hotelList.add(currentHotel);
+                        index++;
+                  }
+                        
+            }
+            catch(IOException e) {
+                  e.printStackTrace();
+            }
+            catch(InterruptedException e) {
+                  e.printStackTrace();
+            }
+		return hotelList;
+	}
 
 	
 
