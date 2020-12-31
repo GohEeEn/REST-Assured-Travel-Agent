@@ -57,7 +57,7 @@
 				</div>
 				<div class="col-4">
 					<h4>Compare unique Hotels</h4>
-					<form action="/processForm" method="post" >
+					<form action="/processHotelsForm" method="post" >
 						<div class="row">
 							<div class="col">
 							<label for="name">Search hotels in</label>
@@ -110,34 +110,37 @@
 
 					 <fieldset class="form-group">
 					    <div class="row">
-					      <legend class="col-form-label col-sm-2 pt-0">Ratings</legend>
-					      <div class="col-sm-10">
+					      <legend class="col-form-label col-sm-5 pt-0">Minimum Ratings</legend>
+					      <div class="col-sm-7">
+
+<!-- 					      <legend class="col-form-label col-sm-6 pt-0">Minimum Ratings</legend>
+					      <div class="col-sm-8"> -->
 					        <div class="form-check">
-					          <input class="form-check-input" type="radio" name="oneStar" id="oneStar" value="oneStar" checked>
+					          <input class="form-check-input" type="radio" name="minRatings" id="ratingsRadio" value="oneStar" required="required">
 					          <label class="form-check-label" for="oneStar">
 					            1 star
 					          </label>
 					        </div>
 					        <div class="form-check">
-					          <input class="form-check-input" type="radio" name="twoStar" id="twoStar" value="twoStar">
+					          <input class="form-check-input" type="radio" name="minRatings" id="ratingsRadio" value="twoStar" required="required">
 					          <label class="form-check-label" for="twoStar">
 					            2 star
 					          </label>
 					        </div>
 					        <div class="form-check">
-					          <input class="form-check-input" type="radio" name="threeStar" id="threeStar" value="threeStar">
+					          <input class="form-check-input" type="radio" name="minRatings" id="ratingsRadio" value="threeStar" required="required">
 					          <label class="form-check-label" for="threeStar">
 					            3 star
 					          </label>
 					        </div>
 					        <div class="form-check">
-					          <input class="form-check-input" type="radio" name="fourStar" id="fourStar" value="fourStar">
+					          <input class="form-check-input" type="radio" name="minRatings" id="ratingsRadio" value="fourStar" required="required">
 					          <label class="form-check-label" for="fourStar">
 					            4 star
 					          </label>
 					        </div>
 					         <div class="form-check">
-					          <input class="form-check-input" type="radio" name="fiveStar" id="fiveStar" value="fiveStar">
+					          <input class="form-check-input" type="radio" name="minRatings" id="ratingsRadio" value="fiveStar" required="required">
 					          <label class="form-check-label" for="fiveStar">
 					            5 star
 					          </label>
