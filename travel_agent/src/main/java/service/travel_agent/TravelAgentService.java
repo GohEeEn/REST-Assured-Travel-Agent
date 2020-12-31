@@ -89,7 +89,7 @@ public class TravelAgentService {
 
 		Hotel [] hotels = new Hotel[10];
 			HttpEntity<HotelRequest> request2 = new HttpEntity<>(clientRequest.getHotelRequest());
-			hotels = restTemplate.postForObject("http://hotels/hotels",request2, Hotel[].class);
+			hotels = restTemplate.postForObject("http://hotels-service/hotels",request2, Hotel[].class);
 
 
 
@@ -126,7 +126,7 @@ public class TravelAgentService {
 
 		RestTemplate restTemplate = new RestTemplate();
 			HttpEntity<HotelRequest> request = new HttpEntity<>(clientRequest.getHotelRequest());
-			hotels = restTemplate.postForObject("http://localhost:8087/hotels",request, Hotel[].class);
+			hotels = restTemplate.postForObject("http://localhost:hotels-service/hotels",request, Hotel[].class);
 		Flight [] fs = new Flight[5];
         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
         HttpHeaders headers = new HttpHeaders();
