@@ -32,6 +32,7 @@ spec:
         name: travel-agent
         ports:
         - containerPort: 8081
+        nodePort: 8081
         resources: {}
       restartPolicy: Always
       serviceAccountName: ""

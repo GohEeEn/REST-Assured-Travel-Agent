@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    io.kompose.service: travel-agent
-  name: travel-agent
+    io.kompose.service: hotels
+  name: hotels
 spec:
   ports:
-  - name: "8081"
-    port: 8081
-    targetPort: 8081
+  - name: "8089"
+    port: 8089
+    targetPort: 8089
   selector:
-    io.kompose.service: travel-agent
+    io.kompose.service: hotels
 status:
   loadBalancer: {}
