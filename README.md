@@ -41,3 +41,5 @@ All technologies and methodologies used to build this application (eg. Maven, RE
 ### Notable Resources
 
 Resources referenced to build this application (eg. API documentations)
+
+Note for Barry: There is a rate limit of 5 requests per minute for skyscanner 

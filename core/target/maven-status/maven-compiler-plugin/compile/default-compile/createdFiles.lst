@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 service\core\ClientRequest.class
 service\core\Activity$Price.class
 service\core\HotelRequest.class
@@ -8,14 +7,3 @@ service\core\Activity.class
 service\core\ClientBooking.class
 service\core\Hotel.class
 service\core\Event.class
-=======
-service/core/Event.class
-service/core/Travel.class
-service/core/Hotel.class
-service/core/ClientBooking.class
-service/core/Flight.class
-service/core/Activity$Price.class
-service/core/Activity.class
-service/core/HotelRequest.class
-service/core/ClientRequest.class
->>>>>>> 6fb385cf35522dbe709b42100c89826fd85c1a58

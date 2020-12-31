@@ -60,42 +60,48 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 
 
 @RestController
-public class HotelService {
+public class HotelService2 {
 
       @Autowired
 	@LoadBalanced
 	private RestTemplate restTemplate;
 
 	
-	private Map<Integer, Hotel[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
+      private Map<Integer, Hotel[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
+      private int referenceNumber = 0;
 
 	// POST request from travel agent
 	@RequestMapping(value="/hotels",method=RequestMethod.POST)
 	public ResponseEntity<Hotel[]> getHotelInfo(@RequestBody HotelRequest hotelRequest)  throws URISyntaxException {
 		
 		List<Hotel> clientHotels = new ArrayList<>();
-		System.out.println("getHotelInfo method \n");
+            System.out.println("getHotelInfo method \n");
+            System.out.println("Testidge");
             clientHotels = findHotels(hotelRequest);
             
             /**
              * Converts Hotel ArrayList to Hotel array as it is not possible to send a list so it must be converted 
              */
             Hotel [] hotelsArray = new Hotel[clientHotels.size()];
-            int counter = 0;
-            // System.out.println("\nNo. of hotels: "+clientHotels.size()+"\n");
-            // while (counter < clientHotels.size()){
-            //       hotelsArray[counter] = clientHotels.get(counter);
-            //       counter++;
-            // }
+            Hotel h = new Hotel();
+            h.setAddress("Camden st.");
+            hotelsArray[0] = h;
+            
+            int index = 0;
+            
+            while (index < clientHotels.size()){
+                  System.out.println("TESTING");
+                  hotelsArray[index] = clientHotels.get(index);
+                  index++;
+            }
 
-            // for (Hotel h : hotelsArray){
-            //       h.toString();
-            // }
 
+
+            referenceNumber++;
             System.out.println("\n TESTING \n");
             System.out.println(hotelsArray.length);
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/hotels/"+hotelRequest.getReferenceNumber();     // Create URI for this hotel
+			build().toUriString()+ "/hotels/"+referenceNumber;     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();
             headers.setLocation(new URI(path));
             
@@ -105,7 +111,8 @@ public class HotelService {
 
 	public List<Hotel> findHotels(HotelRequest hotelRequest){
 
-		List<Hotel> hotelList = new ArrayList<>();
+            List<Hotel> hotelList = new ArrayList<>();
+            // Hotel [] testArray = new Hotel[10];
 		System.out.println("findHotels method \n");
 		try{
                   HttpRequest request = HttpRequest.newBuilder()
@@ -179,14 +186,13 @@ public class HotelService {
                          */
                         JSONArray amenities = (JSONArray) hotel.get("amenities");
                         int j = 0;
-                        List<String> amenitiesList = new ArrayList();
+                        String [] amenitiesList = new String[amenities.size()];
                         while(j < amenities.size()){
                               System.out.println(amenities.get(j));
-                              amenitiesList.add(String.valueOf(amenities.get(j)));
-                              currentHotel.setAmenities(String.valueOf(amenities.get(j)));
+                              amenitiesList[j] = String.valueOf(amenities.get(j));
                               j++;
                         }
-                        
+                        currentHotel.setAmenities(amenitiesList);                        
 
                         /**
                          * Finds hotel rating 
