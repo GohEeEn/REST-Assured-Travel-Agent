@@ -89,7 +89,7 @@ public class TravelAgentService {
 
 		Hotel [] hotels = new Hotel[10];
 			HttpEntity<HotelRequest> request2 = new HttpEntity<>(clientRequest.getHotelRequest());
-			// hotels = restTemplate.postForObject("http://localhost:8089/hotels",request2, Hotel[].class);
+			hotels = restTemplate.postForObject("http://hotels/hotels",request2, Hotel[].class);
 
 
 

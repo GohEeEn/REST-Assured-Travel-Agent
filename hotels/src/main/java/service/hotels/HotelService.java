@@ -54,9 +54,19 @@ import java.util.Iterator;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+
+
 
 @RestController
 public class HotelService {
+
+      @Autowired
+	@LoadBalanced
+	private RestTemplate restTemplate;
+
 	
 	private Map<Integer, Hotel[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
 

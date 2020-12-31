@@ -17,21 +17,11 @@ import service.core.HotelRequest;
 public class Client {
 	
 	public static final String newArgs = "http://localhost:8081/bookings";
-<<<<<<< HEAD
 	public static int referenceNumber = 0;
-=======
-<<<<<<< HEAD
 //	public static final String winArgs = "http://localhost:192.168.99.100:8081/bookings";
-=======
-<<<<<<< HEAD
-	public static int referenceNumber = 0;
-=======
 	public static final String winArgs = "http://localhost:192.168.99.100:8081/bookings";
->>>>>>> 8f62162aa1b92e62304b3330572f2dd31b054420
 
 	
->>>>>>> fd57eaac6da07b9fe0460088a37ed211b687d78d
->>>>>>> 8fe896e5f9e240862d932bd5faaa02ed78cdea7e
 	
 	public static void main(String[] args) {
 		
@@ -55,15 +45,6 @@ public class Client {
 
 			HttpEntity<ClientRequest> request = new HttpEntity<>(clientRequest);
 			
-<<<<<<< HEAD
-//			if(SystemUtils.IS_OS_WINDOWS){
-//				flights = restTemplate.postForObject(winArgs,request,Flight[].class);
-//			}
-//			else{
-				flights = restTemplate.postForObject(newArgs,request,Flight[].class);
-
-//			}
-=======
 			// if(SystemUtils.IS_OS_WINDOWS){
 			// 	flights = restTemplate.postForObject(winArgs,request,Flight[].class);
 			// }
@@ -71,7 +52,6 @@ public class Client {
 				flights = restTemplate.postForObject(newArgs,request,Flight[].class);
 
 			// }
->>>>>>> 8f62162aa1b92e62304b3330572f2dd31b054420
 			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
 
 
