@@ -19,6 +19,8 @@ public class Client {
 	public static final String newArgs = "http://localhost:8081/bookings";
 
 	public static int referenceNumber = 0;
+//	public static final String winArgs = "http://localhost:192.168.99.100:8081/bookings";
+	public static final String winArgs = "http://localhost:192.168.99.100:8081/bookings";
 	
 	public static void main(String[] args) {
 		
@@ -40,11 +42,15 @@ public class Client {
 		clientRequest.setReferenceNumber(referenceNumber);
 
 			HttpEntity<ClientRequest> request = new HttpEntity<>(clientRequest);
-
-//		for (ClientBooking booking : clients){
-//			HttpEntity<ClientBooking> request = new HttpEntity<>(booking);
-
+			
+			// if(SystemUtils.IS_OS_WINDOWS){
+			// 	flights = restTemplate.postForObject(winArgs,request,Flight[].class);
+			// }
+			// else{
 				flights = restTemplate.postForObject(newArgs,request,Flight[].class);
+
+			// }
+			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
 
 			for (int i=0; i < flights.length; i++){
 				Flight f = flights[i];
@@ -53,6 +59,7 @@ public class Client {
 					System.out.println("Price of flight is: " + f.getPrice());
 				}	
 			}
+
 		/**
 		 *  Barry's testing code below
 		 *  */ 
@@ -69,41 +76,9 @@ public class Client {
 		 * 
 		 * restTemplate.put(args[0],request);
 		 */
+
 	} 
    
-	// /**
-	//  * Display the client info nicely.
-	//  * 
-	//  * @param info
-	//  */
-	// public static void displayProfile(ClientInfo info) {
-	// 	System.out.println("|=================================================================================================================|");
-	// 	System.out.println("|                                     |                                     |                                     |");
-	// 	System.out.println(
-	// 			"| Name: " + String.format("%1$-29s", info.getName()) + 
-	// 			" | Gender: " + String.format("%1$-27s", (info.getGender()==ClientInfo.MALE?"Male":"Female")) +
-	// 			" | Age: " + String.format("%1$-30s", info.getAge())+" |");
-	// 	System.out.println(
-	// 			"| License Number: " + String.format("%1$-19s", info.getLicenseNumber()) + 
-	// 			" | No Claims: " + String.format("%1$-24s", info.getNoClaims() +" years") +
-	// 			" | Penalty Points: " + String.format("%1$-19s", info.getPoints())+" |");
-	// 	System.out.println("|                                     |                                     |                                     |");
-	// 	System.out.println("|=================================================================================================================|");
-	// }
-
-	// /**
-	//  * Display a quotation nicely - note that the assumption is that the quotation will follow
-	//  * immediately after the profile (so the top of the quotation box is missing).
-	//  * 
-	//  * @param quotation
-	//  */
-	// public static void displayQuotation(Quotation quotation) {
-	// 	System.out.println(
-	// 			"| Company: " + String.format("%1$-26s", quotation.getCompany()) + 
-	// 			" | Reference: " + String.format("%1$-24s", quotation.getReference()) +
-	// 			" | Price: " + String.format("%1$-28s", NumberFormat.getCurrencyInstance().format(quotation.getPrice()))+" |");
-	// 	System.out.println("|=================================================================================================================|");
-	// }
 	
 	/**
 	 * Test Data
