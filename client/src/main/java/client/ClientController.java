@@ -1,10 +1,18 @@
 package client;
 
 import java.io.IOException;
+<<<<<<< HEAD
+=======
+import java.io.PrintWriter;
+>>>>>>> 8a3675545a4fb007e34a27c0e0019b23399c444f
 import java.util.*;
 
 import javax.servlet.http.HttpServletResponse;
 import service.core.ClientBooking;
+<<<<<<< HEAD
+=======
+import service.core.HotelRequest;
+>>>>>>> 8a3675545a4fb007e34a27c0e0019b23399c444f
 import client.Client;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +35,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 public class ClientController { 
+<<<<<<< HEAD
 	
 //	@RequestMapping(value="/",method=RequestMethod.GET)
 //	@ResponseBody 
@@ -40,6 +49,29 @@ public class ClientController {
 
 			ClientBooking[] clientArray = new ClientBooking[1] ;
 			ClientBooking clientBooking = new ClientBooking();
+=======
+    private HashMap<String, String> cityCodes = new HashMap<String, String>();
+    private ClientBooking clientBooking = new ClientBooking();
+    private HotelRequest hotelRequest = new HotelRequest();
+//	@RequestMapping(value="/",method=RequestMethod.GET)
+//	@ResponseBody 
+	@GetMapping("/")
+	public String greeting(){
+		return "index.html";
+	}
+	
+	@GetMapping("/hotels")
+	public String hotelsForm(){
+		return "hotels.html";
+	}
+	
+
+	@RequestMapping(value="/processFlightsForm",method=RequestMethod.POST)  
+	public void processFlightsForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
+
+			// ClientBooking[] clientArray = new ClientBooking[1] ;
+			// ClientBooking clientBooking = new ClientBooking();
+>>>>>>> 8a3675545a4fb007e34a27c0e0019b23399c444f
 			clientBooking.setName(name);
 			clientBooking.setCityOfOrigin(cityOfOrigin);
 			clientBooking.setCountryOfOrigin(countryOfOrigin);
@@ -49,12 +81,75 @@ public class ClientController {
 			clientBooking.setReturnDate(returnDate);
 			clientBooking.setOutboundDate(outboundDate);
 			clientBooking.setCurrency(currency);
+<<<<<<< HEAD
 			clientArray[0] = clientBooking;
 			Client.bookingAdventure(clientArray);
 			response.sendRedirect("/");
 	}
 }
 
+=======
+            // clientArray[0] = clientBooking;
+            cityCodeGenerator();
+			response.sendRedirect("/hotels");
+    }
+    
+    private void cityCodeGenerator(){
+        Scanner sc = new Scanner("city_codes.txt");
+        while(sc.hasNextLine()) 
+        {   
+            String line = sc.nextLine();
+            int index = line.lastIndexOf(" ")+1;
+            String cityCode = line.substring(index);
+            String cityName = line.substring(0,index);
+	        cityCodes.put(cityName.toLowerCase() , cityCode );
+        }
+    }
+
+    @RequestMapping(value="/processHotelsForm",method=RequestMethod.POST)
+    public void processHotelsForm(String location, String rooms, String checkIn, String checkOut, String minRating, HttpServletResponse response) throws IOException
+    {
+        if(cityCodes.get(location.toLowerCase())==null){
+            PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid city entered, enter again" + "');");
+            out.println("window.location.replace('" + "/hotels" + "');");
+            out.println("</script>");
+        }else {
+			response.sendRedirect("/");
+        }
+        
+    }  
+}
+
+// //	@RequestMapping(value="/",method=RequestMethod.GET)
+// //	@ResponseBody 
+// 	@GetMapping("/")
+// 	public String greeting(){
+// 		return "index.html";
+// 	}
+
+// 	@RequestMapping(value="/processForm",method=RequestMethod.POST)  
+// 	public void processForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
+
+// 			ClientBooking[] clientArray = new ClientBooking[1] ;
+// 			ClientBooking clientBooking = new ClientBooking();
+// 			clientBooking.setName(name);
+// 			clientBooking.setCityOfOrigin(cityOfOrigin);
+// 			clientBooking.setCountryOfOrigin(countryOfOrigin);
+// 			clientBooking.setCityOfDestination(cityOfDestination);
+// 			clientBooking.setCountryOfDestination(countryOfDestination);
+// 			clientBooking.setOneWayTrip(oneWayTrip);
+// 			clientBooking.setReturnDate(returnDate);
+// 			clientBooking.setOutboundDate(outboundDate);
+// 			clientBooking.setCurrency(currency);
+// 			clientArray[0] = clientBooking;
+// 			Client.bookingAdventure(clientArray);
+// 			response.sendRedirect("/");
+// 	}
+// }
+// 
+>>>>>>> 8a3675545a4fb007e34a27c0e0019b23399c444f
 
 
 

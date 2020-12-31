@@ -1,8 +1,9 @@
 service\core\ClientRequest.class
+service\core\Activity$Price.class
 service\core\HotelRequest.class
 service\core\Travel.class
 service\core\Flight.class
+service\core\Activity.class
 service\core\ClientBooking.class
 service\core\Hotel.class
-service\core\Destination.class
 service\core\Event.class

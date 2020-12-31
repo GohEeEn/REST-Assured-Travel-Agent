@@ -46,7 +46,6 @@ import org.json.simple.parser.ParseException;
 import service.core.ClientBooking;
 import service.core.Hotel;
 import service.hotels.NoSuchHotelQuoteException;
-import service.core.Hotel;
 import service.core.HotelRequest;
 
 import java.util.Iterator;
@@ -54,9 +53,19 @@ import java.util.Iterator;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+
+
 
 @RestController
 public class HotelService {
+
+      @Autowired
+	@LoadBalanced
+	private RestTemplate restTemplate;
+
 	
 	private Map<Integer, Hotel[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
 
@@ -73,15 +82,18 @@ public class HotelService {
              */
             Hotel [] hotelsArray = new Hotel[clientHotels.size()];
             int counter = 0;
-            while (counter < clientHotels.size()){
-                  hotelsArray[counter] = clientHotels.get(counter);
-            }
+            // System.out.println("\nNo. of hotels: "+clientHotels.size()+"\n");
+            // while (counter < clientHotels.size()){
+            //       hotelsArray[counter] = clientHotels.get(counter);
+            //       counter++;
+            // }
 
-            for (Hotel h : hotelsArray){
-                  h.toString();
-            }
+            // for (Hotel h : hotelsArray){
+            //       h.toString();
+            // }
 
-
+            System.out.println("\n TESTING \n");
+            System.out.println(hotelsArray.length);
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/hotels/"+hotelRequest.getReferenceNumber();     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();

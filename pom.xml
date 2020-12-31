@@ -14,6 +14,6 @@
             <module>activities</module>
             <module>eureka</module>
             <module>testAPI</module>
-            <module>travelService</module>
-      </modules>      
+<!--             <module>travelService</module>
+ -->      </modules>          
 </project>

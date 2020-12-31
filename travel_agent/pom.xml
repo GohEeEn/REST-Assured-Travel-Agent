@@ -78,7 +78,7 @@
 				<configuration>
 					<mainClass>travel_agent.Application</mainClass>
 				</configuration>
-            	</plugin>
+			</plugin>
 		</plugins>
 	</build>
 </project>
