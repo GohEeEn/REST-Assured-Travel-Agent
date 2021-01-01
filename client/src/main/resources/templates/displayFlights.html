@@ -47,15 +47,41 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-8"><h3>Find Deals on Adventure Trips</h3>
-					<table>
-						<tr>
-<!-- 						We can use this space to display result???
- -->						</tr>
-					</table>
+					<h4>Flights found according to your requirements</h4>
+                    <form action="/userFlightSelection" method="post" >
+                        <div class="container">
+                            <table>
+                                <tr>
+                                    <th class="col-md-auto">Origin</th>
+                                    <th class="col-md-auto">Destination</th>
+                                    <th class="col-md-auto">Outbound Date</th>
+                                    <th class="col-md-auto">Return Date</th>
+                                    <th class="col-md-auto">Airline</th>
+                                    <th class="col-md-auto">Price</th>
+                                    <th class="col-md-auto">Origin Airport</th>
+                                    <th class="col-md-auto">Destination Airport</th>
+                                </tr>
+                                <tr th:each="flightDetail : ${flightDetails}">
+                                    <td class="col-md-auto" th:text="${flightDetail.cityOfOrigin} "></td>
+                                    <td class="col-md-auto" th:text="${flightDetail.cityOfDestination} "></td>
+                                    <td class="col-md-auto" th:text="${flightDetail.outboundDate} "></td>
+                                    <td class="col-md-auto" th:text="${flightDetail.returnDate} "></td>
+                                    <td class="col-md-auto" th:text="${flightDetail.airline} "></td>
+                                    <td class="col-md-auto" th:text="${flightDetail.price} "></td>
+                                    <td class="col-md-auto" th:text="${flightDetail.originAirportName} "></td>
+                                    <td class="col-md-auto" th:text="${flightDetail.destinationAirportName} "></td>                
+                                </tr>
+                            </table>
+                        </div>
+
+						<br>
+						<button type="submit" class="btn btn-primary">Submit</button>
+
+					</form>
 					<br>
 
 				</div>
-				<div class="col-4">
+<!-- 				<div class="col-4">
 					<h4>Flights found according to your requirements</h4>
                     <form action="/userFlightSelection" method="post" >
                         <div class="container">
@@ -88,7 +114,7 @@
 
 					</form>
 
-				</div>
+				</div> -->
 			</div>
 		</div>
 		 <div class="footer">

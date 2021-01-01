@@ -1,6 +1,6 @@
-service/flights/FlightQuote.class
-service/flights/NoSuchFlightQuoteException.class
-service/flights/Application.class
-service/flights/FlightService$NoSuchQuotationException.class
-service/flights/ServiceInstanceRestController.class
-service/flights/FlightService.class
+service\flights\NoSuchFlightQuoteException.class
+service\flights\FlightService.class
+service\flights\FlightQuote.class
+service\flights\ServiceInstanceRestController.class
+service\flights\Application.class
+service\flights\FlightService$NoSuchQuotationException.class
