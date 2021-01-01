@@ -28,18 +28,18 @@ Given 2 Parameters (CityName, CountryName) as the location -> A list of Activity
 
 ### Notes
 
-1. API Credentials
+#### ~~API Credentials~~
 
-- On Java class _ActivitiesRecommenderService line 20-21_, the API credentials are not included due to [security practice](https://developers.amadeus.com/blog/best-practices-api-key-storage).
+- On Java class _ActivitiesRecommenderService_, the API credentials are not included due to [security practice](https://developers.amadeus.com/blog/best-practices-api-key-storage).
 - Contact [me](mailto:vincentgoh1998@gmail.com) to get my API credential or using your own Amadeus Developer Credentials.
 - The implementation here fetches those credentials from the machine ENVIRONMENT variables *AMADEUS_CLIENT_ID* and *AMADEUS_CLIENT_SECRET* with `System.getenv()`
 
-2. API Response Examples
+#### API Response Examples
 
 - An example of __Nominatim Search API response__ is attached (ie. _successful_location_search.json_), while it is basically in __JSON__ format in this documentation [link](https://nominatim.org/release-docs/develop/api/Output/)
 - There is also an example of __Activty[] Response__ of __Amadeus Tours & Activities API__ in this module (ie. _successful_activity_list.json_). The `Activity` class in `core` module is almost the duplicate of `Activity` class of Amadeus Java SDK, while it is in _Java Bean_ format, and only important information are stored.
 
-3. Query Validation
+#### Query Validation
 
 - City or country name with _non-ASCII character(s)_ are __accepted__, example Düsseldorf (Germany), Provence-Alpes-Côte d'Azur (France) and Garðabær (Iceland)
 - Most of the special characters such as tab ('\t') ane newline ('\n') character are __unaccepted__ except _whitespace_
@@ -60,9 +60,9 @@ Tests for `https://test.api.amadeus.com/v1/shopping/activities?latitude=&longitu
 
 It turns out _searching/representing location with their geolocation is the most efficient way_. The translation from location name to its geolocation is one by using __Nominatim API__
 
-^___Note : It shows that there may have some issue of activities searching in certain geolocation___
+^___Note : It shows that there may have some issue of activities searching in certain geolocation (country)___
 
-**Note** : GPS coordinates checked with this [checker](https://www.gps-coordinates.net)
+For more tests done, look into unit test cases in class `ActivitiesRecommenderServiceTest.java` (located in `/test` directory)
 
 ### References
 
