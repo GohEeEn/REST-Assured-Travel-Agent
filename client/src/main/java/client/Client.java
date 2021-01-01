@@ -20,20 +20,26 @@
  	public static final String newArgs = "http://localhost:8081/bookings";
  	public static int referenceNumber = 0;
 	
- 	public static void main(String[] args) {
+ //	public static void main(String[] args) {
 		
- 	// public static void bookingAdventure(ClientBooking[] clients) {	
- 		Flight[] flights = new Flight[10];
+    public static void sendBookingToTravelAgent(FlightRequest flightRequest, HotelRequest hotelRequest) {	
+ 		
+    	Flight[] flights = new Flight[10];
  		RestTemplate restTemplate = new RestTemplate();
 
- 		FlightRequest flightRequest = new FlightRequest("Donald Trump", "Dublin", "Ireland", "Paris", "France", false,
- 				 "2021-01-09", "2021-01-17", "EUR");
- 		HotelRequest hotelRequest = new HotelRequest();
- 		hotelRequest.setCityCode("PAR");
- 		hotelRequest.setNumberOfGuests(1);
+// 		FlightRequest flightRequest = new FlightRequest("Donald Trump", "Dublin", "Ireland", "Paris", "France", false,
+// 				 "2021-01-09", "2021-01-17", "EUR");
+// 		HotelRequest hotelRequest = new HotelRequest();
+// 		hotelRequest.setCityCode("PAR");
+// 		hotelRequest.setNumberOfGuests(1);
  		ClientRequest clientRequest = new ClientRequest();
  		clientRequest.setFlightRequest(flightRequest);
  		clientRequest.setHotelRequest(hotelRequest);
+ 		
+ //		Uncomment this after testing my Code to get same result as Barry
+	/*
+	 * referenceNumber++; clientRequest.setReferenceNumber(referenceNumber);
+	 */
 
 
                    HttpEntity<ClientRequest> request = new HttpEntity<>(clientRequest);
