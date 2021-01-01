@@ -4,7 +4,7 @@ A feature that generates a list of activities available in a given location. In 
 
 ## About this module
 
-This module is meant to be an acivity finder for users who have booked their flight, and generate a list of activities according to their flight destination. Here is the full design stages to provide the service :
+This module is meant to be an acivity finder for users who have input both the city and country name as the location, and generate a list of activities according to that location. Here is the full design stages to provide the service :
 
 | Step | TODO                               | Purpose + HOW TO                                                                  | Progress       |
 | ---- | ---------------------------------- | --------------------------------------------------------------------------------- | -------------- |
@@ -12,6 +12,8 @@ This module is meant to be an acivity finder for users who have booked their fli
 | 2    | Validate the query received        | Done with Regular Expression, to reject queries with unwanted characters or blank | Done           |
 | 3    | Search for geocode of a location   | Finding the location through its geocode with Nominatim Search API                | Done           |
 | 4    | Use the geocode to find activities | Required parameter : Geo-coordinate^                                              | Done           |
+
+Given 2 Parameters (CityName, CountryName) as the location -> A list of Activity objects which represent individual activities available in that location
 
 ^ Reference [here](https://amadeus4dev.github.io/amadeus-java/reference/com/amadeus/shopping/Activities.html)
 
