@@ -119,7 +119,7 @@ public class ClientController {
             }
 
             hotelRequest.setMinNumberOfStarsRequiredForHotel(minNumOfStars);
-//            Client.sendBookingToTravelAgent(flightRequest, hotelRequest);
+            Client.sendBookingToTravelAgent(flightRequest, hotelRequest);
 			response.sendRedirect("/");
         }
         
