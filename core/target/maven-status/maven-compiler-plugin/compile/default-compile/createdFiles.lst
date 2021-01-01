@@ -1,5 +1,6 @@
 service\core\ClientRequest.class
 service\core\Activity$Price.class
+service\core\Geocode.class
 service\core\FlightRequest.class
 service\core\TravelPackage.class
 service\core\HotelRequest.class
