@@ -15,10 +15,22 @@
 // import service.core.HotelRequest;
 // import service.core.TravelPackage;
 
+// import org.json.simple.JSONArray;
+// import org.json.simple.JSONObject;
+// import org.json.simple.parser.JSONParser;
+// import org.json.simple.parser.ParseException; 
+// import java.net.URI;
+// import java.net.URISyntaxException;
+// import java.net.http.HttpClient;
+// import java.net.http.HttpRequest;
+// import java.net.http.HttpResponse;
+// import java.io.IOException;
+
 // public class ClientB {
 	
 // 	public static final String newArgs = "http://localhost:8081/bookings";
 // 	public static int referenceNumber = 0;
+// 	final static String locale = "en-GB";     // need to call Skycanner API
 	
 // 	public static void main(String[] args) {
 		
@@ -28,6 +40,12 @@
 
 // 		FlightRequest flightRequest = new FlightRequest("Donald Trump", "Dublin", "Ireland", "Paris", "France", false,
 // 				 "2021-01-09", "2021-01-17", "EUR");
+		
+// 		flightRequest.setCountryOfOriginCode(getListMarkets("Ireland"));
+// 		flightRequest.setCountryOfDestinationCode(getListMarkets("France"));
+
+// 		System.out.println("DEST CODE: "+getListMarkets("France"));
+
 // 		HotelRequest hotelRequest = new HotelRequest();
 // 		hotelRequest.setCityCode("PAR");
 // 		hotelRequest.setNumberOfGuests(1);
@@ -35,13 +53,39 @@
 // 		clientRequest.setFlightRequest(flightRequest);
 // 		clientRequest.setHotelRequest(hotelRequest);
 
+		
+// 		ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
+// 		ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
+
+
+// 		originAirportIDs = getListPlaces(flightRequest.getCityOfOrigin(), flightRequest.getCountryOfOrigin(),   // Find airport IDs for origin
+// 					flightRequest.getCountryOfOriginCode(), flightRequest.getCurrency());
+// 		String [] originAirportIDsArray = convertAirportIDsListToAirportIDsArray(originAirportIDs);    // converts list to array
+		
+// 		destinationAirportIDs = getListPlaces(flightRequest.getCityOfDestination(), flightRequest.getCountryOfDestination(),   // Find airport IDs for destination
+// 					flightRequest.getCountryOfDestinationCode(), flightRequest.getCurrency()); 
+// 		String [] destAirportIDsArray = convertAirportIDsListToAirportIDsArray(destinationAirportIDs);    // converts list to array
+		
+// 		System.out.println("\n ORIGIN AIRPORT IDS: "+originAirportIDsArray+"\n");
+// 		for(String s : originAirportIDsArray){
+// 			System.out.println(s);
+// 		}
+// 		System.out.println("\n ORIGIN AIRPORT IDS: "+destAirportIDsArray+"\n");
+// 		for(String s : destAirportIDsArray){
+// 			System.out.println(s);
+// 		}
+
+// 		flightRequest.setOriginAirortIDs(originAirportIDsArray);
+// 		flightRequest.setDestAirortIDs(destAirportIDsArray);;
+
 
 //                   HttpEntity<ClientRequest> request = new HttpEntity<>(clientRequest);
                   
-//                   TravelPackage travelPackage = new TravelPackage();
+// 			TravelPackage travelPackage = new TravelPackage();
+// 			System.out.println("\n Country Code: "+getListMarkets("Ireland"));
 //                   travelPackage = restTemplate.postForObject(newArgs,request,TravelPackage.class);
 		
-// 			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
+		
 
                   
 //                   Hotel [] hotels2 = travelPackage.getHotels();
@@ -62,18 +106,177 @@
 // 			}
 
 // 		/**
-// 		 *  Barry's testing code below
+// 		 *  Testing code for PUT below
 // 		 *  */ 
 // 		// HotelRequest h = clientRequest.getHotelRequest();
 // 		// h.setNumberOfGuests(14);
 // 		// clientRequest.setHotelRequest(h);
 // 		//  HttpEntity<ClientRequest> request2 = new HttpEntity<>(clientRequest);
-// 		//  restTemplate.put(newArgs+"/1",request2);
-// 		//   HttpEntity<Integer> request2 = new HttpEntity<>(767);
-// 		//   restTemplate.put(newArgs+"/1",request2);
-		 
-		 
+// 		// restTemplate.put(newArgs+"/1",request2);
+
+// 		 /**
+// 		 *  Testing code for PATCH below
+// 		 *  */ 
+// 		//  HotelRequest h2 = clientRequest.getHotelRequest();
+// 		// h2.setNumberOfGuests(26);
+// 		// clientRequest.setHotelRequest(h2);
+// 		//  HttpEntity<ClientRequest> request3 = new HttpEntity<>(clientRequest);
+// 		//  TravelPackage travelPackage2 = new TravelPackage();
+// 		//  travelPackage2 = restTemplate.patchForObject(newArgs+"/1",request3,TravelPackage.class);
+// 		// Flight [] testFly = new Flight[10];
+// 		// testFly = travelPackage2.getFlights();
+// 		// System.out.println("\n "+testFly[0].getAirline()+"\n");		
+
+		
 // 	} 
+
+// 	/**
+// 	 * The following method converts the array list of airport IDs to an array of airport IDs as we cannot pass a list
+// 	 * using REST
+// 	 * 
+// 	 * @param countryName
+// 	 * @return
+// 	 */
+
+// 	 public static String [] convertAirportIDsListToAirportIDsArray(ArrayList<String> airportIDsList){
+		 
+// 		String [] airportIDsArray = new String[airportIDsList.size()];
+
+// 		int index = 0;
+// 		for (String id : airportIDsList){
+			
+// 			airportIDsArray[index] = airportIDsList.get(index);
+// 			index++;
+// 		}
+// 		return airportIDsArray;
+// 	 }
+
+// 	/**
+// 	 * The following code is used to retrieve the country code for the country name given as this is needed for the Skyscanner API request
+// 	 * 
+// 	 * @param countryName
+// 	 * @return countryCode
+// 	 */
+
+// 	public static String getListMarkets(String countryName) { 
+		
+// 		String countryCode = "";
+
+// 		try {
+// 			HttpRequest requestCode = HttpRequest.newBuilder()
+// 				.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/countries/en-GB"))
+// 				.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
+// 				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+// 				.method("GET", HttpRequest.BodyPublishers.noBody())
+// 				.build();
+// 			HttpResponse<String> response = HttpClient.newHttpClient().send(requestCode, HttpResponse.BodyHandlers.ofString());
+
+// 			/**
+// 			 * TODO may need to delete this response if examples.json isn't needed going forward
+// 			 */
+// 			// HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("countryCodes.json")));
+
+// 			String countryCodes = response.body();
+// 			JSONObject countryCodesJson = parseJSONObject(countryCodes);
+
+// 			JSONArray countryCodesArray = new JSONArray();
+// 	    		countryCodesArray = (JSONArray) countryCodesJson.get("Countries");
+			
+// 			//loop through array to find the country code 
+// 			int index = 0;
+// 			while (index < countryCodesArray.size()) {
+
+// 				JSONObject jsonObject = (JSONObject) countryCodesArray.get(index);
+// 				String name = (String) jsonObject.get("Name");
+				
+// 				if (name.equals(countryName)){
+// 					countryCode = (String) jsonObject.get("Code");
+// 				}
+// 				index++;
+// 			}	
+
+// 		} catch(IOException e) {
+//                   e.printStackTrace();
+// 		}
+// 		catch(InterruptedException e) {
+//                   e.printStackTrace();
+// 		}  
+// 		return countryCode;
+// 	}
+
+// 	/**
+// 	 * The following method will retrieve the airport IDs 
+// 	 * 
+// 	 * @param cityOfDestination
+// 	 * @param countryOfDestination
+// 	 * @param countryOfOriginCode
+// 	 * @param currency
+// 	 * @return
+// 	 */
+
+// 	// GET ListPlaces (Skyscanner API)
+// 	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
+		
+// 		ArrayList<String> airportIDs = new ArrayList();
+
+// 		try {
+// 			HttpRequest request = HttpRequest.newBuilder()
+// 					.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/"+
+// 						countryOfOriginCode+"/"+currency+"/"+locale+"/?query="+cityOfDestination+"%20"+countryOfDestination))
+// 					.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
+// 					.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+// 					.method("GET", HttpRequest.BodyPublishers.noBody())
+// 					.build();
+// 			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+// 			/**
+// 			 * TODO may need to delete this response if airports.json isn't needed going forward
+// 			 */
+// 			// HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("airports.json")));
+			
+// 			System.out.println("Get ListPlaces: "+response.body());
+
+// 			String places = response.body();
+// 			JSONObject placesJson = parseJSONObject(places);
+
+// 			JSONArray placesArray = new JSONArray();
+// 		      placesArray = (JSONArray) placesJson.get("Places");
+// 			System.out.println("Places array: "+placesArray);
+			
+// 			int index = 0;
+// 			while (index < placesArray.size()) {
+// 				JSONObject jsonObject = (JSONObject) placesArray.get(index);
+// 				airportIDs.add((String) jsonObject.get("PlaceId"));
+// 				index++;
+// 			}	
+
+// 		} catch(IOException e) {
+//                   e.printStackTrace();
+// 		}
+// 		catch(InterruptedException e) {
+//                   e.printStackTrace();
+// 		}  
+// 		return airportIDs;
+// 	}
+
+// 	/**
+// 	 * The following code converts a given string to a JSON object
+// 	 * 
+// 	 * @param response
+// 	 * @return jsonObject
+// 	 */
+
+// 	public static JSONObject parseJSONObject(String response){
+
+// 		JSONObject jsonObject = new JSONObject();
+// 		try{
+// 			JSONParser parser = new JSONParser();
+// 			jsonObject = (JSONObject) parser.parse(response);
+// 		} catch (ParseException e) {
+// 			e.printStackTrace();
+// 		}
+// 		return jsonObject;
+// 	}
+
    
 // 	// /**
 // 	//  * Display the client info nicely.

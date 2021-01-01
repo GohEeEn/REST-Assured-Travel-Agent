@@ -28,6 +28,10 @@ public class FlightRequest {
 	private String outboundDate; //format: yyyy-mm-dd or null
 	private String currency;
 	private int referenceNumber;
+	private String countryOfOriginCode;
+	private String countryOfDestinationCode;
+	private String [] originAirportIDs;
+	private String [] destAirportIDs;
 
 	public String getName(){
 		return name;
@@ -108,7 +112,40 @@ public class FlightRequest {
 
       public void setReferenceNumber(int referenceNumber){
             this.referenceNumber = referenceNumber;
-      }
+	}
+	
+	public String getCountryOfOriginCode(){
+		return countryOfOriginCode;
+	}
+
+	public void setCountryOfOriginCode(String countryOfOriginCode){
+		this.countryOfOriginCode = countryOfOriginCode;
+	}
+
+	public String getCountryOfDestinationCode(){
+		return countryOfDestinationCode;
+	}
+
+	public void setCountryOfDestinationCode(String countryOfDestinationCode){
+		this.countryOfDestinationCode = countryOfDestinationCode;
+	}
+
+	public String[] getOriginAirportIDs(){
+		return originAirportIDs;
+	}
+
+	public void setOriginAirortIDs(String[] originAirportIDs){
+		this.originAirportIDs = originAirportIDs;
+	}
+
+	public String[] getDestAirportIDs(){
+		return destAirportIDs;
+	}
+
+	public void setDestAirortIDs(String[] destAirportIDs){
+		this.destAirportIDs = destAirportIDs;
+	}
+
 	/**
 	 * TODO (Barry): Must update equals method with ref num
 	 */

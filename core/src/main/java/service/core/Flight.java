@@ -90,9 +90,16 @@ public class Flight {
       }
 
       public String toString(){
-            String flightInfo = "";
-            flightInfo += cityOfOrigin + "\n" + cityOfDestination  + "\n" + outboundDate + "\n" + returnDate  + "\n";
-            flightInfo += airline  + "\n" + price  + "\n" + originAirportName  + "\n" + destinationAirportName;
+            String flightInfo = "\n******************* FLIGHT *******************\n";
+            flightInfo += "\nCity of Origin: " + cityOfOrigin + "\n";
+            flightInfo += "City of Destination: " + cityOfDestination  + "\n";
+            flightInfo += "Date of Departure: " + outboundDate + "\n";
+            flightInfo += "Date of return: " + returnDate  + "\n";
+            flightInfo += "Airline: " + airline  + "\n";
+            flightInfo += "Price: " + price  + "\n";
+            flightInfo += "Departure flight airport: " + originAirportName  + "\n";
+            flightInfo += "Return flight airport: " + destinationAirportName + "\n";
+            flightInfo += "\n******************* FLIGHT *******************\n";
             return flightInfo;
       }
 

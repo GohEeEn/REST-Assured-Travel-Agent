@@ -45,7 +45,7 @@ import org.json.simple.parser.ParseException;
 
 import service.core.FlightRequest;
 import service.core.Hotel;
-import service.hotels.NoSuchHotelQuoteException;
+import service.hotels.NoSuchHotelException;
 import service.core.HotelRequest;
 
 import java.util.Iterator;
