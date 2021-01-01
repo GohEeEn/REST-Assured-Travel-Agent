@@ -1,9 +1,9 @@
 package service.core;
 
-public class ClientBooking {
+public class FlightRequest {
 
 	
-	public ClientBooking(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination,
+	public FlightRequest(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination,
 	String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency) {
 		this.name = name;
 		this.cityOfOrigin = cityOfOrigin; 
@@ -16,7 +16,7 @@ public class ClientBooking {
 		this.currency = currency;
 	}
 	
-	public ClientBooking() {}
+	public FlightRequest() {}
 
 	private String name;
 	private String cityOfOrigin;
@@ -112,16 +112,16 @@ public class ClientBooking {
 	/**
 	 * TODO (Barry): Must update equals method with ref num
 	 */
-	public Boolean equals(ClientBooking clientBooking){
-		if (this.getName().equals(clientBooking.getName()) &&
-			this.getCityOfOrigin().equals(clientBooking.getCityOfOrigin()) &&
-			this.getCountryOfOrigin().equals(clientBooking.getCountryOfOrigin()) && 
-			this.getCityOfDestination().equals(clientBooking.getCityOfDestination()) &&  
-			this.getCountryOfDestination().equals(clientBooking.getCountryOfDestination()) &&    
-			(this.getOneWayTrip() == clientBooking.getOneWayTrip()) &&    
-			this.getReturnDate().equals(clientBooking.getReturnDate()) &&
-			this.getOutboundDate().equals(clientBooking.getOutboundDate()) &&
-			this.getCurrency().equals(clientBooking.getCurrency()) ) {
+	public Boolean equals(FlightRequest flightRequest){
+		if (this.getName().equals(flightRequest.getName()) &&
+			this.getCityOfOrigin().equals(flightRequest.getCityOfOrigin()) &&
+			this.getCountryOfOrigin().equals(flightRequest.getCountryOfOrigin()) && 
+			this.getCityOfDestination().equals(flightRequest.getCityOfDestination()) &&  
+			this.getCountryOfDestination().equals(flightRequest.getCountryOfDestination()) &&    
+			(this.getOneWayTrip() == flightRequest.getOneWayTrip()) &&    
+			this.getReturnDate().equals(flightRequest.getReturnDate()) &&
+			this.getOutboundDate().equals(flightRequest.getOutboundDate()) &&
+			this.getCurrency().equals(flightRequest.getCurrency()) ) {
 				return true;
 			}
 		return false;

@@ -1,8 +1,5 @@
 package service.core;
 
-import java.util.List;
-import java.util.ArrayList;
-
 public class Hotel{
 
       public Hotel() {}
@@ -12,7 +9,7 @@ public class Hotel{
       private String bedType;  // offers
       private String description; // offers
       private String address;  // hotel
-      private List<String> amenities = new ArrayList();  // hotel
+      private String [] amenities;  // hotel
       private String rating;
       private String phoneNumber;
       private String name;
@@ -57,12 +54,12 @@ public class Hotel{
             this.address = address;
       }
 
-      public List<String> getAmenities(){
+      public String [] getAmenities(){
             return amenities;
       }
 
-      public void setAmenities(String amenity){
-            amenities.add(amenity);
+      public void setAmenities(String [] amenities){
+            this.amenities = amenities;
       }
 
       public String getRating(){

@@ -1,11 +1,11 @@
-package service.travel_agent;
+package service.core;
 
 import service.core.Flight;
 import service.core.Hotel;
 
-public class TravelQuotation {
+public class TravelPackage {
       
-      public TravelQuotation() {}
+      public TravelPackage() {}
 
       private Flight [] flights;
       private Hotel [] hotels;

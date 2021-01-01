@@ -4,13 +4,13 @@ A feature that generates a list of activities available in a given location. In 
 
 ## About this module
 
-This module is meant to be an acivity finder for users who have booked their flight, and generate a list of activities according to their flight destination. Here is the design stages :
+This module is meant to be an acivity finder for users who have booked their flight, and generate a list of activities according to their flight destination. Here is the full design stages to provide the service :
 
-| Step | TODO                                               | Purpose + HOW TO                                                                                               | Progress          |
-| ---- | -------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ----------------- |
-| 1    | Get useful destination info from the flight object | Link the flight booking from `flight` module to this module,                                                   |                   |
-| 2    | Use the info above to get a location (skippable)   | Use the location as the center to search for activities, finding destination with Geo-coordinates or IATA Code | Testing Responses |
-| 3    | Use the location above to find activities          | Required parameter : Geo-coordinate^                                                                           | Functioning       |
+| Step | TODO                               | Purpose + HOW TO                                                   | Progress           |
+| ---- | ---------------------------------- | ------------------------------------------------------------------ | ------------------ |
+| 1    | Get location query from the user   | Location queries (ie. city & country) are accepted through App UI  | Not-applicable     |
+| 2    | Search for geocode of a location   | Finding the location through its geocode with Nominatim Search API | Testing edge cases |
+| 3    | Use the geocode to find activities | Required parameter : Geo-coordinate^                               | Done               |
 
 ^ Reference [here]([reference](https://amadeus4dev.github.io/amadeus-java/reference/com/amadeus/shopping/Activities.html))
 
@@ -19,7 +19,9 @@ This module is meant to be an acivity finder for users who have booked their fli
 - IntelliJ IDEA Community Edition
 - Maven
 - Postman
+- [JSON Simple Library](https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple/1.1.1)
 - [Amadeus API](https://developers.amadeus.com)
+- [Nominatim Search API](https://nominatim.org/release-docs/develop/api/Search/) (Free + Open-Source, No registration required)
 
 ### Notes
 
@@ -29,26 +31,12 @@ This module is meant to be an acivity finder for users who have booked their fli
 - Contact [me](mailto:vincentgoh1998@gmail.com) to get my API credential or using your own Amadeus Developer Credentials.
 - The implementation here fetches those credentials from the machine ENVIRONMENT variables *AMADEUS_CLIENT_ID* and *AMADEUS_CLIENT_SECRET* with `System.getenv()`
 
-2. Service Limitation on Destination
+2. API Response Examples
 
-- ~~Due to my current API package is a _testing environment plan_, thus there is location support limitation to several cities over the world (_haven't fully tested yet_)~~
-- After performing some tests with the geo-coordinate of several random cites (test cases can be found below), it turns out some of the cities excluded from the list on the following link are also supported, while not all of them (eg. Beijing, China and Malacca, Malaysia)
-- Reference : <https://github.com/amadeus4dev/data-collection/blob/master/data/pois.md>
-
-3. API Response Examples
-
-- There are 2 examples of Amadeus Tours & Activities API responses in this module, ie. _successful_activity_list.json_ and _unexpected_activity_list.json_
-- Both return successful responses, while the difference is that the _unexpected_activity_list.json_ contains activities which is unrelated to the given destination (ie. Bangalore, while activities in Dubai show up)
-- Will make further research and update this documentation if there is new progress
+- An example of __Nominatim Search API response__ is attached (ie. _successful_location_search.json_), while it is basically in __JSON__ format in this documentation [link](https://nominatim.org/release-docs/develop/api/Output/)
+- There is also an example of __Activty[] Response__ of __Amadeus Tours & Activities API__ in this module (ie. _successful_activity_list.json_). The `Activity` class in `core` module is almost the duplicate of `Activity` class of Amadeus Java SDK, while it is in _Java Bean_ format, and only important information are stored.
 
 ### Input Tests
-
-Tests for `https://test.api.amadeus.com/v1/shopping/activities/by-square?north=&west=&south=&east=` :
-
-| Test    | Input to test                                              | Example (north, west, south, east)           | Activities? |
-| ------- | ---------------------------------------------------------- | -------------------------------------------- | ----------- |
-| &#9745; | Geolocation of the supported location                      | (52.541755, 13.354201, 52.490569, 13.457198) | Yes         |
-| &#9745; | Geolocation of location doesn't included in the link above | (52, 13, 52, 13)                             | No          |
 
 Tests for `https://test.api.amadeus.com/v1/shopping/activities?latitude=&longitude=` :
 
@@ -62,11 +50,11 @@ Tests for `https://test.api.amadeus.com/v1/shopping/activities?latitude=&longitu
 | &#9745; | Geolocation of location doesn't included in the link above | Malacca(2.2245111, 102.2614662)      | No          |
 | &#9745; | Geolocation of location doesn't included in the link above | Beijing(39.9020803,116.7185213)      | No          |
 
-It turns out _searching/representing location with their geolocation is the most efficient way_, while not recommended for the UX, unless include another API to convert location string to the correponding geo-coordinate.
+It turns out _searching/representing location with their geolocation is the most efficient way_, while not recommended for the UX, unless include another API to convert location string to the correponding geo-coordinate (Done by using __Nominatim API__)
 
 **Note** : GPS coordinates checked with this [checker](https://www.gps-coordinates.net)
 
-Tests for `Location location = amadeus.referenceData.location(id).get();`
+~~Tests for `Location location = amadeus.referenceData.location(id).get();`~~
 
 | Test    | locationId | Location? | subType | Name                           | IATA code | Description                     |
 | ------- | ---------- | --------- | ------- | ------------------------------ | --------- | ------------------------------- |
@@ -86,7 +74,7 @@ Tests for `Location location = amadeus.referenceData.location(id).get();`
 | &#9745; | ABER       | Yes       | Airport | BERLIN/DE:BRANDENBURG          | BER       |                                 |
 | &#9745; | CBER       | Yes       | City    | BERLIN/DE:BRANDENBURG          | BER       |                                 |
 
-The String parameter seems to be __subType_prefix + IATA_code__
+~~The String parameter seems to be __subType_prefix + IATA_code__, however the response is uncertain (ie. not found even if the information is available) since the regex of the `locationId` is __unknown__~~ (__NOT USED__)
 
 ### References
 
@@ -96,3 +84,5 @@ The String parameter seems to be __subType_prefix + IATA_code__
 - [Amadeus for Developers Documentation](https://documenter.getpostman.com/view/2672636/RWEcPfuJ?version=latest)
 - [IATA Airline and Location Code Search](https://www.iata.org/en/publications/directories/code-search/)
 - [GPS Coordinates Checker](https://www.gps-coordinates.net)
+- [Nominatim : Open-Source search based on OpeenStreetMap data](https://nominatim.org/release-docs/develop/api/Search/)
+- [Tutorial : How to Parse JSON Data From a REST API Using a Simple JSON Library](https://dzone.com/articles/how-to-parse-json-data-from-a-rest-api-using-simpl)

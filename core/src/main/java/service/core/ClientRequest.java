@@ -1,25 +1,24 @@
 package service.core;
 
-import service.core.ClientBooking;
+import service.core.FlightRequest;
 import service.core.HotelRequest;
 
 public class ClientRequest {
 
       public ClientRequest() {
-            clientBooking = new ClientBooking();
+            flightRequest = new FlightRequest();
             hotelRequest = new HotelRequest();
       }
 
-      private ClientBooking clientBooking;
+      private FlightRequest flightRequest;
       private HotelRequest hotelRequest;
-      private int referenceNumber;
 
-      public ClientBooking getClientBooking(){
-            return clientBooking;
+      public FlightRequest getFlightRequest(){
+            return flightRequest;
       }
 
-      public void setClientBooking(ClientBooking clientBooking){
-            this.clientBooking = clientBooking;
+      public void setFlightRequest(FlightRequest flightRequest){
+            this.flightRequest = flightRequest;
       }
 
       public HotelRequest getHotelRequest(){
@@ -28,14 +27,6 @@ public class ClientRequest {
 
       public void setHotelRequest(HotelRequest hotelRequest){
             this.hotelRequest = hotelRequest;
-      }
-
-      public int getReferenceNumber(){
-            return referenceNumber;
-      }
-
-      public void setReferenceNumber(int referenceNumber){
-            this.referenceNumber = referenceNumber;
       }
       
 }

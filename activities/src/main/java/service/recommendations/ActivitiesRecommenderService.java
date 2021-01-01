@@ -5,12 +5,22 @@ import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.Location;
 import com.amadeus.resources.Activity;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import service.core.Geocode;
+
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.Scanner;
 
 
 @RestController
@@ -18,7 +28,6 @@ public class ActivitiesRecommenderService {
 
     @Autowired
 	private RestTemplate restTemplate;
-
 
     private final Amadeus amadeus;
 
@@ -51,54 +60,44 @@ public class ActivitiesRecommenderService {
     }
 
     /**
-     * Method that find all the cities and airports starting by the given city
-     * @param city  IATA airport/city code
-     * @param country Country code of the where the city/airport located
-     * @return a list of destinations in the given city/airport, else null
-     * @throws ResponseException
+     * Method to get the geo-coordinate of a given city and country query with Nominatim REST API
+     * Reference : https://nominatim.org/
+     * @param city      Full city name in string, eg. Dublin/dublin instead of DUB
+     * @param country   Full country name in string, eg. Ireland/ireland instead of IRE
+     * @return A Geocode object with the latitude and longitude values in double
      */
-    public Location[] getDestinations(String city, String country) throws ResponseException {
-         Location[] dest = amadeus.referenceData.recommendedLocations
-                                            .get(Params.with("cityCodes", city).and("travelerCountryCode", country));
+    public Geocode getDestinationGeocode(String city, String country) {
+        try {
+            URL url = new URL("https://nominatim.openstreetmap.org/" +
+                    "search?city=" + city + "&country=" + country + "&format=json");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            conn.connect();
+            int responseCode = conn.getResponseCode();
+            if(responseCode != 200) throw new RuntimeException("Unexpected HTTP Response Code: " + responseCode);
+            else {
+                Scanner sc = new Scanner(url.openStream());
+                StringBuilder raw = new StringBuilder();
+                while(sc.hasNext()) {
+                    raw.append(sc.nextLine());
+                }
+                sc.close();
+                JSONParser parser = new JSONParser();
+                JSONArray jsonObject = (JSONArray) parser.parse(String.valueOf(raw));
+                JSONObject first = (JSONObject) jsonObject.get(0);
+                double longitude = Double.parseDouble((String) first.get("lon"));
+                double latitude = Double.parseDouble((String) first.get("lat"));
 
-        if(dest.length != 0) {
-            if(dest[0].getResponse().getStatusCode() != 200) {
-                System.out.println(STATUS_CODE_ERROR + dest[0].getResponse().getStatusCode());
+                return new Geocode(latitude, longitude);
             }
-        } else {
-            System.out.println(EMPTY_RECOMMENDATION);
+        } catch(MalformedURLException e) {
+            System.out.println("Invalid URL given");
+        } catch(IOException e) {
+            System.out.println("There is some issue with I/O");
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-
-        return dest;
-    }
-
-    /**
-     * Method to retrieve a list of activities available in given destination with its latitude and longitude
-     * @param destination Destination in terms of a Location object
-     * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
-     * @throws ResponseException
-     */
-    @GetMapping(value = PAGE)
-    public Activity[] getActivities(Location destination) throws ResponseException {
-
-        if(destination == null) {
-            System.out.println(INVALID_LOCATION);
-            return new Activity[0];
-        }
-
-        Activity[] activities = amadeus.shopping.activities.get(Params
-                .with("latitude", destination.getGeoCode().getLatitude())
-                .and("longitude", destination.getGeoCode().getLongitude())
-        );
-
-        if(activities.length != 0) {
-            if(activities[0].getResponse().getStatusCode() != 200) {
-                System.out.println(STATUS_CODE_ERROR + activities[0].getResponse().getStatusCode());
-            }
-        } else {
-            System.out.println(EMPTY_RECOMMENDATION);
-        }
-        return activities;
+        return null;
     }
 
     /**
@@ -108,25 +107,25 @@ public class ActivitiesRecommenderService {
      * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
      * @throws ResponseException
      */
-    // @GetMapping(value = PAGE)
-    // public Activity[] getActivities(double latitude, double longitude) throws ResponseException {
-    //     if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
-    //         System.out.println("Invalid coordinate(s) given");
-    //         return new Activity[0];
-    //     }
+     @GetMapping(value = PAGE)
+     public Activity[] getActivities(double latitude, double longitude) throws ResponseException {
+         if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
+             System.out.println("Invalid coordinate(s) given");
+             return new Activity[0];
+         }
 
-    //     Activity[] activities = amadeus.shopping.activities.get(Params
-    //             .with("latitude", Double.toString(latitude))
-    //             .and("longitude", Double.toString(longitude)));
+         Activity[] activities = amadeus.shopping.activities.get(Params
+                 .with("latitude", Double.toString(latitude))
+                 .and("longitude", Double.toString(longitude)));
 
-    //     if(activities.length != 0) {
-    //         if(activities[0].getResponse().getStatusCode() != 200) {
-    //             System.out.println(STATUS_CODE_ERROR + activities[0].getResponse().getStatusCode());
-    //         }
-    //     } else {
-    //         System.out.println(EMPTY_RECOMMENDATION);
-    //     }
+         if(activities.length != 0) {
+             if(activities[0].getResponse().getStatusCode() != 200) {
+                 System.out.println(STATUS_CODE_ERROR + activities[0].getResponse().getStatusCode());
+             }
+         } else {
+             System.out.println(EMPTY_RECOMMENDATION);
+         }
 
-    //     return activities;
-    // }
+         return activities;
+     }
 }
