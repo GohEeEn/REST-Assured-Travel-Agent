@@ -17,7 +17,10 @@
 
  public class Client {
 	
- 	public static final String newArgs = "http://localhost:8081/bookings";
+	public static final String newArgs = "http://localhost:8081/bookings";
+
+	//Kubernetes IP
+ 	// public static final String newArgs = "http://10.99.26.248:80/bookings";
  	public static int referenceNumber = 0;
 	
  //	public static void main(String[] args) {

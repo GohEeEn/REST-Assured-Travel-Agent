@@ -24,7 +24,7 @@ spec:
         io.kompose.service: eureka
     spec:
       containers:
-      - image: eureka
+      - image: conchobar/eureka:latest
         imagePullPolicy: ""
         name: eureka
         ports:

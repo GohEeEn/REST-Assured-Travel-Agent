@@ -26,8 +26,8 @@ spec:
       containers:
       - env:
         - name: eureka.client.serviceUrl.defaultZone
-          value: http://eureka:8761/eureka/
-        image: activities
+          value: http://10.103.202.113:8761/eureka/
+        image: conchobar/activities:latest
         imagePullPolicy: ""
         name: activities
         ports:
