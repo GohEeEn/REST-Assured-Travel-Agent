@@ -131,6 +131,158 @@ public class ClientController {
         model.addAttribute("flightDetails", tp.getFlights());
         return "displayFlights.html";
     }
+
+
+    /**
+	 * The following method converts the array list of airport IDs to an array of airport IDs as we cannot pass a list
+	 * using REST
+	 * 
+	 * @param countryName
+	 * @return
+	 */
+
+	 public static String [] convertAirportIDsListToAirportIDsArray(ArrayList<String> airportIDsList){
+		 
+		String [] airportIDsArray = new String[airportIDsList.size()];
+
+		int index = 0;
+		for (String id : airportIDsList){
+			
+			airportIDsArray[index] = airportIDsList.get(index);
+			index++;
+		}
+		return airportIDsArray;
+	 }
+
+	/**
+	 * The following code is used to retrieve the country code for the country name given as this is needed for the Skyscanner API request
+	 * 
+	 * @param countryName
+	 * @return countryCode
+	 */
+
+	public static String getListMarkets(String countryName) { 
+		
+		String countryCode = "";
+
+		try {
+			HttpRequest requestCode = HttpRequest.newBuilder()
+				.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/countries/en-GB"))
+				.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
+				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+				.method("GET", HttpRequest.BodyPublishers.noBody())
+				.build();
+			HttpResponse<String> response = HttpClient.newHttpClient().send(requestCode, HttpResponse.BodyHandlers.ofString());
+
+			/**
+			 * TODO may need to delete this response if examples.json isn't needed going forward
+			 */
+			// HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("countryCodes.json")));
+
+			String countryCodes = response.body();
+			JSONObject countryCodesJson = parseJSONObject(countryCodes);
+
+			JSONArray countryCodesArray = new JSONArray();
+	    		countryCodesArray = (JSONArray) countryCodesJson.get("Countries");
+			
+			//loop through array to find the country code 
+			int index = 0;
+			while (index < countryCodesArray.size()) {
+
+				JSONObject jsonObject = (JSONObject) countryCodesArray.get(index);
+				String name = (String) jsonObject.get("Name");
+				
+				if (name.equals(countryName)){
+					countryCode = (String) jsonObject.get("Code");
+				}
+				index++;
+			}	
+
+		} catch(IOException e) {
+                  e.printStackTrace();
+		}
+		catch(InterruptedException e) {
+                  e.printStackTrace();
+		}  
+		return countryCode;
+	}
+
+	/**
+	 * The following method will retrieve the airport IDs 
+	 * 
+	 * @param cityOfDestination
+	 * @param countryOfDestination
+	 * @param countryOfOriginCode
+	 * @param currency
+	 * @return
+	 */
+
+	// GET ListPlaces (Skyscanner API)
+	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
+		
+		ArrayList<String> airportIDs = new ArrayList();
+
+		try {
+			HttpRequest request = HttpRequest.newBuilder()
+					.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/"+
+						countryOfOriginCode+"/"+currency+"/"+locale+"/?query="+cityOfDestination+"%20"+countryOfDestination))
+					.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
+					.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
+					.method("GET", HttpRequest.BodyPublishers.noBody())
+					.build();
+			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
+			/**
+			 * TODO may need to delete this response if airports.json isn't needed going forward
+			 */
+			// HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("airports.json")));
+			
+			System.out.println("Get ListPlaces: "+response.body());
+
+			String places = response.body();
+			JSONObject placesJson = parseJSONObject(places);
+
+			JSONArray placesArray = new JSONArray();
+		      placesArray = (JSONArray) placesJson.get("Places");
+			System.out.println("Places array: "+placesArray);
+			
+			int index = 0;
+			while (index < placesArray.size()) {
+				JSONObject jsonObject = (JSONObject) placesArray.get(index);
+				airportIDs.add((String) jsonObject.get("PlaceId"));
+				index++;
+			}	
+
+		} catch(IOException e) {
+                  e.printStackTrace();
+		}
+		catch(InterruptedException e) {
+                  e.printStackTrace();
+		}  
+		return airportIDs;
+	}
+
+	/**
+	 * The following code converts a given string to a JSON object
+	 * 
+	 * @param response
+	 * @return jsonObject
+	 */
+
+	public static JSONObject parseJSONObject(String response){
+
+		JSONObject jsonObject = new JSONObject();
+		try{
+			JSONParser parser = new JSONParser();
+			jsonObject = (JSONObject) parser.parse(response);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
+	}
+
+
+
+
 }
 
 // //	@RequestMapping(value="/",method=RequestMethod.GET)
