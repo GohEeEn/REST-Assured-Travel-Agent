@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 import service.core.FlightRequest;
 import service.core.HotelRequest;
+import service.core.TravelPackage;
 import client.Client;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,7 @@ public class ClientController {
     private HashMap<String, String> cityCodes = new HashMap<String, String>();
     private FlightRequest flightRequest = new FlightRequest();
     private HotelRequest hotelRequest = new HotelRequest();
+    private TravelPackage tp = new TravelPackage();
 //	@RequestMapping(value="/",method=RequestMethod.GET)
 //	@ResponseBody 
 	@GetMapping("/")
@@ -119,13 +121,16 @@ public class ClientController {
             }
 
             hotelRequest.setMinNumberOfStarsRequiredForHotel(minNumOfStars);
-            Client.sendBookingToTravelAgent(flightRequest, hotelRequest);
-			response.sendRedirect("/");
-        }
-        
+            tp = Client.sendBookingToTravelAgent(flightRequest, hotelRequest);
+			response.sendRedirect("/displayFlights");
+        } 
     }
-    
-  
+
+    @GetMapping("/displayFlights")
+    public String displayflights(Model model){
+        model.addAttribute("flightDetails", tp.getFlights());
+        return "displayFlights.html";
+    }
 }
 
 // //	@RequestMapping(value="/",method=RequestMethod.GET)

@@ -22,7 +22,7 @@
 	
  //	public static void main(String[] args) {
 		
-    public static void sendBookingToTravelAgent(FlightRequest flightRequest, HotelRequest hotelRequest) {	
+    public static TravelPackage sendBookingToTravelAgent(FlightRequest flightRequest, HotelRequest hotelRequest) {	
  		
     	Flight[] flights = new Flight[10];
  		RestTemplate restTemplate = new RestTemplate();
@@ -52,7 +52,8 @@
                   
                    Hotel [] hotels2 = travelPackage.getHotels();
                    System.out.println(hotels2);
-                   Flight [] flights2 = travelPackage.getFlights();
+				   Flight [] flights2 = travelPackage.getFlights();
+				   System.out.println("SIZE OF FLIGHST ARRAY is = "+flights2.length);
                    System.out.println(flights2);
  			for (int i=0; i < 1; i++){
                          Flight f = flights2[i];
@@ -67,7 +68,9 @@
  					System.out.println("Price of hotel is: " + h.getPrice());
                          }
                          System.out.println("\n");
- 			}
+			 }
+			 
+			 return travelPackage;
 
 // 		/**
 // 		 *  Barry's testing code below
