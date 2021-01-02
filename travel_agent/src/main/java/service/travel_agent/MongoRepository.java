@@ -1,6 +1,7 @@
 package service.travel_agent;
 
 import com.google.gson.Gson;
+import static com.mongodb.client.model.Filters.eq;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
@@ -19,7 +20,7 @@ public class MongoRepository {
         this.collection = database.getCollection("booking");
     }
 
-    public boolean createBooking(Booking booking) {
+    public boolean insertBooking(Booking booking) {
         try {
             final String json = new Gson().toJson(booking);
             final Document doc = Document.parse(json);
@@ -31,48 +32,21 @@ public class MongoRepository {
         }
     }
 
-    // private Coffin createCoffinFromMongoDocument(@NonNull final Document document) {
-    //     return Coffin.builder()
-    //             .id(document.get(MongoConstants.ID).toString())
-    //             .userEmail(document.getString(MongoConstants.EMAIL))
-    //             .name(document.getString(MongoConstants.NAME))
-    //             .image(document.getString(MongoConstants.IMAGE))
-    //             .description(document.getString(MongoConstants.DESCRIPTION))
-    //             .price(document.getInteger(MongoConstants.PRICE))
-    //             .timeStamp(document.getLong(MongoConstants.TIMESTAMP))
+    private Booking createBookingFromMongoDocument(final Document document) {
+        String uni_id = document.get("_id").toString();
+        String id = document.get("id").toString();
+        String flight = document.get("flight").toString(); 
+        return new Booking(id, flight);
+    }
 
-    //             .build();
-    // }
+    public Booking getBookingFromMongo(final String search) throws NoSuchFieldException{
+        try {
+            final Document document = collection.find(eq("id", search)).first();
+            return createBookingFromMongoDocument(document);
+        } catch (final Exception e) {
+            throw new NoSuchFieldException(
+            String.format("The given ref id: <{%s}> does not correspond to a booking.", search));
+        }
+    }
 
-    // public ArrayList<Coffin> getCoffins() {
-    //     final ArrayList<Coffin> coffinList = new ArrayList<>();
-
-    //     for (final Document coffinDoc : collection.find()) {
-    //         coffinList.add(createCoffinFromMongoDocument(coffinDoc));
-    //     }
-    //     return coffinList;
-    // }
-
-    // TODO search string analysis
-    // public ArrayList<Coffin> getCoffins(@NonNull final String search) {
-    //     final ArrayList<Coffin> coffinList = new ArrayList<>();
-
-    //     for (final Document coffinDoc : collection.find(Filters.text(search))) {
-    //         coffinList.add(createCoffinFromMongoDocument(coffinDoc));
-    //     }
-    //     return coffinList;
-    // }
-
-//     public boolean removeCoffins(@NonNull final long time) {
-//         try {
-// //            final BsonArray toRemove = new BsonArray();
-// //            for (final Document document: collection.find(Filters.lte(MongoConstants.TIMESTAMP, time))){
-// //                toRemove.add()
-// //            }
-//             collection.deleteMany(Filters.lte(MongoConstants.TIMESTAMP, time));
-//             return true;
-//         } catch (final Exception e) {
-//             return false;
-//         }
-//     }
 }

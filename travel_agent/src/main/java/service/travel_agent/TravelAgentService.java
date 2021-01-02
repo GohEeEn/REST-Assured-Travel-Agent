@@ -132,8 +132,8 @@ public class TravelAgentService {
 		travelPackage.setHotels(hotels);
 		travelPackages.put(referenceNumber,travelPackage);
 
-		System.out.println("CALLING TEST MONGO");
-		testMongo();
+		// storeBookingInMongo();
+		
 		/**
 		 * Send response back to the client
 		 */
@@ -145,10 +145,18 @@ public class TravelAgentService {
 		
 	} 
 
-	public void testMongo(){
-		System.out.println("CALLING TEST MONGO");
-		Booking b = new Booking("tanmay", "joshi");
-		mongoRepository.createBooking(b);
+	public void storeBookingInMongo(){
+		// Booking b = new Booking("try", "ni");
+		// mongoRepository.insertBooking(b);
+	}
+
+	public Booking getBookingFromMongo(String referenceId){
+		try{
+			mongoRepository.getBookingFromMongo(referenceId);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 	}
 	/**
 	 * PUT REQUEST
