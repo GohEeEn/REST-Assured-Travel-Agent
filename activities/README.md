@@ -4,7 +4,7 @@ A feature that generates a list of activities available in a given location. In 
 
 ## About this module
 
-This module is meant to be an acivity finder for users who have input both the city and country name as the location, and generate a list of activities according to that location. Here is the full design stages to provide the service :
+This module is meant to be an activity finder for users who have input both the city and country name as the location, and generate a list of activities according to that location. Here is the full design stages to provide the service :
 
 | Step | TODO                               | Purpose + HOW TO                                                                  | Progress       |
 | ---- | ---------------------------------- | --------------------------------------------------------------------------------- | -------------- |
@@ -14,6 +14,8 @@ This module is meant to be an acivity finder for users who have input both the c
 | 4    | Use the geocode to find activities | Required parameter : Geo-coordinate^                                              | Done           |
 
 Given 2 Parameters (CityName, CountryName) as the location -> A list of Activity objects which represent individual activities available in that location
+
+Done by using a single Java method `getActivitiesWithQueries()` with _2 HTTP GET Method Calls from 2 different APIs_  
 
 ^ Reference [here](https://amadeus4dev.github.io/amadeus-java/reference/com/amadeus/shopping/Activities.html)
 
