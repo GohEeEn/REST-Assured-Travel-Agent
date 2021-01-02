@@ -10,10 +10,10 @@ metadata:
   name: eureka
 spec:
   ports:
-  - name: "8761"
+  - name: "8081"
     port: 8761
-    targetPort: 8761
+    targetPort: 8081
   selector:
-    io.kompose.service: eureka
+    app: travel-agent
 status:
   loadBalancer: {}

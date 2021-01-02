@@ -5,8 +5,8 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 8100  
-      targetPort: 876
+    - port: 8081
+      targetPort: 8081
       nodePort: 31000
   selector: 
-    component: travel-agent
+    app: travel-agent
