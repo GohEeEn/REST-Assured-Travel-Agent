@@ -10,9 +10,9 @@ metadata:
   name: travel-agent
 spec:
   ports:
-  - name: "8081"
+  - name: "eureka"
     port: 8081
-    targetPort: 8081
+    targetPort: 8761
   selector:
     io.kompose.service: travel-agent
 status:

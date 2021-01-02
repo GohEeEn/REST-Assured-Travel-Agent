@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: attractions
+  name: attractions
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: attractions
+  strategy: {}
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert
+        kompose.version: 1.21.0 (992df58d8)
+      creationTimestamp: null
+      labels:
+        io.kompose.service: attractions
+    spec:
+      containers:
+      - env:
+        - name: eureka.client.serviceUrl.defaultZone
+          value: http://10.103.202.113:8761/eureka/
+        image: conchobar/attractions:latest
+        imagePullPolicy: ""
+        name: attractions
+        ports:
+        - containerPort: 8086
+        resources: {}
+      restartPolicy: Always
+      serviceAccountName: ""
+      volumes: null
+status: {}

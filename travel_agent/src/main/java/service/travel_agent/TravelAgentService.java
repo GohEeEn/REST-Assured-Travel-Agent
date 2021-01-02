@@ -105,7 +105,6 @@ public class TravelAgentService {
 
 
 
-
 		/**
 		 * POST request to Attractions Service
 		 * TODO (Barry & Sean): Insert code below
