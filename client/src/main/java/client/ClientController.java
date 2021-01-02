@@ -131,6 +131,14 @@ public class ClientController {
         model.addAttribute("flightDetails", tp.getFlights());
         return "displayFlights.html";
     }
+    
+    @GetMapping("/displayHotels")
+    public String displayhotels(Model model){
+        model.addAttribute("hotelDetails", tp.getHotels());
+        return "displayHotels.html";
+    }
+    
+    
 }
 
 // //	@RequestMapping(value="/",method=RequestMethod.GET)

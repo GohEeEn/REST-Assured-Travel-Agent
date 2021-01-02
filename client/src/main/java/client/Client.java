@@ -51,7 +51,7 @@
 
                   
                    Hotel [] hotels2 = travelPackage.getHotels();
-                   System.out.println(hotels2);
+                   System.out.println(hotels2.toString() );
 				   Flight [] flights2 = travelPackage.getFlights();
 				   System.out.println("SIZE OF FLIGHST ARRAY is = "+flights2.length);
                    System.out.println(flights2);
