@@ -21,16 +21,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+// import org.json.simple.*;
+
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
-import org.json.simple.*;
+import org.json.simple.parser.ParseException; 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import org.json.simple.parser.ParseException; 
-
+import java.io.IOException;
 
 
 
@@ -47,7 +49,8 @@ public class ClientController {
     private HashMap<String, String> cityCodes = new HashMap<String, String>();
     private FlightRequest flightRequest = new FlightRequest();
     private HotelRequest hotelRequest = new HotelRequest();
-    private TravelPackage tp = new TravelPackage();
+	private TravelPackage tp = new TravelPackage();
+	final static String locale = "en-GB";
 //	@RequestMapping(value="/",method=RequestMethod.GET)
 //	@ResponseBody 
 	@GetMapping("/")
@@ -143,7 +146,14 @@ public class ClientController {
         model.addAttribute("flightDetails", tp.getFlights());
         return "displayFlights.html";
     }
-
+    
+    @GetMapping("/displayHotels")
+    public String displayhotels(Model model){
+        model.addAttribute("hotelDetails", tp.getHotels());
+        return "displayHotels.html";
+    }
+    
+    
 
     /**
 	 * The following method converts the array list of airport IDs to an array of airport IDs as we cannot pass a list
@@ -230,7 +240,7 @@ public class ClientController {
 	 */
 
 	// GET ListPlaces (Skyscanner API)
-	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String locale, String countryOfOriginCode, String currency) { 
+	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
 		
 		ArrayList<String> airportIDs = new ArrayList();
 

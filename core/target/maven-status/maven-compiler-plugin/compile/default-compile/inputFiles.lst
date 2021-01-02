@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Flight.java
 /home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Hotel.java
 /home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/Travel.java
@@ -10,3 +11,17 @@
 /home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/ActivityRequest.java
 /home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/AttractionRequest.java
 /home/sean/Documents/DS/Before_merge/quaranteam/core/src/main/java/service/core/FlightRequest.java
+=======
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/FlightRequest.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Geocode.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Activity.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Attraction.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Travel.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/TravelPackage.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/AttractionRequest.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/ClientRequest.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Hotel.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Flight.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/ActivityRequest.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/HotelRequest.java
+>>>>>>> 6ad3049c6eda14fa4d8c77891b0791caf420e500
