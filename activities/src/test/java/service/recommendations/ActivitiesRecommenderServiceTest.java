@@ -1,12 +1,9 @@
 package service.recommendations;
 
-import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.Activity;
 import org.junit.Before;
 import org.junit.Test;
 import service.core.Geocode;
-
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -87,5 +84,21 @@ public class ActivitiesRecommenderServiceTest {
         Activity[] pyongyang = recommender.getActivities(dest.getLatitude(), dest.getLongitude());
         assertNotNull("Error : The activity array instance should be returned", pyongyang);
         assertEquals("Error : This list should be empty since this location is not supported", 0, pyongyang.length);
+    }
+
+    @Test
+    public void getActivitiesWithQueriesTest() {
+
+        Activity[] dublin = recommender.getActivitiesWithQueries("dublin", "ireland");
+        assertNotNull("Error : It should return an array of Activity objects", dublin);
+        assertNotEquals("Error : The Activity array shouldn't be empty since it is a valid location", 0, dublin.length);
+
+        Activity[] invalid = recommender.getActivitiesWithQueries("dublin", "china");
+        assertNotNull("Error : It should return an array of Activity objects", invalid);
+        assertEquals("Error : The Activity array should be empty since the invalid location", 0, invalid.length);
+
+        Activity[] unsupported = recommender.getActivitiesWithQueries("beijing", "china");
+        assertNotNull("Error : It should return an array of Activity objects", unsupported);
+        assertEquals("Error : The Activity array should be empty since it is an unsupported location", 0, unsupported.length);
     }
 }
