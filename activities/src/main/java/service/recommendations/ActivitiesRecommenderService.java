@@ -9,6 +9,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -109,7 +110,6 @@ public class ActivitiesRecommenderService {
      * @param longitude Double value in range of -90 to 90
      * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
      */
-     @GetMapping(value = PAGE)
      public Activity[] getActivities(double latitude, double longitude) {
          if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
              System.out.println("Invalid coordinate(s) given (Lat=" + latitude + ", Lon=" + longitude + ")");
@@ -135,5 +135,26 @@ public class ActivitiesRecommenderService {
          }
 
          return new Activity[0];
+     }
+
+    /**
+     * Method to retrieve a list of activities available in given destination with the city and country full name
+     * @param city Full city name in string, eg. Dublin instead of DUB
+     * @param country Full country name in string, eg. Ireland instead of IRE
+     * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
+     */
+    @GetMapping(value = PAGE + "/{country}/{city}")
+     public Activity[] getActivitiesWithQueries(@RequestParam("city") String city, @RequestParam("country") String country) {
+        Geocode destination = getDestinationGeocode(city, country);
+        if(destination == null) {
+            System.out.println("Invalid destination (" + city + ", " + country + ")");
+            return new Activity[0];
+        }
+        Activity[] activities = getActivities(destination.getLatitude(), destination.getLongitude());
+        if(activities == null) {
+            System.out.println("No activity found in (" + city + ", " + country + ")");
+            return new Activity[0];
+        }
+        return activities;
      }
 }
