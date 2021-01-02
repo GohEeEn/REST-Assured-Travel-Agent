@@ -1,6 +1,6 @@
+service/flights/FlightService$NoSuchFlightException.class
 service/flights/FlightQuote.class
-service/flights/FlightServiceB$NoSuchFlightException.class
-service/flights/FlightServiceB.class
 service/flights/Application.class
 service/flights/NoSuchFlightException.class
 service/flights/ServiceInstanceRestController.class
+service/flights/FlightService.class
