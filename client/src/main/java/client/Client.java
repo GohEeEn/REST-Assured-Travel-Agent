@@ -48,32 +48,32 @@ public class Client {
 			 		clientRequest.setFlightRequest(flightRequest);
 			 		clientRequest.setHotelRequest(hotelRequest);
 					 
-					ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
-					ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
+					// ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
+					// ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
 
-					flightRequest.setCountryOfOriginCode(getListMarkets(flightRequest.getCountryOfOrigin()));
-					System.out.println(flightRequest.getCountryOfOriginCode());
-					flightRequest.setCountryOfDestinationCode(getListMarkets(flightRequest.getCountryOfDestination()));
-					System.out.println(flightRequest.getCountryOfDestinationCode());
+					// flightRequest.setCountryOfOriginCode(getListMarkets(flightRequest.getCountryOfOrigin()));
+					// System.out.println(flightRequest.getCountryOfOriginCode());
+					// flightRequest.setCountryOfDestinationCode(getListMarkets(flightRequest.getCountryOfDestination()));
+					// System.out.println(flightRequest.getCountryOfDestinationCode());
 
-					originAirportIDs = getListPlaces(flightRequest.getCityOfOrigin(), flightRequest.getCountryOfOrigin(),   // Find airport IDs for origin
-								flightRequest.getCountryOfOriginCode(), flightRequest.getCurrency());
-					String [] originAirportIDsArray = convertAirportIDsListToAirportIDsArray(originAirportIDs);    // converts list to array
+					// originAirportIDs = getListPlaces(flightRequest.getCityOfOrigin(), flightRequest.getCountryOfOrigin(),   // Find airport IDs for origin
+					// 			flightRequest.getCountryOfOriginCode(), flightRequest.getCurrency());
+					// String [] originAirportIDsArray = convertAirportIDsListToAirportIDsArray(originAirportIDs);    // converts list to array
 					
-					destinationAirportIDs = getListPlaces(flightRequest.getCityOfDestination(), flightRequest.getCountryOfDestination(),   // Find airport IDs for destination
-								flightRequest.getCountryOfDestinationCode(), flightRequest.getCurrency()); 
-					String [] destAirportIDsArray = convertAirportIDsListToAirportIDsArray(destinationAirportIDs);    // converts list to array
+					// destinationAirportIDs = getListPlaces(flightRequest.getCityOfDestination(), flightRequest.getCountryOfDestination(),   // Find airport IDs for destination
+					// 			flightRequest.getCountryOfDestinationCode(), flightRequest.getCurrency()); 
+					// String [] destAirportIDsArray = convertAirportIDsListToAirportIDsArray(destinationAirportIDs);    // converts list to array
 					
-					System.out.println("\n ORIGIN AIRPORT IDS: "+originAirportIDsArray+"\n");
-					for(String s : originAirportIDsArray){
-						System.out.println(s);
-					}
-					System.out.println("\n ORIGIN AIRPORT IDS: "+destAirportIDsArray+"\n");
-					for(String s : destAirportIDsArray){
-						System.out.println(s);
-					}
-					flightRequest.setOriginAirortIDs(originAirportIDsArray);
-					flightRequest.setDestAirortIDs(destAirportIDsArray);
+					// System.out.println("\n ORIGIN AIRPORT IDS: "+originAirportIDsArray+"\n");
+					// for(String s : originAirportIDsArray){
+					// 	System.out.println(s);
+					// }
+					// System.out.println("\n ORIGIN AIRPORT IDS: "+destAirportIDsArray+"\n");
+					// for(String s : destAirportIDsArray){
+					// 	System.out.println(s);
+					// }
+					// flightRequest.setOriginAirortIDs(originAirportIDsArray);
+					// flightRequest.setDestAirortIDs(destAirportIDsArray);
 			
 			 //		Uncomment this after testing my Code to get same result as Barry
 				/*
@@ -168,27 +168,27 @@ public class Client {
 		
 
                   
-                   Hotel [] hotels2 = travelPackage.getHotels();
-                   System.out.println(hotels2.toString() );
-				   Flight [] flights2 = travelPackage.getFlights();
-				   System.out.println("SIZE OF FLIGHST ARRAY is = "+flights2.length);
-                   System.out.println(flights2);
- 			for (int i=0; i < 1; i++){
-                         Flight f = flights2[i];
-                         Hotel h = hotels2[i];
- 				if (f != null){
- 					System.out.println("City of Destination is: " + f.getCityOfDestination());
- 					System.out.println("Price of flight is: " + f.getPrice());
-                         }	
-                         System.out.println("\n");
-                         if (h != null){
-                               System.out.println("Description of hotel is: " + h.getDescription());
- 					System.out.println("Price of hotel is: " + h.getPrice());
-                         }
-                         System.out.println("\n");
-			 }
+            //        Hotel [] hotels2 = travelPackage.getHotels();
+            //        System.out.println(hotels2.toString());
+			// 	   Flight [] flights2 = travelPackage.getFlights();
+			// 	   System.out.println("SIZE OF FLIGHST ARRAY is = "+flights2.length);
+            //        System.out.println(flights2);
+ 			// for (int i=0; i < 1; i++){
+            //              Flight f = flights2[i];
+            //              Hotel h = hotels2[i];
+ 			// 	if (f != null){
+ 			// 		System.out.println("City of Destination is: " + f.getCityOfDestination());
+ 			// 		System.out.println("Price of flight is: " + f.getPrice());
+            //              }	
+            //              System.out.println("\n");
+            //              if (h != null){
+            //                    System.out.println("Description of hotel is: " + h.getDescription());
+ 			// 		System.out.println("Price of hotel is: " + h.getPrice());
+            //              }
+            //              System.out.println("\n");
+			//  }
 			 
-			 return travelPackage;
+			//  return travelPackage;
 
 // 		/**
 // 		 *  Barry's testing code below
@@ -248,153 +248,6 @@ public class Client {
 
 		
 	// } 
-
-	/**
-	 * The following method converts the array list of airport IDs to an array of airport IDs as we cannot pass a list
-	 * using REST
-	 * 
-	 * @param countryName
-	 * @return
-	 */
-
-	 public static String [] convertAirportIDsListToAirportIDsArray(ArrayList<String> airportIDsList){
-		 
-		String [] airportIDsArray = new String[airportIDsList.size()];
-
-		int index = 0;
-		for (String id : airportIDsList){
-			
-			airportIDsArray[index] = airportIDsList.get(index);
-			index++;
-		}
-		return airportIDsArray;
-	 }
-
-	/**
-	 * The following code is used to retrieve the country code for the country name given as this is needed for the Skyscanner API request
-	 * 
-	 * @param countryName
-	 * @return countryCode
-	 */
-
-	public static String getListMarkets(String countryName) { 
-		
-		String countryCode = "";
-
-		try {
-			HttpRequest requestCode = HttpRequest.newBuilder()
-				.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/reference/v1.0/countries/en-GB"))
-				.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
-				.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
-				.method("GET", HttpRequest.BodyPublishers.noBody())
-				.build();
-			HttpResponse<String> response = HttpClient.newHttpClient().send(requestCode, HttpResponse.BodyHandlers.ofString());
-
-			/**
-			 * TODO may need to delete this response if examples.json isn't needed going forward
-			 */
-			// HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("countryCodes.json")));
-
-			String countryCodes = response.body();
-			JSONObject countryCodesJson = parseJSONObject(countryCodes);
-
-			JSONArray countryCodesArray = new JSONArray();
-	    		countryCodesArray = (JSONArray) countryCodesJson.get("Countries");
-			
-			//loop through array to find the country code 
-			int index = 0;
-			while (index < countryCodesArray.size()) {
-
-				JSONObject jsonObject = (JSONObject) countryCodesArray.get(index);
-				String name = (String) jsonObject.get("Name");
-				
-				if (name.equals(countryName)){
-					countryCode = (String) jsonObject.get("Code");
-				}
-				index++;
-			}	
-
-		} catch(IOException e) {
-                  e.printStackTrace();
-		}
-		catch(InterruptedException e) {
-                  e.printStackTrace();
-		}  
-		return countryCode;
-	}
-
-	/**
-	 * The following method will retrieve the airport IDs 
-	 * 
-	 * @param cityOfDestination
-	 * @param countryOfDestination
-	 * @param countryOfOriginCode
-	 * @param currency
-	 * @return
-	 */
-
-	// GET ListPlaces (Skyscanner API)
-	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
-		
-		ArrayList<String> airportIDs = new ArrayList();
-
-		try {
-			HttpRequest request = HttpRequest.newBuilder()
-					.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/autosuggest/v1.0/"+
-						countryOfOriginCode+"/"+currency+"/"+locale+"/?query="+cityOfDestination+"%20"+countryOfDestination))
-					.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
-					.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
-					.method("GET", HttpRequest.BodyPublishers.noBody())
-					.build();
-			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-			/**
-			 * TODO may need to delete this response if airports.json isn't needed going forward
-			 */
-			// HttpResponse<Path> response2 = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofFile(Paths.get("airports.json")));
-			
-			System.out.println("Get ListPlaces: "+response.body());
-
-			String places = response.body();
-			JSONObject placesJson = parseJSONObject(places);
-
-			JSONArray placesArray = new JSONArray();
-		      placesArray = (JSONArray) placesJson.get("Places");
-			System.out.println("Places array: "+placesArray);
-			
-			int index = 0;
-			while (index < placesArray.size()) {
-				JSONObject jsonObject = (JSONObject) placesArray.get(index);
-				airportIDs.add((String) jsonObject.get("PlaceId"));
-				index++;
-			}	
-
-		} catch(IOException e) {
-                  e.printStackTrace();
-		}
-		catch(InterruptedException e) {
-                  e.printStackTrace();
-		}  
-		return airportIDs;
-	}
-
-	/**
-	 * The following code converts a given string to a JSON object
-	 * 
-	 * @param response
-	 * @return jsonObject
-	 */
-
-	public static JSONObject parseJSONObject(String response){
-
-		JSONObject jsonObject = new JSONObject();
-		try{
-			JSONParser parser = new JSONParser();
-			jsonObject = (JSONObject) parser.parse(response);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		return jsonObject;
-	}
 
    
 	// /**

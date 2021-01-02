@@ -1,27 +1,13 @@
-<<<<<<< HEAD
-service/core/FlightRequest.class
-service/core/ActivityRequest.class
-service/core/TravelPackage.class
-=======
 service/core/ActivityRequest.class
 service/core/TravelPackage.class
 service/core/FlightRequest.class
->>>>>>> 6ad3049c6eda14fa4d8c77891b0791caf420e500
 service/core/Flight.class
 service/core/ClientRequest.class
 service/core/AttractionRequest.class
 service/core/Attraction.class
-<<<<<<< HEAD
-service/core/Hotel.class
-service/core/Geocode.class
-service/core/Travel.class
-service/core/Activity.class
-service/core/Activity$Price.class
-=======
 service/core/Geocode.class
 service/core/Travel.class
 service/core/Hotel.class
 service/core/Activity$Price.class
 service/core/Activity.class
->>>>>>> 6ad3049c6eda14fa4d8c77891b0791caf420e500
 service/core/HotelRequest.class

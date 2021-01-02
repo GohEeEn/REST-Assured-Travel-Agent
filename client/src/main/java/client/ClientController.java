@@ -66,21 +66,90 @@ public class ClientController {
 	@RequestMapping(value="/processFlightsForm",method=RequestMethod.POST)  
 	public void processFlightsForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
 
+		cityCodeGenerator();
 			// ClientBooking[] clientArray = new ClientBooking[1] ;
 			// ClientBooking clientBooking = new ClientBooking();
-		flightRequest.setName(name);
-		flightRequest.setCityOfOrigin(cityOfOrigin);
-		flightRequest.setCountryOfOrigin(countryOfOrigin);
-		flightRequest.setCityOfDestination(cityOfDestination);
-		flightRequest.setCountryOfDestination(countryOfDestination);
-		flightRequest.setOneWayTrip(oneWayTrip);
-		flightRequest.setReturnDate(returnDate);
-		flightRequest.setOutboundDate(outboundDate);
-		flightRequest.setCurrency(currency);
+		
+			String capOriginCountry = countryOfOrigin.substring(0, 1).toUpperCase() + countryOfOrigin.substring(1).toLowerCase();
+			String capDestinaptionCountry = countryOfDestination.substring(0,1).toUpperCase() + countryOfDestination.substring(1).toLowerCase();
+			System.out.println("caporigincountry is = "+capOriginCountry);
+			System.out.println("capDestncountry is = "+capDestinaptionCountry);
+			String originCountryCode = getListMarkets(capOriginCountry);
+			String destinatonCountryCode = getListMarkets(capDestinaptionCountry);
+
+			if(originCountryCode.isEmpty()){
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('" + "invalid country of origin entered, enter again" + "');");
+				out.println("window.location.replace('" + "/" + "');");
+				out.println("</script>");
+			}
+			else{
+				if(destinatonCountryCode.isEmpty()){
+					PrintWriter out = response.getWriter();
+					out.println("<script>");
+					out.println("alert('" + "invalid country of destination entered, enter again" + "');");
+					out.println("window.location.replace('" + "/" + "');");
+					out.println("</script>");
+				}
+				else{
+					if(cityCodes.get(cityOfOrigin.toLowerCase())==null){
+						PrintWriter out = response.getWriter();
+						out.println("<script>");
+						out.println("alert('" + "invalid city of origin entered, enter again" + "');");
+						out.println("window.location.replace('" + "/" + "');");
+						out.println("</script>");
+					}
+					else{
+						if(cityCodes.get(cityOfDestination.toLowerCase())==null){
+							PrintWriter out = response.getWriter();
+							out.println("<script>");
+							out.println("alert('" + "invalid city of destination entered, enter again" + "');");
+							out.println("window.location.replace('" + "/" + "');");
+							out.println("</script>");
+						}
+						else{
+
+					ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
+					ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
+
+					flightRequest.setCountryOfOriginCode(originCountryCode);
+					System.out.println(flightRequest.getCountryOfOriginCode());
+					flightRequest.setCountryOfDestinationCode(destinatonCountryCode);
+					System.out.println(flightRequest.getCountryOfDestinationCode());
+
+					originAirportIDs = getListPlaces(cityOfOrigin, countryOfOrigin, originCountryCode, currency);
+					String [] originAirportIDsArray = convertAirportIDsListToAirportIDsArray(originAirportIDs);    // converts list to array
+					
+					destinationAirportIDs = getListPlaces(cityOfDestination, countryOfDestination, destinatonCountryCode, currency); 
+					String [] destAirportIDsArray = convertAirportIDsListToAirportIDsArray(destinationAirportIDs);    // converts list to array
+					
+					System.out.println("\n ORIGIN AIRPORT IDS: "+originAirportIDsArray+"\n");
+					for(String s : originAirportIDsArray){
+						System.out.println(s);
+					}
+					System.out.println("\n ORIGIN AIRPORT IDS: "+destAirportIDsArray+"\n");
+					for(String s : destAirportIDsArray){
+						System.out.println(s);
+					}
+					flightRequest.setOriginAirortIDs(originAirportIDsArray);
+					flightRequest.setDestAirortIDs(destAirportIDsArray);
+					flightRequest.setName(name);
+					flightRequest.setCityOfOrigin(cityOfOrigin);
+					flightRequest.setCountryOfOrigin(countryOfOrigin);
+					flightRequest.setCityOfDestination(cityOfDestination);
+					flightRequest.setCountryOfDestination(countryOfDestination);
+					flightRequest.setOneWayTrip(oneWayTrip);
+					flightRequest.setReturnDate(returnDate);
+					flightRequest.setOutboundDate(outboundDate);
+					flightRequest.setCurrency(currency);
             // clientArray[0] = clientBooking;
-            cityCodeGenerator();
-			response.sendRedirect("/hotels");
-    }
+					response.sendRedirect("/hotels");
+	}
+}
+				}
+			}
+		}
     
     private void cityCodeGenerator(){
         File file = new File("city_codes.txt");
@@ -301,8 +370,6 @@ public class ClientController {
 		}
 		return jsonObject;
 	}
-
-
 
 
 }

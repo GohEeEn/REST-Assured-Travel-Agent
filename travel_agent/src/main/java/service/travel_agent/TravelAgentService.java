@@ -150,12 +150,14 @@ public class TravelAgentService {
 	}
 
 	public Booking getBookingFromMongo(String referenceId){
+		Booking b = new Booking();
 		try{
-			mongoRepository.getBookingFromMongo(referenceId);
+			b = mongoRepository.getBookingFromMongo(referenceId);
 		}
 		catch(Exception e){
 			e.printStackTrace();
 		}
+		return b;
 	}
 	/**
 	 * PUT REQUEST
