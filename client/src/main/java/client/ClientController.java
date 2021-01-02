@@ -29,6 +29,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.text.ParseException;
 
 
 
@@ -229,7 +230,7 @@ public class ClientController {
 	 */
 
 	// GET ListPlaces (Skyscanner API)
-	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
+	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String locale, String countryOfOriginCode, String currency) { 
 		
 		ArrayList<String> airportIDs = new ArrayList();
 
@@ -279,7 +280,7 @@ public class ClientController {
 	 * @return jsonObject
 	 */
 
-	public static JSONObject parseJSONObject(String response){
+	public static JSONObject parseJSONObject(String response) throws ParseException{
 
 		JSONObject jsonObject = new JSONObject();
 		try{
