@@ -1,3 +1,6 @@
-/home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/TravelAgentService.java
-/home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/Application.java
-/home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/NoSuchTravelPackageException.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/NoSuchTravelPackageException.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoConfig.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoRepository.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/Booking.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/Application.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/TravelAgentService.java
