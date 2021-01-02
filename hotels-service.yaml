@@ -10,10 +10,10 @@ metadata:
   name: hotels
 spec:
   ports:
-  - name: "8089"
+  - name: "eureka"
     port: 8089
-    targetPort: 8089
+    targetPort: 8761
   selector:
-    io.kompose.service: hotels
+    io.kompose.service: eureka
 status:
   loadBalancer: {}

@@ -18,11 +18,11 @@ services:
       - eureka
       - flights
       - hotels
-    # environment:
-    #   - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
-    #Environment for k8s
     environment:
-      - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+    #Environment for k8s
+    # environment:
+    #   - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
     links:
       - eureka
     ports:
@@ -34,11 +34,11 @@ services:
     build: 
       context: ./flights
     image: conchobar/flights:latest
-    # environment:
-    #   - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
-    #Environment for k8s
     environment:
-      - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+    #Environment for k8s
+    # environment:
+    #   - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
     depends_on:
       - eureka
     links:
@@ -52,13 +52,13 @@ services:
     build: 
       context: ./hotels
     image: conchobar/hotels:latest
-    # environment:
-    #   - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
 
 
     #Environment for k8s
-    environment:
-      - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
+    # environment:
+    #   - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
 
     depends_on:
       - eureka
@@ -73,11 +73,11 @@ services:
     build: 
       context: ./activities
     image: conchobar/activities:latest
-    # environment:
-    #   - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
-    #Environment for k8s
     environment:
-      - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+    #Environment for k8s
+    # environment:
+    #   - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
     depends_on:
       - eureka
     links:
@@ -91,12 +91,12 @@ services:
     build: 
       context: ./attractions
     image: conchobar/attractions:latest
-    # environment:
-    #   - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://eureka:8761/eureka/
 
     #Environment for k8s
-    environment:
-      - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
+    # environment:
+    #   - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
     depends_on:
       - eureka
     links:
