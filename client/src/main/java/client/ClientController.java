@@ -210,6 +210,60 @@ public class ClientController {
         } 
     }
 
+	@RequestMapping(value="/userFlightSelection",method=RequestMethod.POST)
+	public void userFlightSelection(String inputFlightIndex, HttpServletResponse response) throws IOException
+	{
+		boolean isNumeric = inputFlightIndex.chars().allMatch( Character::isDigit );
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayFlights" + "');");
+            out.println("</script>");
+		}
+		else{
+			int i = Integer.parseInt(inputFlightIndex);
+			if(i<0 || i>tp.getFlights().length){
+				PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayFlights" + "');");
+            out.println("</script>");
+			}
+			else{
+				System.out.println("chosen index is = "+i);
+				response.sendRedirect("/displayHotels");
+			}
+		}
+	}
+
+	@RequestMapping(value="/userHotelSelection",method=RequestMethod.POST)
+	public void userHotelSelection(String inputHotelIndex, HttpServletResponse response) throws IOException
+	{
+		boolean isNumeric = inputHotelIndex.chars().allMatch( Character::isDigit );
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayHotels" + "');");
+            out.println("</script>");
+		}
+		else{
+			int i = Integer.parseInt(inputHotelIndex);
+			if(i<0 || i>tp.getHotels().length){
+				PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayHotels" + "');");
+            out.println("</script>");
+			}
+			else{
+				System.out.println("chosen index is = "+i);
+				response.sendRedirect("/");
+			}
+		}
+	}
+
     @GetMapping("/displayFlights")
     public String displayflights(Model model){
         model.addAttribute("flightDetails", tp.getFlights());
