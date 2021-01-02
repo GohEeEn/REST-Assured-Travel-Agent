@@ -29,7 +29,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-import java.text.ParseException;
+import org.json.simple.parser.ParseException; 
 
 
 
@@ -280,7 +280,7 @@ public class ClientController {
 	 * @return jsonObject
 	 */
 
-	public static JSONObject parseJSONObject(String response) throws ParseException{
+	public static JSONObject parseJSONObject(String response){
 
 		JSONObject jsonObject = new JSONObject();
 		try{
