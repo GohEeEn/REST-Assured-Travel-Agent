@@ -6,7 +6,7 @@ public class HotelRequest {
 
       private String cityCode;
       private int numberOfGuests;
-      private int minNumberOfStarsRequiredForHotel; //hotel stars. Up to four values can be requested at the same time in a comma separated list. Permitted values: 5,4,3,2,1
+      private int minNumberOfStarsRequiredForHotel; 
 
       public String getCityCode(){
             return cityCode;

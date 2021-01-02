@@ -207,6 +207,7 @@ public class TravelAgentService {
 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.DELETE)
 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
 	public @ResponseBody void deleteTravelPackage(@PathVariable int referenceNumber) {
+		System.out.println("DELETE METHOD");
 		TravelPackage travelPackage = travelPackages.remove(referenceNumber);
 		if (travelPackage == null) throw new NoSuchTravelPackageException();
 	}

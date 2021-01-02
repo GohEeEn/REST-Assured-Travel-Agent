@@ -47,7 +47,6 @@ public class ClientController {
 		return "hotels.html";
 	}
 	
-
 	@RequestMapping(value="/processFlightsForm",method=RequestMethod.POST)  
 	public void processFlightsForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
 

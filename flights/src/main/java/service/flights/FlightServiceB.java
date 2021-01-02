@@ -22,9 +22,9 @@ import java.net.URISyntaxException;
 
 import java.util.Map;
 import java.util.HashMap;
-
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -83,7 +83,7 @@ public class FlightServiceB {
 		for (String airportID : destAirportIDs){
 			System.out.println(airportID);
 			flightQuotes.addAll(findFlights(flightRequest.getCountryOfOriginCode(),flightRequest.getCurrency(),locale,originAirportIDs[0],airportID,
-			flightRequest.getOutboundDate()));
+			flightRequest.getOutboundDate(), flightRequest.getReturnDate()));
 		}
 
 		/**
@@ -133,6 +133,17 @@ public class FlightServiceB {
 	}
 
 	/**
+	 * GET REQUEST (all instances)
+	 * 
+	 * @return flights.values()
+	 */
+	@RequestMapping(value="/flights",method=RequestMethod.GET)
+	public @ResponseBody Collection<Flight[]> listEntries() {
+		if (flights.size() == 0) throw new NoSuchFlightException();
+		return flights.values();
+	}
+
+	/**
 	 * PUT REQUEST: Replaces flights with given reference number
 	 * 
 	 * @param referenceNumber
@@ -165,13 +176,13 @@ public class FlightServiceB {
 	     * @param referenceNumber
 	     */
 
-	@RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.DELETE)
-	@ResponseStatus(value=HttpStatus.NO_CONTENT)
-	public void deleteFlights(@PathVariable int referenceNumber) {
+	// @RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.DELETE)
+	// @ResponseStatus(value=HttpStatus.NO_CONTENT)
+	// public void deleteFlights(@PathVariable String uri) {
 
-		Flight [] clientFlights = flights.remove(referenceNumber);
-		if (clientFlights == null) throw new NoSuchFlightException();
-	}
+	// 	Flight [] clientFlights = flights.remove(referenceNumber);
+	// 	if (clientFlights == null) throw new NoSuchFlightException();
+	// }
 
 	// If there is no flight listed with the given reference after calling GET method then throw this exception
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
@@ -212,14 +223,14 @@ public class FlightServiceB {
 	 */
 	
 	public ArrayList<FlightQuote> findFlights(String countryOfOriginCode, String currency, String locale, String originAirportCode, String destAirportCode, 
-							String outboundDate) {
+							String outboundDate, String returnDate) {
 
 		ArrayList<FlightQuote> flightQuotes = new ArrayList();
 
 		try{
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/"+
-						countryOfOriginCode+"/"+currency+"/"+locale+"/"+originAirportCode+"/"+destAirportCode+"/"+outboundDate))
+						countryOfOriginCode+"/"+currency+"/"+locale+"/"+originAirportCode+"/"+destAirportCode+"/"+outboundDate+"?inboundpartialdate="+returnDate))
 					.header("x-rapidapi-key", "91b7d3fc53mshf8b9bac5b6fd091p118e46jsn22debfe2cd83")
 					.header("x-rapidapi-host", "skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
 					.method("GET", HttpRequest.BodyPublishers.noBody())
@@ -244,61 +255,61 @@ public class FlightServiceB {
 			if (flightQuotesArray.size() > 0){
 
 				int index = 0;
-			while (index < flightQuotesArray.size() ) {
+				while (index < flightQuotesArray.size() ) {
 
-				FlightQuote flightQuote = new FlightQuote();
-				JSONObject quotes = (JSONObject) flightQuotesArray.get(index);
-				Long price = (Long) quotes.get("MinPrice");
-				flightQuote.setPrice(Long.toString(price));
+					FlightQuote flightQuote = new FlightQuote();
+					JSONObject quotes = (JSONObject) flightQuotesArray.get(index);
+					Long price = (Long) quotes.get("MinPrice");
+					flightQuote.setPrice(Long.toString(price));
 
-				// Finds the airline ID
-				JSONObject outboundLeg = (JSONObject) quotes.get("OutboundLeg");
-				JSONArray carrierIds = (JSONArray) outboundLeg.get("CarrierIds");
-				Long carrierId = (Long) carrierIds.get(0);
-				flightQuote.setCarrierId(Long.toString(carrierId));
-				
-				// Finds the airport origin ID and destination ID which are needed to find the names of the airports
-				Long originId = (Long) outboundLeg.get("OriginId");
-				flightQuote.setOriginId(Long.toString(originId));
-				Long destId = (Long) outboundLeg.get("DestinationId");
-				flightQuote.setDestinationId(Long.toString(destId));
-
-				// Finds the name of the Airline by using IDs found in the JSON Object
-				for(int j=0; j<carriersArray.size(); j++){
-					JSONObject carriers = (JSONObject) carriersArray.get(j);
-					Long carId = (Long) carriers.get("CarrierId");
-					// System.out.println("Carrier name: "+carriers.get("Name"));
-					// System.out.println("Carrierid 1: "+carId);
-					// System.out.println("Carrierid 2: "+carrierId);
-					if (carId.equals(carrierId)){
-						flightQuote.setAirline((String) carriers.get("Name"));
-					}
-				}
-
-				// Finds 'Name' which is the name of the airport
-				// This code find both the origin and destination airport name
-				for(int k=0; k<placesArray.size(); k++){
-
-					JSONObject places = (JSONObject) placesArray.get(k);
-					Long placeId = (Long) places.get("PlaceId");
-					String placeName = (String) places.get("Name");
+					// Finds the airline ID
+					JSONObject outboundLeg = (JSONObject) quotes.get("OutboundLeg");
+					JSONArray carrierIds = (JSONArray) outboundLeg.get("CarrierIds");
+					Long carrierId = (Long) carrierIds.get(0);
+					flightQuote.setCarrierId(Long.toString(carrierId));
 					
-					// If IDs match then we know this is the origin airport
-					if (placeId.equals(originId)){
+					// Finds the airport origin ID and destination ID which are needed to find the names of the airports
+					Long originId = (Long) outboundLeg.get("OriginId");
+					flightQuote.setOriginId(Long.toString(originId));
+					Long destId = (Long) outboundLeg.get("DestinationId");
+					flightQuote.setDestinationId(Long.toString(destId));
+
+					// Finds the name of the Airline by using IDs found in the JSON Object
+					for(int j=0; j<carriersArray.size(); j++){
+						JSONObject carriers = (JSONObject) carriersArray.get(j);
+						Long carId = (Long) carriers.get("CarrierId");
+						// System.out.println("Carrier name: "+carriers.get("Name"));
+						// System.out.println("Carrierid 1: "+carId);
+						// System.out.println("Carrierid 2: "+carrierId);
+						if (carId.equals(carrierId)){
+							flightQuote.setAirline((String) carriers.get("Name"));
+						}
+					}
+
+					// Finds 'Name' which is the name of the airport
+					// This code find both the origin and destination airport name
+					for(int k=0; k<placesArray.size(); k++){
+
+						JSONObject places = (JSONObject) placesArray.get(k);
+						Long placeId = (Long) places.get("PlaceId");
+						String placeName = (String) places.get("Name");
 						
-						flightQuote.setOriginAirportName(placeName);
-						// System.out.println("placename: "+placeName+" placeid: "+placeId);
-					}
+						// If IDs match then we know this is the origin airport
+						if (placeId.equals(originId)){
+							
+							flightQuote.setOriginAirportName(placeName);
+							// System.out.println("placename: "+placeName+" placeid: "+placeId);
+						}
 
-					// If IDs match then we know this is the destination airport
-					if (placeId.equals(destId)){
-						flightQuote.setDestAirportName(placeName);
-					}
-				}	
+						// If IDs match then we know this is the destination airport
+						if (placeId.equals(destId)){
+							flightQuote.setDestAirportName(placeName);
+						}
+					}	
 
-				flightQuotes.add(flightQuote);
-				
-				index++;
+					flightQuotes.add(flightQuote);
+					
+					index++;
 			}	
 		}
 			
