@@ -1,11 +1,13 @@
 service/core/FlightRequest.class
+service/core/ActivityRequest.class
+service/core/TravelPackage.class
+service/core/Flight.class
+service/core/ClientRequest.class
+service/core/AttractionRequest.class
+service/core/Attraction.class
 service/core/Hotel.class
 service/core/Geocode.class
-service/core/TravelPackage.class
 service/core/Travel.class
-service/core/Event.class
-service/core/Flight.class
 service/core/Activity.class
 service/core/Activity$Price.class
-service/core/ClientRequest.class
 service/core/HotelRequest.class

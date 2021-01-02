@@ -39,7 +39,11 @@ import service.core.Flight;
 import service.core.TravelPackage;
 import service.core.ClientRequest;
 import service.core.HotelRequest;
+import service.core.ActivityRequest;
+import service.core.Activity;
 import service.core.Hotel;
+import service.core.AttractionRequest;
+import service.core.Attraction;
 /**
  * Implementation of the broker service that uses the Service Registry.
  * 
@@ -94,8 +98,10 @@ public class TravelAgentService {
 		 * TODO (Barry & Sean): Insert code below
 		 */
 
-
-
+		Activity[] activities = new Activity[10];
+		HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
+		activities = restTemplate.postForObject("http://activity-service/activities", activityRequest, Activity[].class);
+		System.out.println("\n"+activities[0].getDescription()+"\n");
 
 
 
@@ -105,6 +111,10 @@ public class TravelAgentService {
 		 * TODO (Barry & Sean): Insert code below
 		 */
 
+		Attraction[] attractions = new Attraction[10];
+		HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
+		attractions = restTemplate.postForObject("http://attraction-service/activities", attractionRequest, Attraction[].class);
+		System.out.println("\n"+attractions[0].toString()+"\n");
 
 
 

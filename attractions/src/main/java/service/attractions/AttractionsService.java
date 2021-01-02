@@ -23,8 +23,13 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+
 @RestController
 public class AttractionsService {
+
+    @Autowired
+	private RestTemplate restTemplate;
+
 
     private static final Amadeus amadeus= Amadeus.builder( "3qFG1Vf9IQTAvMAFQUUAXZeJbE8KAAjm",
             "f9qzap835Rv0PtCg").build();

@@ -31,4 +31,8 @@ public class Attraction {
 
     public int getRank() { return rank; }
     public void setRank(int rank) { this.rank = rank; }
+
+    public String toString(){
+        return "Name: " + getName() + "\nCategory: " + getCategory() + "\nType: " + getType() + "\nSubType: " + getSubtype() + "\nRank: " + getRank();
+    }
 }

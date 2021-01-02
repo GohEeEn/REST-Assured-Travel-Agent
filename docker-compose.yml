@@ -85,6 +85,22 @@ services:
     expose:
       - "8083"
 
+  attractions:
+    build: attractions
+    # image: conchobar/attractions:latest
+    environment:
+      - eureka.client.serviceUrl.defaultZone=http://10.103.202.113:8761/eureka/
+    depends_on:
+      - eureka
+    links:
+      - eureka
+    ports:
+      - "8086:8086"
+    expose:
+      - "8086"
+   
+
+
 
 
   

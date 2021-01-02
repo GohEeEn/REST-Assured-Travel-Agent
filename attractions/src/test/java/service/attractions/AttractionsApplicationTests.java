@@ -1,13 +1,13 @@
-package service.attractions;
+// package service.attractions;
 
-import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+// import org.junit.jupiter.api.Test;
+// import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class AttractionsApplicationTests {
+// @SpringBootTest
+// class ApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
+//     @Test
+//     void contextLoads() {
+//     }
 
-}
+// }
