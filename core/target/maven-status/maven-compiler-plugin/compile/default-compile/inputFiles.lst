@@ -1,10 +1,12 @@
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\ClientRequest.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\TravelPackage.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Flight.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Geocode.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Hotel.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\FlightRequest.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Activity.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Event.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\HotelRequest.java
-C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\core\src\main\java\service\core\Travel.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/FlightRequest.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Geocode.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Activity.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Attraction.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Travel.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/TravelPackage.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/AttractionRequest.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/ClientRequest.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Hotel.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Flight.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/ActivityRequest.java
+/home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/HotelRequest.java

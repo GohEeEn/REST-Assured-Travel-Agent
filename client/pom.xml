@@ -49,6 +49,18 @@
 		</dependency>
 
 		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20201115</version>
+		</dependency>
+
+		<dependency>
 			<groupId>assignment2</groupId>
 			<artifactId>core</artifactId>
 			<version>0.0.1</version>
@@ -66,7 +78,7 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>1.6.0</version>
 				<configuration>
-					<mainClass>client.ClientB</mainClass>
+					<mainClass>client.Client</mainClass>
 				</configuration>
             	</plugin>
 		</plugins>

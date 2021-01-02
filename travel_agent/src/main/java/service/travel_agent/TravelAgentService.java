@@ -39,7 +39,12 @@ import service.core.Flight;
 import service.core.TravelPackage;
 import service.core.ClientRequest;
 import service.core.HotelRequest;
+import service.core.Travel;
+import service.core.ActivityRequest;
+import service.core.Activity;
 import service.core.Hotel;
+import service.core.AttractionRequest;
+import service.core.Attraction;
 /**
  * Implementation of the broker service that uses the Service Registry.
  * 
@@ -48,6 +53,13 @@ import service.core.Hotel;
  */
 @RestController
 public class TravelAgentService {
+	private final MongoRepository mongoRepository;
+
+    @Autowired
+    public TravelAgentService(MongoRepository mongoRepository) {
+        this.mongoRepository = mongoRepository;
+    }
+
 
 	@Autowired
 	@LoadBalanced
@@ -59,10 +71,16 @@ public class TravelAgentService {
 	private Map<Integer, ClientRequest> clientRequests = new TreeMap();
 	private int referenceNumber = 0;
 
-	// POST Method, handles requests from client for quotations with given clientInfo
+	/**
+	 * POST REQUEST: handles requests from client for Hotels, Flights, Activities and Attractions
+	 * 
+	 * @param clientRequest
+	 * @return
+	 * @throws URISyntaxException
+	 */
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)
 	public ResponseEntity<TravelPackage> getFlightInfo(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
-
+		System.out.println("TEST5");
 		referenceNumber++;
 		/**
 		 * POST request to Flight service
@@ -84,6 +102,29 @@ public class TravelAgentService {
 		System.out.println("\n"+hotels[0].getPrice()+"\n");
 
 		/**
+		 * POST request to Activities Service
+		 * TODO (Barry & Sean): Insert code below
+		 */
+
+		// Activity[] activities = new Activity[10];
+		// HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
+		// activities = restTemplate.postForObject("http://activity-service/activities", activityRequest, Activity[].class);
+		// System.out.println("\n"+activities[0].getDescription()+"\n");
+
+
+
+
+		/**
+		 * POST request to Attractions Service
+		 * TODO (Barry & Sean): Insert code below
+		 */
+
+		// Attraction[] attractions = new Attraction[10];
+		// HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
+		// attractions = restTemplate.postForObject("http://attraction-service/activities", attractionRequest, Attraction[].class);
+		// System.out.println("\n"+attractions[0].toString()+"\n");
+
+		/**
 		 * Create a new TravelPackage for client
 		 */
 		TravelPackage travelPackage = new TravelPackage();
@@ -91,6 +132,8 @@ public class TravelAgentService {
 		travelPackage.setHotels(hotels);
 		travelPackages.put(referenceNumber,travelPackage);
 
+		// storeBookingInMongo();
+		
 		/**
 		 * Send response back to the client
 		 */
@@ -102,71 +145,103 @@ public class TravelAgentService {
 		
 	} 
 
+	public void storeBookingInMongo(){
+		// Booking b = new Booking("try", "ni");
+		// mongoRepository.insertBooking(b);
+	}
 
+	public Booking getBookingFromMongo(String referenceId){
+		try{
+			mongoRepository.getBookingFromMongo(referenceId);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+	}
+	/**
+	 * PUT REQUEST
+	 * 
+	 * @param referenceNumber
+	 * @param clientRequest
+	 * @return travelPackage
+	 * @throws URISyntaxException
+	 */
 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PUT)
-    public ResponseEntity<TravelPackage> updateClientBooking(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
-	  TravelPackage travelPackage = travelPackages.get(referenceNumber);
-      //   if (booking == null) throw new NoSuchFlightQuoteException();
+    	public ResponseEntity<TravelPackage> replaceTravelPackage(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
+		TravelPackage travelPackage = travelPackages.get(referenceNumber);
+		if (travelPackage == null) throw new NoSuchTravelPackageException();
 		
-        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
-        HttpHeaders headers = new HttpHeaders();
-	  headers.set("Content-Location", path); 
+		System.out.println("\n Testing PUT \n");
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/bookings/"+referenceNumber;
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Location", path); 
 	  
-	  return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
+	  	return new ResponseEntity<>(travelPackage,headers, HttpStatus.NO_CONTENT);
     }
 
-//     @RequestMapping(value="/book/{phone_number}", method=RequestMethod.PATCH)
-//     public ResponseEntity<PhoneBookEntry> updateEntity(@PathVariable String phone_number, @RequestBody PhoneBookEntry entry) {
-//         PhoneBookEntry phoneBookEntry = directory.get(phone_number);
-//         if (phoneBookEntry == null) throw new NoSuchPhoneEntryException();
-
-//         if (entry.getPhone() != null && !phone_number.equals(entry.getPhone())) 
-//             throw new InvalidPhoneEntryException();
-        
-//         directory.get(phone_number).update(entry);
-
-//         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/book/"+phone_number;
-//         HttpHeaders headers = new HttpHeaders();
-//         headers.set("Content-Location", path);
-//         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-//     }
-
+    /**
+	 * PATCH REQUEST
+	 * 
+	 * @param referenceNumber
+	 * @param clientRequest
+	 * @return travelPackage
+	 * @throws URISyntaxException
+	 */
+	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PATCH)
+	public ResponseEntity<TravelPackage> updateTravelPackage(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
+	  TravelPackage travelPackage = travelPackages.get(referenceNumber);
+	  if (travelPackage == null) throw new NoSuchTravelPackageException();
+	  
+	  System.out.println("\n Testing PATCH \n");
+	  String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
+	  HttpHeaders headers = new HttpHeaders();
+	  headers.set("Content-Location", path); 
     
+	    return new ResponseEntity<>(travelPackage,headers, HttpStatus.NO_CONTENT);
+}
 
 
+	/**
+	 * GET REQUEST (single instance)
+	 * 
+	 * @param referenceNumber
+	 * @return travelPackage
+	 */
+	@RequestMapping(value="/bookings/{referenceNumber}",method=RequestMethod.GET)
+	@ResponseStatus(value=HttpStatus.OK)
+	public TravelPackage getTravelPackage(@PathVariable int referenceNumber) {
+		TravelPackage travelPackage = travelPackages.get(referenceNumber);  // Create new TravelPackage with given reference
+		if (travelPackage == null) throw new NoSuchTravelPackageException();  // If no TravelPackage exists matching this reference then throw an exception
+		return travelPackage;
+	}
 
+	/**
+	 * GET REQUEST (all instances)
+	 * 
+	 * @return travelPackages
+	 */
+	@RequestMapping(value="/bookings",method=RequestMethod.GET)
+	public @ResponseBody Collection<TravelPackage> listEntries() {
+		if (travelPackages.size() == 0) throw new NoSuchTravelPackageException();
+		return travelPackages.values();
+	}
 
+	/**
+	 * DELETE REQUEST
+	 * 
+	 * @param referenceNumber
+	 */
+	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.DELETE)
+	@ResponseStatus(value=HttpStatus.NO_CONTENT)
+	public @ResponseBody void deleteTravelPackage(@PathVariable int referenceNumber) {
+		System.out.println("DELETE METHOD");
+		TravelPackage travelPackage = travelPackages.remove(referenceNumber);
+		if (travelPackage == null) throw new NoSuchTravelPackageException();
+	}
 
-
-
-
-
-
-	// // GET request, returns the ClientApplication with the given reference 
-	// @RequestMapping(value="/applications/{reference}",method=RequestMethod.GET)
-	// @ResponseStatus(value=HttpStatus.OK)
-	// public ClientApplication getEntity(@PathVariable int reference) {
-	// 	ClientApplication clientApplication = clientApplications.get(reference);  // Create new ClientApplication with giver reference
-	// 	if (clientApplication == null) throw new NoSuchClientApplicationException();  // If no ClientApplication exists matching this reference then throw an exception
-	// 	return clientApplication;
-	// }
-
-	// // GET request, returns the ClientApplication with the given reference (passed as URI)
-	// @RequestMapping(value="/applications",method=RequestMethod.GET)
-	// public @ResponseBody Collection<ClientApplication> listEntries() {
-	// 	if (clientApplications.size() == 0) throw new NoSuchClientApplicationException();
-	// 	return clientApplications.values();
-	// }
-
-	// // If there is no ClientApplication listed with the given reference after calling GET method (for single instance) then throw this exception
-	// @ResponseStatus(value = HttpStatus.NOT_FOUND)
-	// public class NoSuchClientApplicationException extends RuntimeException {
-	// 	static final long serialVersionUID = -6516152229878843037L;
-	// }
-
-	// // If there is no ClientApplications listed (i.e. size = 0) after calling GET method (for all instances) then throw this exception
-	// @ResponseStatus(value = HttpStatus.NOT_FOUND)
-	// public class NoClientApplicationsExistException extends RuntimeException {
-	// 	static final long serialVersionUID = -6516152229878843036L;
-	// }	
+	// If there is no TravelPackage listed with the given reference then throw this exception
+	@ResponseStatus(value = HttpStatus.NOT_FOUND)
+	public class NoSuchTravelPackageException extends RuntimeException {
+		static final long serialVersionUID = -6516152229878843037L;
+	}
 }

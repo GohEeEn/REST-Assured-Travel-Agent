@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert
+    kompose.version: 1.21.0 (992df58d8)
+  creationTimestamp: null
+  labels:
+    io.kompose.service: hotels
+  name: hotels
+spec:
+  ports:
+  - name: "8089"
+    port: 8089
+    targetPort: 8089
+  selector:
+    io.kompose.service: hotels
+status:
+  loadBalancer: {}
