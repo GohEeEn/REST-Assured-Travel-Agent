@@ -1,9 +1,9 @@
-package service.recommendations;
+package service.attractions;
 
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
-import com.amadeus.resources.Activity;
+import com.amadeus.resources.PointOfInterest;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
@@ -24,14 +24,11 @@ import java.util.regex.Pattern;
 
 
 @RestController
-public class ActivitiesRecommenderService {
+public class AttractionsService {
 
-    @Autowired
-	private RestTemplate restTemplate;
-
-    private static final Amadeus amadeus= Amadeus.builder( "06t9AsvC4fSxHQuM0VGPkYwBbpfCLNkj",
-                                                        "2ARuN5wPvtHDAKmZ").build();
-    private static final String PAGE = "/activities";
+    private static final Amadeus amadeus= Amadeus.builder( "3qFG1Vf9IQTAvMAFQUUAXZeJbE8KAAjm",
+            "f9qzap835Rv0PtCg").build();
+    private static final String PAGE = "/attractions";
     private static final String QUERY_REGEX = "^([a-z\\u0080-\\u024F]+(?:. |-| |'))*[a-z\\u0080-\\u024F]*$";
     private static final Pattern QUERY_PATTERN_CHECKER = Pattern.compile(QUERY_REGEX,Pattern.CASE_INSENSITIVE);
     private static final String STATUS_CODE_ERROR = "Wrong status code: ";
@@ -104,36 +101,36 @@ public class ActivitiesRecommenderService {
     }
 
     /**
-     * Method to retrieve a list of activities available in given destination with its latitude and longitude
+     * Method to retrieve a list of attractions available in given destination with its latitude and longitude
      * @param latitude Double value in range of -90 to 90
      * @param longitude Double value in range of -90 to 90
-     * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
+     * @return list of attractions in a given destination, empty if the given location is unavailable or no attractions can be found
      */
-     @GetMapping(value = PAGE)
-     public Activity[] getActivities(double latitude, double longitude) {
-         if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
-             System.out.println("Invalid coordinate(s) given (Lat=" + latitude + ", Lon=" + longitude + ")");
-             return new Activity[0];
-         }
+    @GetMapping(value = PAGE)
+    public PointOfInterest[] getAttractions(double latitude, double longitude) {
+        if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
+            System.out.println("Invalid coordinate(s) given (Lat=" + latitude + ", Lon=" + longitude + ")");
+            return new PointOfInterest[0];
+        }
 
-         try {
-             Activity[] activities = amadeus.shopping.activities.get(Params
-                     .with("latitude", Double.toString(latitude))
-                     .and("longitude", Double.toString(longitude)));
+        try {
+            PointOfInterest[] attractions = amadeus.referenceData.locations.pointsOfInterest.get(Params
+                    .with("latitude", Double.toString(latitude))
+                    .and("longitude", Double.toString(longitude)));
 
-             if(activities.length != 0) {
-                 if(activities[0].getResponse().getStatusCode() != 200) {
-                     System.out.println(STATUS_CODE_ERROR + activities[0].getResponse().getStatusCode());
-                 }
-             } else {
-                 System.out.println(EMPTY_RECOMMENDATION);
-             }
-             return activities;
+            if(attractions.length != 0) {
+                if(attractions[0].getResponse().getStatusCode() != 200) {
+                    System.out.println(STATUS_CODE_ERROR + attractions[0].getResponse().getStatusCode());
+                }
+            } else {
+                System.out.println(EMPTY_RECOMMENDATION);
+            }
+            return attractions;
 
-         } catch(ResponseException e) {
+        } catch(ResponseException e) {
             System.out.println("Error " + e.getCode() + " : " + e.getDescription());
-         }
+        }
 
-         return new Activity[0];
-     }
+        return new PointOfInterest[0];
+    }
 }
