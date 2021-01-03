@@ -6,8 +6,6 @@ import org.junit.Test;
 import service.core.ActivityItem;
 import service.core.Geocode;
 
-import java.util.LinkedList;
-
 import static org.junit.Assert.*;
 
 public class ActivitiesRecommenderServiceTest {
