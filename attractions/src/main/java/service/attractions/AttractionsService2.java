@@ -1,5 +1,25 @@
 package service.attractions;
 
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
+
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
@@ -10,24 +30,24 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
+
 import service.core.Attraction;
 import service.core.Geocode;
+import service.core.AttractionRequest;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-
 @RestController
-public class AttractionsService {
+public class AttractionsService2 {
 
     @Autowired
 	private RestTemplate restTemplate;
@@ -40,6 +60,55 @@ public class AttractionsService {
     private static final Pattern QUERY_PATTERN_CHECKER = Pattern.compile(QUERY_REGEX,Pattern.CASE_INSENSITIVE);
     private static final String STATUS_CODE_ERROR = "Wrong status code: ";
     private static final String EMPTY_RECOMMENDATION = "No recommendation found / Location not supported";
+
+    private static int attractionRequestReferenceNumber = 0;    // unique reference number for each attractionRequest
+	private static int searchedAttractionReferenceNumber = 0;           // unique reference number for each array of attractions found by AttractionService that matches requirements from attractionRequest
+	private static int bookedAttractionReferenceNumber = 0;           // unique reference number for each attraction list booked by a client
+	private Map<Integer, Attraction> bookedAttractions = new HashMap<>();      // Map of all attractions created with new reference number as key
+    private Map<Integer, Attraction> searchedAttractions = new HashMap<>();    // Map of all attractions that AttractionsService searched for
+
+
+     /**
+	 * POST REQUEST: handles all attraction requests from travel agent
+	 * 
+	 * @param flightRequest
+	 * @return attractions
+	 * @throws URISyntaxException
+	 */
+
+	@RequestMapping(value="/attractionservice/attractionrequests",method=RequestMethod.POST)
+	public ResponseEntity<Attraction []> searchAttractions(@RequestBody AttractionRequest attractionRequest)  throws URISyntaxException {
+
+        System.out.println("\nTesting AttractionService POST Request\n");
+
+        Attraction[] attractions = getAttractionsWithQueries(attractionRequest.getCity(), attractionRequest.getCountry());
+        
+        /** 
+		 * The following code prints all attractions which were found through the Amadeus API
+		 */
+        
+
+        System.out.println("\nATTRACTIONS\n");
+         for (int i=0; i<3; i++){
+            
+                System.out.println("\n"+attractions[i].toString()+"\n");
+            
+         }
+         
+         /**
+          * TODO: Important
+          */
+		// attractions = addAttractionsToSearchAttractionsMap(attractions);
+
+		attractionRequestReferenceNumber++;
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+			build().toUriString()+ "/attractionservice/attractionrequests/"+attractionRequestReferenceNumber;     // Create URI for this attraction
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(new URI(path));
+		return new ResponseEntity<>(attractions, headers, HttpStatus.CREATED);     // Returns attractions to travel agent
+    }
+
 
     /**
      * Method to validate the user string query, to prevent unwanted characters used<br/>
@@ -182,4 +251,22 @@ public class AttractionsService {
 
         return attractionsArray;
     }
+
+      /**
+	 * The following method adds all attractions found by AttractionsService to searchedAttractions map
+	 */
+
+	 public Attraction [] addAttractionsToSearchAttractionsMap(Attraction [] attractions){
+
+		for (Attraction attraction : attractions){
+
+			searchedAttractionReferenceNumber++; 
+			attraction.setReferenceNumber(searchedAttractionReferenceNumber);           // set the ref number in Attraction so that we can cross reference 
+                                                                                        // with the client choice of attraction booking
+            searchedAttractions.put(searchedAttractionReferenceNumber,attraction);          // add new attraction to map with new ref number
+		}
+		return attractions;
+	 }
+
+
 }

@@ -1,10 +1,11 @@
 package service.core;
 
 public class Attraction {
-    String name;
-    String category;
-    String type;
-    String subtype;
+    private String name;
+    private String category;
+    private String type;
+    private String subtype;
+    private int referenceNumber;
 
     public Attraction() {}
 
@@ -26,6 +27,14 @@ public class Attraction {
 
     public String getSubtype() { return subtype; }
     public void setSubtype(String subtype) { this.subtype = subtype; }
+
+    public int getReferenceNumber(){
+        return referenceNumber;
+    }
+
+    public void setReferenceNumber(int referenceNumber){
+        this.referenceNumber = referenceNumber;
+    }
 
 
     public String toString(){

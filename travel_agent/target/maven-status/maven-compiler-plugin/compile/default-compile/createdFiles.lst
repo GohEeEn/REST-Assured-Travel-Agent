@@ -1,17 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> origin/master
-service\travel_agent\MongoRepository.class
-service\travel_agent\Booking.class
-service\travel_agent\NoSuchBookingException.class
-service\travel_agent\Application.class
-service\travel_agent\TravelAgentService.class
-service\travel_agent\ServiceInstanceRestController.class
-service\travel_agent\MongoConfig.class
-service\travel_agent\TravelAgentService$NoSuchBookingException.class
-<<<<<<< HEAD
-=======
 service/travel_agent/Booking.class
 service/travel_agent/MongoRepository.class
 service/travel_agent/TravelAgentService.class
@@ -20,6 +6,3 @@ service/travel_agent/NoSuchBookingException.class
 service/travel_agent/Application.class
 service/travel_agent/MongoConfig.class
 service/travel_agent/TravelAgentService$NoSuchBookingException.class
->>>>>>> refs/remotes/origin/master
-=======
->>>>>>> origin/master
