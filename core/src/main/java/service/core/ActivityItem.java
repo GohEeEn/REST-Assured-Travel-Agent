@@ -20,6 +20,7 @@ public class ActivityItem {
         this.bookingLink = bookingLink;
         this.pictures = pictures;
         this.price = new Price(amount, currencyCode);
+        this.priceOfActivity = this.price.toString();
     }
 
     public class Price {
