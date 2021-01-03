@@ -28,10 +28,9 @@ spec:
   ports:
   - protocol: TCP
     port: 8761
+    targetPort: 8761
   selector:
     app: eureka
-status:
-  loadBalancer: {}
 
   # ports:
   # - port: 8761
