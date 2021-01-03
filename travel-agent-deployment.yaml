@@ -24,14 +24,26 @@ spec:
         app: travel-agent
     spec:
       containers:
-      - env:
-        - name: eureka.client.serviceUrl.defaultZone
-          value: http://10.103.202.113:8761/eureka/
+      - name: travel-agent
         image: conchobar/travel_agent:latest
         imagePullPolicy: ""
-        name: travel-agent
         ports:
         - containerPort: 8081
+        env:
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+          # Due to camelcase issues with "defaultZone" and "preferIpAddress", _JAVA_OPTIONS is used here
+        - name: _JAVA_OPTIONS
+          value: -Deureka.client.fetch-registry=true -Deureka.client.register-with-eureka=true
+        - name: EUREKA_CLIENT_REGISTERWITHEUREKA
+          value: "true"
+        - name: EUREKA_CLIENT_FETCHREGISTRY
+          value: "true"
+        # The hostnames must match with the the eureka serviceUrls, otherwise the replicas are reported as unavailable in the eureka dashboard      
+        - name: EUREKA_INSTANCE_HOSTNAME
+          value: ${MY_POD_NAME}.eureka
         resources: {}
       restartPolicy: Always
       serviceAccountName: ""

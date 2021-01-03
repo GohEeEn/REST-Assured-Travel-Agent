@@ -26,8 +26,16 @@ metadata:
     app: eureka
 spec:
   ports:
-  - port: 8761
-    name: eureka
-  clusterIP: None
+  - protocol: TCP
+    port: 8761
   selector:
     app: eureka
+status:
+  loadBalancer: {}
+
+  # ports:
+  # - port: 8761
+  #   name: eureka
+  # clusterIP: None
+  # selector:
+  #   app: eureka
