@@ -41,7 +41,7 @@ import service.core.ClientRequest;
 import service.core.HotelRequest;
 import service.core.Travel;
 import service.core.ActivityRequest;
-import service.core.Activity;
+import service.core.ActivityItem;
 import service.core.Hotel;
 import service.core.AttractionRequest;
 import service.core.Attraction;
@@ -58,6 +58,7 @@ import service.core.ReplaceBooking;
  */
 @RestController
 public class TravelAgentService {
+
 	private final MongoRepository mongoRepository;
 
     @Autowired
@@ -83,17 +84,10 @@ public class TravelAgentService {
 	 * @return
 	 * @throws URISyntaxException
 	 */
-<<<<<<< HEAD
 
 	@RequestMapping(value="/travelagent/travelpackagerequests",method=RequestMethod.POST)
 	public ResponseEntity<TravelPackage> createTravelPackageRequest(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
 	
-=======
-	@RequestMapping(value="/bookings",method=RequestMethod.POST)
-	public ResponseEntity<TravelPackage> getFlightInfo(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
-		System.out.println("TEST5");
-		referenceNumber++;
->>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 		/**
 		 * POST request to Flight service for a FlightRequest which will return a list of available flights
 		 */
@@ -112,18 +106,13 @@ public class TravelAgentService {
 		System.out.println("\n"+hotels[0].getPrice()+"\n");
 
 		/**
-		 * POST request to Activities Service
-		 * TODO (Barry & Sean): Insert code below
+		 * POST request to ActivityService
 		 */
 
-		// Activity[] activities = new Activity[10];
-		// HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
-		// activities = restTemplate.postForObject("http://activity-service/activities", activityRequest, Activity[].class);
-		// System.out.println("\n"+activities[0].getDescription()+"\n");
-<<<<<<< HEAD
-
-=======
->>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
+		ActivityItem[] activities = new ActivityItem[100];
+		HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
+		activities = restTemplate.postForObject("http://activities-service/activityservice/activityrequests", activityRequest, ActivityItem[].class);
+		System.out.println("\nName of activity: "+activities[0].getName()+"\n");
 
 
 
@@ -136,15 +125,12 @@ public class TravelAgentService {
 		// HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
 		// attractions = restTemplate.postForObject("http://attraction-service/activities", attractionRequest, Attraction[].class);
 		// System.out.println("\n"+attractions[0].toString()+"\n");
-<<<<<<< HEAD
 
 
 
 
 
 
-=======
->>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 
 		/**
 		 * Create a new TravelPackage for client
@@ -167,21 +153,23 @@ public class TravelAgentService {
 		
 	} 
 
-	public void storeBookingInMongo(){
-		// Booking b = new Booking("try", "ni");
-		// mongoRepository.insertBooking(b);
-	}
+	// public void storeBookingInMongo(){
+	// 	// Booking b = new Booking("try", "ni");
+	// 	// mongoRepository.insertBooking(b);
+	// }
 
-	public Booking getBookingFromMongo(String referenceId){
-		Booking b = new Booking();
-		try{
-			b = mongoRepository.getBookingFromMongo(referenceId);
-		}
-		catch(Exception e){
-			e.printStackTrace();
-		}
-		return b;
-	}
+	// public Booking getBookingFromMongo(String referenceId){
+	// 	Booking b = new Booking();
+	// 	try{
+	// 		b = mongoRepository.getBookingFromMongo(referenceId);
+	// 	}
+	// 	catch(Exception e){
+	// 		e.printStackTrace();
+	// 	}
+	// 	return b;
+	// }
+
+
 	/**
 	 * POST REQUEST: handles requests from client for a booking (after they have made their choice of flight, hotel etc.)
 	 * 

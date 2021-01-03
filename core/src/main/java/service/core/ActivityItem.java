@@ -1,17 +1,19 @@
 package service.core;
 
-public class Activity {
+public class ActivityItem {
 
     private String name;
     private String description;
     private String rating;
     private String bookingLink;
     private String[] pictures;
+    private String priceOfActivity;
     private Price price;
+    private int referenceNumber;
 
-    public Activity() {}
+    public ActivityItem() {}
 
-    public Activity(String name, String description, String rating, String bookingLink, String[] pictures, String amount, String currencyCode) {
+    public ActivityItem(String name, String description, String rating, String bookingLink, String[] pictures, String amount, String currencyCode) {
         this.name = name;
         this.description = description;
         this.rating = rating;
@@ -99,6 +101,23 @@ public class Activity {
     public void setPrice(Price price) {
         this.price = price;
     }
+
+    public int getReferenceNumber(){
+        return referenceNumber;
+    }
+
+    public void setReferenceNumber(int referenceNumber){
+        this.referenceNumber = referenceNumber;
+    }
+
+    public String getPriceOfActivity(){
+        return priceOfActivity;
+    }
+
+    public void setPriceOfActivity(String priceOfActivity){
+        this.priceOfActivity = priceOfActivity;
+    }
+
 
     public String toString() {
         return name + " " + rating + " " + price.toString() + " " + bookingLink;

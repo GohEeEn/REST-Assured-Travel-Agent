@@ -15,6 +15,7 @@ import service.core.ClientRequest;
 import service.core.ClientResponse;
 import service.core.HotelRequest;
 import service.core.TravelPackage;
+import service.core.ActivityRequest;
 import service.core.Booking;
 import service.core.ReplaceBooking;
 
@@ -56,6 +57,13 @@ public class ClientB {
 		ClientRequest clientRequest = new ClientRequest();
 		clientRequest.setFlightRequest(flightRequest);
 		clientRequest.setHotelRequest(hotelRequest);
+
+		ActivityRequest ar = new ActivityRequest();
+		ar.setCountry("Ireland");
+		ar.setCity("Dublin");
+		ar.setLatitude(53.3498);
+		ar.setLongitude(6.2603);
+		clientRequest.setActivityRequest(ar);
 
 		
 		ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
