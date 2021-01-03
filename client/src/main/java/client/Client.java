@@ -69,6 +69,12 @@ public class Client {
 									System.out.println("Description of activity is: " + a.getDescription());
 									System.out.println("Booking link of activity is: " + a.getBookingLink());
 								}
+								Attraction [] attractions2 = travelPackage.getAttractions();
+								Attraction at = attractions2[0];
+								if (at != null){
+									System.out.println("Category of attraction is: " + at.getCategory());
+									System.out.println("Name of attraction is: " + at.getName());
+								}
 
 							//    System.out.println(travelPackage.getActivities());
 			 			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);

@@ -280,7 +280,7 @@ public class ClientController {
 					cr.setHotelReferenceNumber(tp.getHotels()[i-1].getReferenceNumber());
 				}
 				else{
-					cr.setHotelReferenceNumber(0);
+					cr.setHotelReferenceNumber(-1);
 				}
 				response.sendRedirect("/displayActivities");
 				// response.sendRedirect("/");
@@ -329,8 +329,64 @@ public class ClientController {
 					cr.setActivitiesReferenceNumber(chosenActivitiesRefs);
 				}
 				else{
-					chosenActivitiesRefs[0] = 0;
+					chosenActivitiesRefs[0] = -1;
 					cr.setActivitiesReferenceNumber(chosenActivitiesRefs);
+				}
+				response.sendRedirect("/displayAttractions");
+			}
+			else{
+				PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid indexes entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayActivities" + "');");
+            out.println("</script>");
+			}
+		}
+	}
+
+	@RequestMapping(value="/userAttractionsSelection",method=RequestMethod.POST)
+	public void userAttractionsSelection(String inputAttractionsIndex, HttpServletResponse response) throws IOException
+	{
+		System.out.println("CHOSEN STRING = "+inputAttractionsIndex);
+		ArrayList<Integer> chosenAttractions = new ArrayList<Integer>();
+		boolean isNumeric=true;
+		String[] splited = inputAttractionsIndex.split("\\s+");
+		for(String s: splited){
+			isNumeric = s.chars().allMatch( Character::isDigit );
+			if (!isNumeric){
+				break;
+			}
+		}
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid indexes entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayAttractions" + "');");
+            out.println("</script>");
+		}
+		else{
+			boolean checkerB=true;
+			for(String s: splited){
+			int i = Integer.parseInt(s);
+			chosenAttractions.add(i);
+			if(i<0 || (i == 0 && tp.getAttractions().length!=0) || (i!=0 && i>tp.getAttractions().length)){
+				checkerB = false;
+				break;
+			}
+			}
+			int [] chosenAttractionsRefs = new int[chosenAttractions.size()];
+			int index0=0;
+			if(checkerB){
+				if (chosenAttractions.get(0)!=0){
+					for(int in: chosenAttractions){
+						chosenAttractionsRefs[index0]=tp.getAttractions()[in-1].getReferenceNumber();
+						index0++;
+					}
+					cr.setAttractionsReferenceNumber(chosenAttractionsRefs);
+				}
+				else{
+					chosenAttractionsRefs[0] = -1;
+					cr.setAttractionsReferenceNumber(chosenAttarctionsRefs);
 				}
 				response.sendRedirect("/");
 			}
@@ -338,7 +394,7 @@ public class ClientController {
 				PrintWriter out = response.getWriter();
             out.println("<script>");
             out.println("alert('" + "invalid indexes entered, enter again" + "');");
-            out.println("window.location.replace('" + "/displayActivities" + "');");
+            out.println("window.location.replace('" + "/displayAttractions" + "');");
             out.println("</script>");
 			}
 		}
@@ -362,11 +418,11 @@ public class ClientController {
         return "displayActivities.html";
 	}
 
-	// @GetMapping("/displayAttractions")
-    // public String displayAttraction(Model model){
-    //     model.addAttribute("attractionsDetails", tp.getAttractions());
-    //     return "displayAttractions.html";
-    // }
+	@GetMapping("/displayAttractions")
+    public String displayAttraction(Model model){
+        model.addAttribute("attractionsDetails", tp.getAttractions());
+        return "displayAttractions.html";
+    }
     
 
     /**
