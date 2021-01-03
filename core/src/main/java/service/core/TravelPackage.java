@@ -1,15 +1,12 @@
 package service.core;
 
-import service.core.Flight;
-import service.core.Hotel;
-
 public class TravelPackage {
       
       public TravelPackage() {}
 
       private Flight [] flights;
       private Hotel [] hotels;
-      private Activity [] activities;
+      private ActivityItem[] activities;
       private int travelPackageReferenceNumber;
 
       public Flight [] getFlights(){
@@ -28,11 +25,11 @@ public class TravelPackage {
             this.hotels = hotels;
       }
 
-      public Activity [] getActivities(){
+      public ActivityItem[] getActivities(){
             return activities;
       }
 
-      public void setActivities(Activity [] activities){
+      public void setActivities(ActivityItem[] activities){
             this.activities = activities;
       }
 

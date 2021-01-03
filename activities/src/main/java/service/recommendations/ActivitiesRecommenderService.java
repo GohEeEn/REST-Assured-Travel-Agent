@@ -14,12 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
+import service.core.ActivityItem;
 import service.core.Geocode;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -145,31 +147,31 @@ public class ActivitiesRecommenderService {
      * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
      */
     @GetMapping(value = PAGE + "/{country}/{city}")
-     public LinkedList<service.core.Activity> getActivitiesWithQueries(@RequestParam("city") String city, @RequestParam("country") String country) {
+     public ActivityItem[] getActivitiesWithQueries(@RequestParam("city") String city, @RequestParam("country") String country) {
         Geocode destination = getDestinationGeocode(city, country);
         if(destination == null) {
             System.out.println("Invalid destination (" + city + ", " + country + ")");
-            return new LinkedList<>();
+            return new ActivityItem[0];
         }
         Activity[] activities = getActivities(destination.getLatitude(), destination.getLongitude());
         if(activities == null) {
             System.out.println("No activity found in (" + city + ", " + country + ")");
-            return new LinkedList<>();
+            return new ActivityItem[0];
         }
-        LinkedList<service.core.Activity> translated = new LinkedList<>();
+        LinkedList<ActivityItem> translated = new LinkedList<>();
         for(Activity activity : activities) {
             translated.add(toCoreActivity(activity));
         }
-        return translated;
+        return listToArray(translated);
      }
 
     /**
      * Method to translate an Amadeus Java SDK Activity class instance into a Java Bean Activity class object
      * @param act an Amadeus Java SDK Activity class instance
-     * @return a Java Bean Activity class object
+     * @return a Java Bean ActivityItem class object
      */
-     public service.core.Activity toCoreActivity(Activity act) {
-        return new service.core.Activity(
+     public ActivityItem toCoreActivity(Activity act) {
+        return new ActivityItem(
                                 act.getName(),
                                 act.getShortDescription(),
                                 act.getRating(),
@@ -178,5 +180,17 @@ public class ActivitiesRecommenderService {
                                 act.getPrice().getAmount(),
                                 act.getPrice().getCurrencyCode()
         );
+     }
+
+     public ActivityItem[] listToArray(List<ActivityItem> activities) {
+
+         ActivityItem[] activitiesArray = new ActivityItem[activities.size()];
+         int index = 0;
+         while (index < activities.size()){
+             activitiesArray[index] = activities.get(index);
+             index++;
+         }
+
+         return activitiesArray;
      }
 }
