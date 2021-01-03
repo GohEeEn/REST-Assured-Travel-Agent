@@ -9,4 +9,4 @@ spec:
       targetPort: 8081
       nodePort: 31500
   selector: 
-    app: travel-agent
+    app: travel

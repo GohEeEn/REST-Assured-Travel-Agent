@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    app: hotels-service
-  name: hotels-service
+    app: hotels
+  name: hotels
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: hotels-service
+      app: hotels
   strategy: {}
   template:
     metadata:
@@ -21,7 +21,7 @@ spec:
         kompose.version: 1.21.0 (992df58d8)
       creationTimestamp: null
       labels:
-        app: hotels-service
+        app: hotels
     spec:
       containers:
       - env:
@@ -36,11 +36,11 @@ spec:
         - name: EUREKA_CLIENT_FETCHREGISTRY
           value: "true"
         # The hostnames must match with the the eureka serviceUrls, otherwise the replicas are reported as unavailable in the eureka dashboard      
-        - name: EUREKA_INSTANCE_HOSTNAME
-          value: ${MY_POD_NAME}.eureka
+        # - name: EUREKA_INSTANCE_HOSTNAME
+        #   value: ${MY_POD_NAME}.eureka
         image: conchobar/hotels:latest
         imagePullPolicy: ""
-        name: hotels-service
+        name: hotels
         ports:
         - containerPort: 8089
         resources: {}

@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    app: travel-agent
-  name: travel-agent
+    app: travel
+  name: travel
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: travel-agent
+      app: travel
   strategy: {}
   template:
     metadata:
@@ -21,7 +21,7 @@ spec:
         kompose.version: 1.21.0 (992df58d8)
       creationTimestamp: null
       labels:
-        app: travel-agent
+        app: travel
     spec:
       containers:
       - env:
@@ -40,7 +40,7 @@ spec:
         #   value: ${MY_POD_NAME}.eureka
         image: conchobar/travel_agent:latest
         imagePullPolicy: ""
-        name: travel-agent
+        name: travel
         ports:
         - containerPort: 8081
         resources: {}

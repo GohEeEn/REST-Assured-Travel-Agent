@@ -10,9 +10,9 @@ metadata:
   name: activities
 spec:
   ports:
-  - name: "8083"
+  - name: "blah"
     port: 8083
-    targetPort: 8761
+    targetPort: 8083
   selector:
     app: eureka
 status:

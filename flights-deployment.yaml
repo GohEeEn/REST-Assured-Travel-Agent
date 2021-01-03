@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    app: flights-service
-  name: flights-service
+    app: flights
+  name: flights
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: flights-service
+      app: flights
   strategy: {}
   template:
     metadata:
@@ -21,7 +21,7 @@ spec:
         kompose.version: 1.21.0 (992df58d8)
       creationTimestamp: null
       labels:
-        app: flights-service
+        app: flights
     spec:
       containers:
       - env:
@@ -42,7 +42,7 @@ spec:
         #   value: ${MY_POD_NAME}.eureka
         image: conchobar/flights:latest
         imagePullPolicy: ""
-        name: flights-service
+        name: flights
         ports:
         - containerPort: 8082
         resources: {}

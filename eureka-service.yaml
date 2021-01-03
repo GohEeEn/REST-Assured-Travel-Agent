@@ -26,12 +26,11 @@ metadata:
     app: eureka
 spec:
   ports:
-  - protocol: TCP
-    port: 8761
-    targetPort: 8761
+  - port: 8761
+    name: eureka
+  clusterIP: None
   selector:
     app: eureka
-
   # ports:
   # - port: 8761
   #   name: eureka
