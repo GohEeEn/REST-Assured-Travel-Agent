@@ -156,7 +156,8 @@
 //                          System.out.println("Hotel ref num: "+h.getReferenceNumber());
 // 			 }
 			 
-// 			 for (ActivityItem a : travelPackage.getActivities()){
+// 			 for (int p=0; p < 3;p++){
+// 				ActivityItem a = travelPackage.getActivities()[p];
 // 				System.out.println("Activity ref num: "+a.getReferenceNumber());
 // 			}
 
@@ -168,7 +169,10 @@
 //             ClientResponse clientResponse = new ClientResponse();
 //             clientResponse.setTravelPackageReferenceNumber(travelPackage.getTravelPackageReferenceNumber());
 //             clientResponse.setHotelReferenceNumber(1);
-//             clientResponse.setFlightReferenceNumber(2);
+// 		clientResponse.setFlightReferenceNumber(2);
+// 		int [] intArray = new int[1];
+// 		intArray[0] = 1;
+// 		clientResponse.setActivitiesReferenceNumber(intArray);
 //             HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(clientResponse);
                   
 //             Booking booking = new Booking();
