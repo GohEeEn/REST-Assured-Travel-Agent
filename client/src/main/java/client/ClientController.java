@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 import service.core.ActivityRequest;
+import service.core.AttractionRequest;
 import service.core.ClientResponse;
 import service.core.FlightRequest;
 import service.core.HotelRequest;
@@ -53,6 +54,7 @@ public class ClientController {
     private FlightRequest flightRequest = new FlightRequest();
 	private HotelRequest hotelRequest = new HotelRequest();
 	private ActivityRequest activityRequest = new ActivityRequest();
+	private AttractionRequest attractionRequest = new AttractionRequest();
 	private TravelPackage tp = new TravelPackage();
 	private ClientResponse cr = new ClientResponse();
 	final static String locale = "en-GB";
@@ -115,6 +117,7 @@ public class ClientController {
 						}
 						else{
 							activityRequest.setCountry(capDestinaptionCountry);
+							attractionRequest.setCountry(capDestinaptionCountry);
 
 					ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
 					ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
@@ -189,6 +192,7 @@ public class ClientController {
             out.println("</script>");
         }else {
 			activityRequest.setCity(location.toLowerCase());
+			attractionRequest.setCity(location.toLowerCase());
             hotelRequest.setCityCode(cityCodes.get(location.toLowerCase()));
             hotelRequest.setNumberOfGuests(Integer.parseInt(guests));
             
@@ -212,7 +216,7 @@ public class ClientController {
             }
 
             hotelRequest.setMinNumberOfStarsRequiredForHotel(minNumOfStars);
-            tp = Client.sendBookingToTravelAgent(flightRequest, hotelRequest, activityRequest);
+            tp = Client.sendBookingToTravelAgent(flightRequest, hotelRequest, activityRequest, attractionRequest);
 			response.sendRedirect("/displayFlights");
         } 
     }
@@ -278,7 +282,51 @@ public class ClientController {
 				else{
 					cr.setHotelReferenceNumber(0);
 				}
-				Client.
+				// response.sendRedirect("/displayActivities");
+				response.sendRedirect("/");
+			}
+		}
+	}
+
+	@RequestMapping(value="/userActivitiesSelection",method=RequestMethod.POST)
+	public void userHotelSelection(String inputActivitiesIndex, HttpServletResponse response) throws IOException
+	{
+		ArrayList<Integer> chosenActivities = new ArrayList<Integer>();
+		boolean isNumeric;
+		String[] splited = inputActivitiesIndex.split("\\s+");
+		for(String s: splited){
+			isNumeric = inputHotelIndex.chars().allMatch( Character::isDigit );
+			if (!isNumeric){
+				break;
+			}
+		}
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid indexes entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayHotels" + "');");
+            out.println("</script>");
+		}
+		else{
+			boolean checkerB=true;
+			for(String s: splited){
+			int i = Integer.parseInt(s);
+			chosenActivities.add(i);
+			if(i<0 || (i == 0 && tp.getHotels().length!=0) || (i!=0 && i>tp.getActivities().length)){
+				checkerB = false;
+			}
+			}
+			if(checkerB){
+				if (chosenActivities.get(0)!=0){
+					for(int in: chosenActivities){
+						
+					}
+					cr.setActivitiesReferenceNumber(tb.getHotels()[i-1].getReferenceNumber());
+				}
+				else{
+					cr.setHotelReferenceNumber(0);
+				}
+				// response.sendRedirect("/displayActivities");
 				response.sendRedirect("/");
 			}
 		}
@@ -294,8 +342,19 @@ public class ClientController {
     public String displayhotels(Model model){
         model.addAttribute("hotelDetails", tp.getHotels());
         return "displayHotels.html";
+	}
+	
+    @GetMapping("/displayActivities")
+    public String displayactivities(Model model){
+        model.addAttribute("activitiesDetails", tp.getActivities());
+        return "displayActivities.html";
+	}
+
+	@GetMapping("/displayAttractions")
+    public String displayAttraction(Model model){
+        model.addAttribute("attractionsDetails", tp.getAttractions());
+        return "displayAttractions.html";
     }
-    
     
 
     /**

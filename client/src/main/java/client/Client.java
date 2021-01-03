@@ -12,6 +12,7 @@ import service.core.FlightRequest;
 import service.core.Flight;
 import service.core.Hotel;
 import service.core.ActivityRequest;
+import service.core.AttractionRequest;
 import service.core.ClientRequest;
 import service.core.ClientResponse;
 import service.core.HotelRequest;
@@ -36,7 +37,7 @@ public class Client {
 	
 	// public static void main(String[] args) {
 
-		public static TravelPackage sendBookingToTravelAgent(FlightRequest flightRequest, HotelRequest hotelRequest, ActivityRequest activityRequest) {	
+		public static TravelPackage sendBookingToTravelAgent(FlightRequest flightRequest, HotelRequest hotelRequest, ActivityRequest activityRequest, AttractionRequest attractionRequest) {	
  		
 			    	Flight[] flights = new Flight[10];
 			 		RestTemplate restTemplate = new RestTemplate();
@@ -44,6 +45,7 @@ public class Client {
 			 		clientRequest.setFlightRequest(flightRequest);
 					 clientRequest.setHotelRequest(hotelRequest);
 					 clientRequest.setActivityRequest(activityRequest);
+					 clientRequest.setAttractionRequest(attractionRequest);
 			 //		Uncomment this after testing my Code to get same result as Barry
 				/*
 				 * referenceNumber++; clientRequest.setReferenceNumber(referenceNumber);
