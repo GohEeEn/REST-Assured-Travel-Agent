@@ -39,9 +39,13 @@ import service.core.Hotel;
 import service.core.Booking;
 import service.core.ClientResponse;
 import service.core.ClientChoice;
+import service.core.ClientChoices;
 import service.core.ReplaceBooking;
 import service.core.Attraction;
 import service.core.AttractionRequest;
+
+// import java.net.URLDecoder;
+//  import java.net.URLEncoder;
 
 /**
  * Implementation of the broker service that uses the Service Registry.
@@ -113,8 +117,6 @@ public class TravelAgentService {
 			System.out.println("\n"+a.toString()+"\n");
 		   }
 
-
-
 		// /**
 		//  * POST request to AttractionsService
 		//  */
@@ -126,10 +128,6 @@ public class TravelAgentService {
 		HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
 		attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
 		System.out.println("\n"+attractions[0].toString()+"\n");
-
-
-
-
 
 
 
@@ -184,6 +182,7 @@ public class TravelAgentService {
 	@RequestMapping(value="/travelagent/bookings",method=RequestMethod.POST)
 	public ResponseEntity<Booking> createBooking(@RequestBody ClientResponse clientResponse) throws URISyntaxException {
 
+		System.out.println("\nTesting booking method\n");
 		/**
 		 * POST request to Flight service
 		 */
@@ -202,6 +201,31 @@ public class TravelAgentService {
 		clientChoiceOfHotel.setReferenceNumber(clientResponse.getHotelReferenceNumber());
 		HttpEntity<ClientChoice> requestHotel = new HttpEntity<>(clientChoiceOfHotel);
 		hotel = restTemplate.postForObject("http://hotels-service/hotelservice/hotels",requestHotel, Hotel.class);
+
+		/**
+		 * POST request to ActivityRecommenderService
+		 */
+		System.out.println("\nTesting actvities booking: "+clientResponse.getActivitiesReferenceNumber()[0]);
+		ActivityItem [] activities = new ActivityItem[20];
+		ClientChoices clientChoicesOfActivities = new ClientChoices();
+		clientChoicesOfActivities.setReferenceNumbers(clientResponse.getActivitiesReferenceNumber());
+		// ClientChoice clientChoiceOfActivities = new ClientChoice();      // create ClientChoice to hold array of ref number (if a negative number then no activities were chosen)
+		HttpEntity<ClientChoices> requestActivities = new HttpEntity<>(clientChoicesOfActivities);
+		activities = restTemplate.postForObject("http://activities-service/activityservice/activities",requestActivities, ActivityItem[].class);
+		System.out.println(activities[0].getName());
+
+		/**
+		 * POST request to AttractionsService
+		 */
+
+		System.out.println("\nTesting attractions booking: "+clientResponse.getAttractionsReferenceNumber()[0]);
+		Attraction [] attractions = new Attraction[20];
+		ClientChoices clientChoicesOfAttractions = new ClientChoices();
+		clientChoicesOfAttractions.setReferenceNumbers(clientResponse.getAttractionsReferenceNumber());
+		// ClientChoice clientChoiceOfActivities = new ClientChoice();      // create ClientChoice to hold array of ref number (if a negative number then no activities were chosen)
+		HttpEntity<ClientChoices> requestAttractions = new HttpEntity<>(clientChoicesOfAttractions);
+		attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractions",requestAttractions, Attraction[].class);
+		System.out.println(attractions[0].getName());
 
 		/**
 		 * Create a new Booking for client
