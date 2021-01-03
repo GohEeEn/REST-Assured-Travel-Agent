@@ -50,7 +50,8 @@ import java.io.IOException;
  */
 @Controller
 public class ClientController { 
-    private HashMap<String, String> cityCodes = new HashMap<String, String>();
+	private HashMap<String, String> cityCodes = new HashMap<String, String>();
+	private String[] attractionCities = new String[7];
     private FlightRequest flightRequest = new FlightRequest();
 	private HotelRequest hotelRequest = new HotelRequest();
 	private ActivityRequest activityRequest = new ActivityRequest();
@@ -116,8 +117,13 @@ public class ClientController {
 							out.println("</script>");
 						}
 						else{
+							activityRequest.setCity(cityOfDestination.toLowerCase());
+							if (Arrays.stream(attractionCities).anyMatch(cityOfDestination.toLowerCase()::equals)){
+								attractionRequest.setCity(cityOfDestination.toLowerCase());
+								attractionRequest.setCountry(capDestinaptionCountry);
+							}
+            				hotelRequest.setCityCode(cityCodes.get(cityOfDestination.toLowerCase()));
 							activityRequest.setCountry(capDestinaptionCountry);
-							attractionRequest.setCountry(capDestinaptionCountry);
 
 					ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
 					ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
@@ -161,12 +167,12 @@ public class ClientController {
 		}
     
     private void cityCodeGenerator(){
-        File file = new File("city_codes.txt");
+		File file = new File("city_codes.txt");
+		File file2 = new File("attraction_cities.txt");
         try{
-            int i = 0;
             Scanner sc = new Scanner(file);
             while(sc.hasNextLine()) 
-            {   i++;
+            {
                 String line = sc.nextLine();
                 int index = line.lastIndexOf(" ")+1;
                 String cityCode = line.substring(index);
@@ -176,24 +182,28 @@ public class ClientController {
         }   
         catch (FileNotFoundException e) {
             e.printStackTrace();
+		}
+		try{
+			int i = 0;
+            Scanner sc = new Scanner(file2);
+            while(sc.hasNextLine()) 
+            { 
+                String line = sc.nextLine();
+				line = line.trim().toLowerCase();
+				attractionCities[i] = line;
+				i++;
+            }
+        }   
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
 
     @RequestMapping(value="/processHotelsForm",method=RequestMethod.POST)
-    public void processHotelsForm(String location, String guests, String checkIn, String checkOut, String minRatings, HttpServletResponse response) throws IOException
+    public void processHotelsForm(String guests, String checkIn, String checkOut, String minRatings, HttpServletResponse response) throws IOException
     {
 
         System.out.println("minrating is "+minRatings);
-        if(cityCodes.get(location.toLowerCase())==null){
-            PrintWriter out = response.getWriter();
-            out.println("<script>");
-            out.println("alert('" + "invalid city entered, enter again" + "');");
-            out.println("window.location.replace('" + "/hotels" + "');");
-            out.println("</script>");
-        }else {
-			activityRequest.setCity(location.toLowerCase());
-			attractionRequest.setCity(location.toLowerCase());
-            hotelRequest.setCityCode(cityCodes.get(location.toLowerCase()));
             hotelRequest.setNumberOfGuests(Integer.parseInt(guests));
             
             int minNumOfStars = 0;
@@ -214,11 +224,9 @@ public class ClientController {
                     minNumOfStars = 5;
                     break;
             }
-
             hotelRequest.setMinNumberOfStarsRequiredForHotel(minNumOfStars);
             tp = Client.sendBookingToTravelAgent(flightRequest, hotelRequest, activityRequest, attractionRequest);
 			response.sendRedirect("/displayFlights");
-        } 
     }
 
 	@RequestMapping(value="/userFlightSelection",method=RequestMethod.POST)
@@ -326,6 +334,7 @@ public class ClientController {
 						chosenActivitiesRefs[index0]=tp.getActivities()[in-1].getReferenceNumber();
 						index0++;
 					}
+					
 					cr.setActivitiesReferenceNumber(chosenActivitiesRefs);
 				}
 				else{
@@ -386,7 +395,7 @@ public class ClientController {
 				}
 				else{
 					chosenAttractionsRefs[0] = -1;
-					cr.setAttractionsReferenceNumber(chosenAttarctionsRefs);
+					cr.setAttractionsReferenceNumber(chosenAttractionsRefs);
 				}
 				response.sendRedirect("/");
 			}

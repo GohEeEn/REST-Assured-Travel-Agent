@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import service.core.FlightRequest;
 import service.core.Flight;
 import service.core.Hotel;
+import service.core.Attraction;
 import service.core.ActivityRequest;
 import service.core.ActivityItem;
 import service.core.AttractionRequest;

@@ -125,7 +125,7 @@ public class TravelAgentService {
 		Attraction[] attractions = new Attraction[200];
 		HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
 		attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
-		System.out.println("\n"+attractions[0].toString()+"\n");
+		// System.out.println("\n"+attractions[0].toString()+"\n");
 
 
 
