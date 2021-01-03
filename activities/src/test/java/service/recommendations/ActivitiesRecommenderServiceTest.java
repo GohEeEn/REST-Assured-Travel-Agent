@@ -3,6 +3,7 @@ package service.recommendations;
 import com.amadeus.resources.Activity;
 import org.junit.Before;
 import org.junit.Test;
+import service.core.ActivityItem;
 import service.core.Geocode;
 
 import java.util.LinkedList;
@@ -91,16 +92,16 @@ public class ActivitiesRecommenderServiceTest {
     @Test
     public void getActivitiesWithQueriesTest() {
 
-        LinkedList<service.core.Activity> dublin = recommender.getActivitiesWithQueries("dublin", "ireland");
-        assertNotNull("Error : It should return an array of Activity objects", dublin);
-        assertNotEquals("Error : The Activity array shouldn't be empty since it is a valid location", 0, dublin.size());
+        ActivityItem[] dublin = recommender.getActivitiesWithQueries("dublin", "ireland");
+        assertNotNull("Error : It should return an array of ActivityItem objects", dublin);
+        assertNotEquals("Error : The ActivityItem array shouldn't be empty since it is a valid location", 0, dublin.length);
 
-        LinkedList<service.core.Activity> invalid = recommender.getActivitiesWithQueries("dublin", "china");
-        assertNotNull("Error : It should return an array of Activity objects", invalid);
-        assertEquals("Error : The Activity array should be empty since the invalid location", 0, invalid.size());
+        ActivityItem[] invalid = recommender.getActivitiesWithQueries("dublin", "china");
+        assertNotNull("Error : It should return an array of ActivityItem objects", invalid);
+        assertEquals("Error : The ActivityItem array should be empty since the invalid location", 0, invalid.length);
 
-        LinkedList<service.core.Activity> unsupported = recommender.getActivitiesWithQueries("beijing", "china");
-        assertNotNull("Error : It should return an array of Activity objects", unsupported);
-        assertEquals("Error : The Activity array should be empty since it is an unsupported location", 0, unsupported.size());
+        ActivityItem[] unsupported = recommender.getActivitiesWithQueries("beijing", "china");
+        assertNotNull("Error : It should return an array of ActivityItem objects", unsupported);
+        assertEquals("Error : The ActivityItem array should be empty since it is an unsupported location", 0, unsupported.length);
     }
 }

@@ -6,12 +6,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
@@ -21,17 +19,12 @@ import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import org.springframework.web.client.RestTemplate; 
 import org.springframework.http.HttpEntity;
 
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.Collection;
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
- 
-import java.text.NumberFormat;
 
 import service.core.FlightRequest;
 import service.core.Flight;
@@ -39,12 +32,7 @@ import service.core.Flight;
 import service.core.TravelPackage;
 import service.core.ClientRequest;
 import service.core.HotelRequest;
-import service.core.Travel;
-import service.core.ActivityRequest;
-import service.core.Activity;
 import service.core.Hotel;
-import service.core.AttractionRequest;
-import service.core.Attraction;
 import service.core.Booking;
 import service.core.ClientResponse;
 import service.core.ClientChoice;
@@ -111,10 +99,10 @@ public class TravelAgentService {
 		 */
 
 		// System.out.println("CALLING ACTIVITIESA");
-		// Activity[] activities = new Activity[50];
+		// ActivityItem[] activities = new ActivityItem[50];
 		// HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
 		// System.out.println("LINE 116");
-		// activities = restTemplate.postForObject("http://activities-service/activities", activityRequest, Activity[].class);
+		// activities = restTemplate.postForObject("http://activities-service/activities", activityRequest, ActivityItem[].class);
 		// System.out.println("117");
 		// System.out.println("\n"+activities[0].getDescription()+"\n");
 
