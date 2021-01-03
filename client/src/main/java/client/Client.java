@@ -66,20 +66,20 @@ public class Client {
 							   Flight [] flights2 = travelPackage.getFlights();
 							   System.out.println("SIZE OF FLIGHST ARRAY is = "+flights2.length);
 			                   System.out.println(flights2);
-			 			for (int i=0; i < 1; i++){
-			                         Flight f = flights2[i];
-			                         Hotel h = hotels2[i];
-			 				if (f != null){
-			 					System.out.println("City of Destination is: " + f.getCityOfDestination());
-			 					System.out.println("Price of flight is: " + f.getPrice());
-			                         }	
-			                         System.out.println("\n");
-			                         if (h != null){
-			                               System.out.println("Description of hotel is: " + h.getDescription());
-			 					System.out.println("Price of hotel is: " + h.getPrice());
-			                         }
-			                         System.out.println("\n");
-						 }
+			 			// for (int i=0; i < 1; i++){
+			            //              Flight f = flights2[i];
+			            //              Hotel h = hotels2[i];
+			 			// 	if (f != null){
+			 			// 		System.out.println("City of Destination is: " + f.getCityOfDestination());
+			 			// 		System.out.println("Price of flight is: " + f.getPrice());
+			            //              }	
+			            //              System.out.println("\n");
+			            //              if (h != null){
+			            //                    System.out.println("Description of hotel is: " + h.getDescription());
+			 			// 		System.out.println("Price of hotel is: " + h.getPrice());
+			            //              }
+			            //              System.out.println("\n");
+						//  }
 						 return travelPackage;
 						}
 	
