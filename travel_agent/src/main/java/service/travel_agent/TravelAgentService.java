@@ -45,6 +45,11 @@ import service.core.Activity;
 import service.core.Hotel;
 import service.core.AttractionRequest;
 import service.core.Attraction;
+import service.core.Booking;
+import service.core.ClientResponse;
+import service.core.ClientChoice;
+import service.core.ReplaceBooking;
+
 /**
  * Implementation of the broker service that uses the Service Registry.
  * 
@@ -66,10 +71,10 @@ public class TravelAgentService {
 	private RestTemplate restTemplate;
 
 	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
-	// private Map<Integer, Booking> bookings = new TreeMap();            // all bookings for all clients 
-	private Map<Integer, TravelPackage> travelPackages = new TreeMap();
-	private Map<Integer, ClientRequest> clientRequests = new TreeMap();
-	private int referenceNumber = 0;
+
+	private Map<Integer, Booking> clientBookings = new TreeMap();
+	private static int travelPackageRequestReferenceNumber = 0;
+	private static int clientBookingReferenceNumber = 0;
 
 	/**
 	 * POST REQUEST: handles requests from client for Hotels, Flights, Activities and Attractions
@@ -78,26 +83,31 @@ public class TravelAgentService {
 	 * @return
 	 * @throws URISyntaxException
 	 */
+<<<<<<< HEAD
+
+	@RequestMapping(value="/travelagent/travelpackagerequests",method=RequestMethod.POST)
+	public ResponseEntity<TravelPackage> createTravelPackageRequest(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
+	
+=======
 	@RequestMapping(value="/bookings",method=RequestMethod.POST)
 	public ResponseEntity<TravelPackage> getFlightInfo(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
 		System.out.println("TEST5");
 		referenceNumber++;
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 		/**
-		 * POST request to Flight service
+		 * POST request to Flight service for a FlightRequest which will return a list of available flights
 		 */
-		Flight[] flights = new Flight[10];	
+		Flight[] flights = new Flight[50];	
 		HttpEntity<FlightRequest> request = new HttpEntity<>(clientRequest.getFlightRequest());
-		flights = restTemplate.postForObject("http://flights-service/flights",request, Flight[].class);
-
-		clientRequests.put(referenceNumber, clientRequest);  // create a new ClientRequest
+		flights = restTemplate.postForObject("http://flights-service/flightservice/flightrequests",request, Flight[].class);
 
 		/**
-		 * POST request to Hotel Service
+		 * POST request to Hotel Service for a HotelRequest which will return a list of available hotels
 		 */
 
-		Hotel [] hotels = new Hotel[10];
+		Hotel [] hotels = new Hotel[50];
 		HttpEntity<HotelRequest> request2 = new HttpEntity<>(clientRequest.getHotelRequest());
-		hotels = restTemplate.postForObject("http://hotels-service/hotels",request2, Hotel[].class);
+		hotels = restTemplate.postForObject("http://hotels-service/hotelservice/hotelrequests",request2, Hotel[].class);
 		System.out.println("TESTING TA");
 		System.out.println("\n"+hotels[0].getPrice()+"\n");
 
@@ -110,26 +120,39 @@ public class TravelAgentService {
 		// HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
 		// activities = restTemplate.postForObject("http://activity-service/activities", activityRequest, Activity[].class);
 		// System.out.println("\n"+activities[0].getDescription()+"\n");
+<<<<<<< HEAD
+
+=======
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 
 
 
-		/**
-		 * POST request to Attractions Service
-		 * TODO (Barry & Sean): Insert code below
-		 */
+		// /**
+		//  * POST request to Attractions Service
+		//  * TODO (Barry & Sean): Insert code below
+		//  */
 
 		// Attraction[] attractions = new Attraction[10];
 		// HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
 		// attractions = restTemplate.postForObject("http://attraction-service/activities", attractionRequest, Attraction[].class);
 		// System.out.println("\n"+attractions[0].toString()+"\n");
+<<<<<<< HEAD
+
+
+
+
+
+
+=======
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 
 		/**
 		 * Create a new TravelPackage for client
 		 */
+		travelPackageRequestReferenceNumber++;                      // create new ref num for this travel package
 		TravelPackage travelPackage = new TravelPackage();
 		travelPackage.setFlights(flights);
 		travelPackage.setHotels(hotels);
-		travelPackages.put(referenceNumber,travelPackage);
 
 		// storeBookingInMongo();
 		
@@ -137,7 +160,7 @@ public class TravelAgentService {
 		 * Send response back to the client
 		 */
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/bookings/"+referenceNumber;  // Create new URI for this newly created ClientApplication
+			build().toUriString()+ "/travelagent/travelpackagerequests/"+travelPackageRequestReferenceNumber;  // Create new URI for this newly created ClientApplication
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(travelPackage, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
@@ -160,89 +183,170 @@ public class TravelAgentService {
 		return b;
 	}
 	/**
-	 * PUT REQUEST
+	 * POST REQUEST: handles requests from client for a booking (after they have made their choice of flight, hotel etc.)
 	 * 
-	 * @param referenceNumber
 	 * @param clientRequest
-	 * @return travelPackage
+	 * @return
 	 * @throws URISyntaxException
 	 */
-	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PUT)
-    	public ResponseEntity<TravelPackage> replaceTravelPackage(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
-		TravelPackage travelPackage = travelPackages.get(referenceNumber);
-		if (travelPackage == null) throw new NoSuchTravelPackageException();
-		
-		System.out.println("\n Testing PUT \n");
-		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/bookings/"+referenceNumber;
+	
+	@RequestMapping(value="/travelagent/bookings",method=RequestMethod.POST)
+	public ResponseEntity<Booking> createBooking(@RequestBody ClientResponse clientResponse) throws URISyntaxException {
+
+		/**
+		 * POST request to Flight service
+		 */
+		Flight flight = new Flight();	
+		ClientChoice clientChoiceOfFlight = new ClientChoice();      // create ClientChoice to hold ref number
+		clientChoiceOfFlight.setReferenceNumber(clientResponse.getFlightReferenceNumber());
+		HttpEntity<ClientChoice> requestFlight = new HttpEntity<>(clientChoiceOfFlight);
+		flight = restTemplate.postForObject("http://flights-service/flightservice/flights",requestFlight, Flight.class);
+
+		/**
+		 * POST request to Hotel Service
+		 */
+
+		Hotel hotel = new Hotel();
+		ClientChoice clientChoiceOfHotel = new ClientChoice();
+		clientChoiceOfHotel.setReferenceNumber(clientResponse.getHotelReferenceNumber());
+		HttpEntity<ClientChoice> requestHotel = new HttpEntity<>(clientChoiceOfHotel);
+		hotel = restTemplate.postForObject("http://hotels-service/hotelservice/hotels",requestHotel, Hotel.class);
+
+		/**
+		 * Create a new Booking for client
+		 */
+		Booking booking = new Booking();
+
+		System.out.println("\n"+flight.toString());
+		System.out.println("\n"+hotel.toString());
+
+		booking.setFlight(flight);
+		booking.setHotel(hotel);
+		clientBookingReferenceNumber++; // create unique ref num
+		booking.setReferenceNumber(clientBookingReferenceNumber);   // give booking this unique ref num
+		clientBookings.put(clientBookingReferenceNumber,booking);
+
+		/**
+		 * Send response back to the client
+		 */
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+			build().toUriString()+ "/travelagent/bookings/"+clientBookingReferenceNumber;  // Create new URI for this newly created ClientApplication
 		HttpHeaders headers = new HttpHeaders();
-		headers.set("Content-Location", path); 
-	  
-	  	return new ResponseEntity<>(travelPackage,headers, HttpStatus.NO_CONTENT);
-    }
+		headers.setLocation(new URI(path));
+		return new ResponseEntity<>(booking, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
+		
+	} 
 
-    /**
-	 * PATCH REQUEST
-	 * 
-	 * @param referenceNumber
-	 * @param clientRequest
-	 * @return travelPackage
-	 * @throws URISyntaxException
-	 */
-	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.PATCH)
-	public ResponseEntity<TravelPackage> updateTravelPackage(@PathVariable int referenceNumber, @RequestBody ClientRequest clientRequest) throws URISyntaxException  {
-	  TravelPackage travelPackage = travelPackages.get(referenceNumber);
-	  if (travelPackage == null) throw new NoSuchTravelPackageException();
-	  
-	  System.out.println("\n Testing PATCH \n");
-	  String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/booking/"+referenceNumber;
-	  HttpHeaders headers = new HttpHeaders();
-	  headers.set("Content-Location", path); 
-    
-	    return new ResponseEntity<>(travelPackage,headers, HttpStatus.NO_CONTENT);
-}
-
-
+	
 	/**
 	 * GET REQUEST (single instance)
 	 * 
 	 * @param referenceNumber
-	 * @return travelPackage
+	 * @return booking
 	 */
-	@RequestMapping(value="/bookings/{referenceNumber}",method=RequestMethod.GET)
+	@RequestMapping(value="/travelagent/bookings/{referenceNumber}",method=RequestMethod.GET)
 	@ResponseStatus(value=HttpStatus.OK)
-	public TravelPackage getTravelPackage(@PathVariable int referenceNumber) {
-		TravelPackage travelPackage = travelPackages.get(referenceNumber);  // Create new TravelPackage with given reference
-		if (travelPackage == null) throw new NoSuchTravelPackageException();  // If no TravelPackage exists matching this reference then throw an exception
-		return travelPackage;
+	public Booking getBooking(@PathVariable int referenceNumber) {
+
+		System.out.println("\nTEsting GET \n");
+		Booking booking = clientBookings.get(referenceNumber);  // Find booking with given reference
+		if (booking == null) throw new NoSuchBookingException();  // If no booking exists matching this reference then throw an exception
+		return booking;
 	}
+
 
 	/**
 	 * GET REQUEST (all instances)
 	 * 
-	 * @return travelPackages
+	 * @return clientBookings
 	 */
-	@RequestMapping(value="/bookings",method=RequestMethod.GET)
-	public @ResponseBody Collection<TravelPackage> listEntries() {
-		if (travelPackages.size() == 0) throw new NoSuchTravelPackageException();
-		return travelPackages.values();
+	@RequestMapping(value="/travelagent/bookings",method=RequestMethod.GET)
+	public @ResponseBody Collection<Booking> listEntries() {
+
+		if (clientBookings.size() == 0) throw new NoSuchBookingException();
+		return clientBookings.values();
 	}
 
+	
 	/**
-	 * DELETE REQUEST
+	 * PUT REQUEST
 	 * 
 	 * @param referenceNumber
+	 * @param clientResponse
+	 * @return 
+	 * @throws URISyntaxException
 	 */
-	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.DELETE)
-	@ResponseStatus(value=HttpStatus.NO_CONTENT)
-	public @ResponseBody void deleteTravelPackage(@PathVariable int referenceNumber) {
-		System.out.println("DELETE METHOD");
-		TravelPackage travelPackage = travelPackages.remove(referenceNumber);
-		if (travelPackage == null) throw new NoSuchTravelPackageException();
-	}
+	@RequestMapping(value="/travelagent/bookings/{referenceNumber}", method=RequestMethod.PUT)
+    	public ResponseEntity<Booking> replaceBooking(@PathVariable int referenceNumber, @RequestBody ReplaceBooking replaceBooking) throws URISyntaxException  {
 
-	// If there is no TravelPackage listed with the given reference then throw this exception
+		Booking booking = clientBookings.get(referenceNumber);
+		if (booking == null) throw new NoSuchBookingException();
+		System.out.println("\n Testing PUT \n");
+
+		/**
+		 * POST request to Flight service
+		 */
+		Flight flight = new Flight();	
+		ClientChoice clientChoiceOfFlight = new ClientChoice();      // create ClientChoice to hold ref number
+		clientChoiceOfFlight.setReferenceNumber(replaceBooking.getNewChoiceOfBooking().getFlightReferenceNumber());
+		HttpEntity<ClientChoice> requestFlight = new HttpEntity<>(clientChoiceOfFlight);
+		restTemplate.put("http://flights-service/flightservice/flights/"+replaceBooking.getPreviousBooking().getFlight().getReferenceNumber(),requestFlight);
+		flight = restTemplate.getForObject("http://flights-service/flightservice/flights/"+replaceBooking.getPreviousBooking().getFlight().getReferenceNumber(),Flight.class);
+		System.out.println("\n GET FLIGHT:" +flight.toString());
+
+		/**
+		 * POST request to Hotel Service
+		 */
+
+		Hotel hotel = new Hotel();
+		ClientChoice clientChoiceOfHotel = new ClientChoice();
+		clientChoiceOfHotel.setReferenceNumber(replaceBooking.getNewChoiceOfBooking().getHotelReferenceNumber());
+		HttpEntity<ClientChoice> requestHotel = new HttpEntity<>(clientChoiceOfHotel);
+		restTemplate.put("http://hotels-service/hotelservice/hotels/"+replaceBooking.getPreviousBooking().getHotel().getReferenceNumber(),requestHotel);
+		hotel = restTemplate.getForObject("http://hotels-service/hotelservice/hotels/"+replaceBooking.getPreviousBooking().getHotel().getReferenceNumber(), Hotel.class);
+		System.out.println("\n GET HOTEL:" +hotel.toString());
+
+		/**
+		 * Create a new Booking for client
+		 */
+
+		System.out.println("\n"+flight.toString());
+		System.out.println("\n"+hotel.toString());
+
+		Booking previousBooking = clientBookings.remove(referenceNumber);
+		Booking newBooking = new Booking();
+		newBooking.setFlight(flight);
+		newBooking.setHotel(hotel);
+		newBooking.setReferenceNumber(referenceNumber);   // give booking this unique ref num
+		clientBookings.put(referenceNumber,newBooking);
+
+		System.out.println("\n PUT successful \n");
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+			build().toUriString()+ "/travelagent/bookings/"+clientBookingReferenceNumber;  // Create new URI for this newly created ClientApplication
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Location", path);
+		return new ResponseEntity<>(headers, HttpStatus.OK);
+    }
+
+	
+// 	/**
+// 	 * DELETE REQUEST
+// 	 * 
+// 	 * @param referenceNumber
+// 	 */
+// 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.DELETE)
+// 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
+// 	public @ResponseBody void deleteTravelPackage(@PathVariable int referenceNumber) {
+// 		System.out.println("DELETE METHOD");
+// 		TravelPackage travelPackage = travelPackageRequests.remove(referenceNumber);
+// 		if (travelPackage == null) throw new NoSuchTravelPackageException();
+// 	}
+
+
+	// If there is no booking listed with the given reference then throw this exception
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-	public class NoSuchTravelPackageException extends RuntimeException {
+	public class NoSuchBookingException extends RuntimeException {
 		static final long serialVersionUID = -6516152229878843037L;
 	}
+
 }

@@ -24,6 +24,7 @@ public class Flight {
       private String price;
       private String originAirportName;
       private String destinationAirportName;
+      private int referenceNumber;
 
       public String getCityOfOrigin(){
             return cityOfOrigin;
@@ -87,6 +88,14 @@ public class Flight {
 
       public void setDestinationAirportName(String destinationAirportName){
             this.destinationAirportName = destinationAirportName;
+      }
+
+      public int getReferenceNumber(){
+            return referenceNumber;
+      }
+
+      public void setReferenceNumber(int referenceNumber){
+            this.referenceNumber = referenceNumber;
       }
 
       public String toString(){

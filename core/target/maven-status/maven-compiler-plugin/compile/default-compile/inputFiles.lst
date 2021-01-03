@@ -1,3 +1,21 @@
+<<<<<<< HEAD
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Hotel.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\TravelPackage.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ClientRequest.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ReplaceBooking.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\AttractionRequest.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Flight.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Attraction.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ClientChoice.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Geocode.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ClientResponse.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Travel.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Activity.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\FlightRequest.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\ActivityRequest.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\Booking.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\core\src\main\java\service\core\HotelRequest.java
+=======
 /home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/FlightRequest.java
 /home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Geocode.java
 /home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Activity.java
@@ -10,3 +28,4 @@
 /home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/Flight.java
 /home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/ActivityRequest.java
 /home/tam/Desktop/CLEAN2/quaranteam/core/src/main/java/service/core/HotelRequest.java
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
