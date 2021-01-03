@@ -18,6 +18,8 @@ import service.core.Geocode;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -112,38 +114,72 @@ public class AttractionsService {
      * @return list of attractions in a given destination, empty if the given location is unavailable or no attractions can be found
      */
     @GetMapping(value = PAGE)
-    public Attraction[] getAttractions(double latitude, double longitude) {
+    public PointOfInterest[] getAttractions(double latitude, double longitude) {
         if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
             System.out.println("Invalid coordinate(s) given (Lat=" + latitude + ", Lon=" + longitude + ")");
-            return new Attraction[0];
+            return new PointOfInterest[0];
         }
 
         try {
             PointOfInterest[] pois = amadeus.referenceData.locations.pointsOfInterest.get(Params
                     .with("latitude", Double.toString(latitude))
                     .and("longitude", Double.toString(longitude)));
-            Attraction[] attractions = new Attraction[100];
 
-            for(int i = 0;i<pois.length;i++){
-                PointOfInterest poi = pois[i];
-                attractions[i] = new Attraction(poi.getName(),poi.getCategory(),poi.getType(),poi.getSubType());
-            }
-
-            if(attractions[0]!=null) {
+            if(pois[0]!=null) {
                 if(pois[0].getResponse().getStatusCode() != 200) {
                     System.out.println(STATUS_CODE_ERROR + pois[0].getResponse().getStatusCode());
                 }
             } else {
                 System.out.println(EMPTY_RECOMMENDATION);
             }
-            return attractions;
+
+            return pois;
 
 
         } catch(ResponseException e) {
             System.out.println("Error " + e.getCode() + " : " + e.getDescription());
         }
 
-        return new Attraction[0];
+        return new PointOfInterest[0];
     }
 
+    /**
+     * Method to retrieve a list of attraction available in given destination with the city and country full name
+     * @param city Full city name in string, eg. Dublin instead of DUB
+     * @param country Full country name in string, eg. Ireland instead of IRE
+     * @return list of attractions in given destination, empty if the given location is unavailable or no attraction can be found
+     */
+    public Attraction[] getAttractionsWithQueries(String city, String country) {
+        Geocode destination = getDestinationGeocode(city, country);
+        if(destination == null) {
+            System.out.println("Invalid destination (" + city + ", " + country + ")");
+            return new Attraction[0];
+        }
+        PointOfInterest[] activities = getAttractions(destination.getLatitude(), destination.getLongitude());
+        if(activities == null) {
+            System.out.println("No activity found in (" + city + ", " + country + ")");
+            return new Attraction[0];
+        }
+        LinkedList<Attraction> translated = new LinkedList<>();
+        for(PointOfInterest pointOfInterest : activities) {
+            translated.add(toCoreAttraction(pointOfInterest));
+        }
+        return listToArray(translated);
+    }
+
+    public Attraction toCoreAttraction(PointOfInterest poi) {
+        return new Attraction(poi.getName(), poi.getCategory(), poi.getType(), poi.getSubType());
+    }
+
+    public Attraction[] listToArray(List<Attraction> activities) {
+
+        Attraction[] attractionsArray = new Attraction[activities.size()];
+        int index = 0;
+        while (index < activities.size()){
+            attractionsArray[index] = activities.get(index);
+            index++;
+        }
+
+        return attractionsArray;
+    }
 }
