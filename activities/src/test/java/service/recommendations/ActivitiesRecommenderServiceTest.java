@@ -5,6 +5,8 @@ import org.junit.Before;
 import org.junit.Test;
 import service.core.Geocode;
 
+import java.util.LinkedList;
+
 import static org.junit.Assert.*;
 
 public class ActivitiesRecommenderServiceTest {
@@ -89,16 +91,16 @@ public class ActivitiesRecommenderServiceTest {
     @Test
     public void getActivitiesWithQueriesTest() {
 
-        Activity[] dublin = recommender.getActivitiesWithQueries("dublin", "ireland");
+        LinkedList<service.core.Activity> dublin = recommender.getActivitiesWithQueries("dublin", "ireland");
         assertNotNull("Error : It should return an array of Activity objects", dublin);
-        assertNotEquals("Error : The Activity array shouldn't be empty since it is a valid location", 0, dublin.length);
+        assertNotEquals("Error : The Activity array shouldn't be empty since it is a valid location", 0, dublin.size());
 
-        Activity[] invalid = recommender.getActivitiesWithQueries("dublin", "china");
+        LinkedList<service.core.Activity> invalid = recommender.getActivitiesWithQueries("dublin", "china");
         assertNotNull("Error : It should return an array of Activity objects", invalid);
-        assertEquals("Error : The Activity array should be empty since the invalid location", 0, invalid.length);
+        assertEquals("Error : The Activity array should be empty since the invalid location", 0, invalid.size());
 
-        Activity[] unsupported = recommender.getActivitiesWithQueries("beijing", "china");
+        LinkedList<service.core.Activity> unsupported = recommender.getActivitiesWithQueries("beijing", "china");
         assertNotNull("Error : It should return an array of Activity objects", unsupported);
-        assertEquals("Error : The Activity array should be empty since it is an unsupported location", 0, unsupported.length);
+        assertEquals("Error : The Activity array should be empty since it is an unsupported location", 0, unsupported.size());
     }
 }
