@@ -10,10 +10,10 @@ metadata:
   name: flights
 spec:
   ports:
-  - name: "eureka"
+  - protocol: TCP
     port: 8082
-    targetPort: 8761
+    targetPort: 8082
   selector:
-    io.kompose.service: eureka
+    app: flights
 status:
   loadBalancer: {}

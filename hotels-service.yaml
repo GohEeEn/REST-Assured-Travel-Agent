@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    io.kompose.service: hotels
+    app: hotels
   name: hotels
 spec:
   ports:
-  - name: "eureka"
+  - protocol: TCP
     port: 8089
-    targetPort: 8761
+    targetPort: 8089
   selector:
-    io.kompose.service: eureka
+    app: hotels
 status:
   loadBalancer: {}

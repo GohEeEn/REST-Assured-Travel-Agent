@@ -29,8 +29,10 @@ import java.io.IOException;
 
 public class Client {
 	
+/	// public static final String newArgs = "http://192.168.49.2:31500/bookings";
 	public static final String newArgs = "http://localhost:8081/bookings";
 	public static int referenceNumber = 0;
+
 	final static String locale = "en-GB";     // need to call Skycanner API
 	
 	// public static void main(String[] args) {
