@@ -103,7 +103,7 @@ public class TravelAgentService {
 		HttpEntity<HotelRequest> request2 = new HttpEntity<>(clientRequest.getHotelRequest());
 		hotels = restTemplate.postForObject("http://hotels-service/hotelservice/hotelrequests",request2, Hotel[].class);
 		System.out.println("TESTING TA");
-		System.out.println("\n"+hotels[0].getPrice()+"\n");
+		// System.out.println("\n"+hotels[0].getPrice()+"\n");
 
 		/**
 		 * POST request to Activities Service
