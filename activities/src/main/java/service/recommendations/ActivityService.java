@@ -1,5 +1,25 @@
 package service.recommendations;
 
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
+
+
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import com.amadeus.Amadeus;
 import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
@@ -9,24 +29,33 @@ import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
+<<<<<<< HEAD:activities/src/main/java/service/recommendations/ActivityService.java
+
+import service.core.ActivityRequest;
+=======
+import service.core.ActivityItem;
+>>>>>>> refs/remotes/origin/master:activities/src/main/java/service/recommendations/ActivitiesRecommenderService.java
 import service.core.Geocode;
+import service.core.ActivityItem;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.util.Map;
+import java.util.HashMap;
+
 
 @RestController
-public class ActivitiesRecommenderService {
+public class ActivityService {
 
     @Autowired
 	private RestTemplate restTemplate;
@@ -38,6 +67,67 @@ public class ActivitiesRecommenderService {
     private static final Pattern QUERY_PATTERN_CHECKER = Pattern.compile(QUERY_REGEX,Pattern.CASE_INSENSITIVE);
     private static final String STATUS_CODE_ERROR = "Wrong status code: ";
     private static final String EMPTY_RECOMMENDATION = "No recommendation found / Location not supported";
+
+    private static int activityRequestReferenceNumber = 0;    // unique reference number for each activityRequest
+	private static int searchedActivityReferenceNumber = 0;           // unique reference number for each list of activities found by ActivitiesRecommenderService that matches requirements from activityRequest
+	private static int bookedActivityReferenceNumber = 0;           // unique reference number for each activity list booked by a client
+	private Map<Integer, ActivityItem> bookedActivites = new HashMap<>();      // Map of all activities created with new reference number as key
+    private Map<Integer, ActivityItem> searchedActivities = new HashMap<>();    // Map of all activites that ActivityRecommenderService searched for
+    
+    /**
+	 * POST REQUEST: handles all flight requests from travel agent
+	 * 
+	 * @param flightRequest
+	 * @return clientFlghts
+	 * @throws URISyntaxException
+	 */
+
+	@RequestMapping(value="/activityservice/activityrequests",method=RequestMethod.POST)
+	public ResponseEntity<ActivityItem []> searchActivities(@RequestBody ActivityRequest activityRequest)  throws URISyntaxException {
+
+        System.out.println("\nTesting ActivityService POST Request\n");
+        Activity [] activities = getActivities(activityRequest.getLatitude(), activityRequest.getLongitude());
+
+        ActivityItem[] activityItems = convertActivitiesToActivitiyItems(activities);
+        
+        /** 
+		 * The following code prints all activites which were found through the Amadeus API
+		 */
+
+		for (ActivityItem activityItem : activityItems){
+			System.out.println("\n ActivityItem: "+activityItem.toString());
+		}
+
+		activityItems = addActivitiesToSearchActivitiesMap(activityItems);
+
+		activityRequestReferenceNumber++;
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+			build().toUriString()+ "/activityservice/activityrequests/"+activityRequestReferenceNumber;     // Create URI for this activity
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(new URI(path));
+		return new ResponseEntity<>(activityItems, headers, HttpStatus.CREATED);     // Returns activities to travel agent
+    }
+    
+    public ActivityItem[] convertActivitiesToActivitiyItems(Activity[] activities){
+
+        ActivityItem [] activityItems = new ActivityItem[activities.length];
+
+        int index = 0;
+        for (Activity activity : activities){
+
+            ActivityItem activityItem = new ActivityItem();
+            activityItem.setName(activity.getName());
+            activityItem.setDescription(activity.getDescription());
+            activityItem.setRating(activity.getRating());
+            activityItem.setBookingLink(activity.getBookingLink());
+            activityItem.setPriceOfActivity(activity.getPrice().getAmount());
+            activityItem.setPictures(activity.getPictures());
+            activityItems[index] = activityItem;
+            index++;
+        }
+        return activityItems;
+    }
 
     /**
      * Method to validate the user string query, to prevent unwanted characters used<br/>
@@ -145,31 +235,31 @@ public class ActivitiesRecommenderService {
      * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
      */
     @GetMapping(value = PAGE + "/{country}/{city}")
-     public LinkedList<service.core.Activity> getActivitiesWithQueries(@RequestParam("city") String city, @RequestParam("country") String country) {
+     public ActivityItem[] getActivitiesWithQueries(@RequestParam("city") String city, @RequestParam("country") String country) {
         Geocode destination = getDestinationGeocode(city, country);
         if(destination == null) {
             System.out.println("Invalid destination (" + city + ", " + country + ")");
-            return new LinkedList<>();
+            return new ActivityItem[0];
         }
         Activity[] activities = getActivities(destination.getLatitude(), destination.getLongitude());
         if(activities == null) {
             System.out.println("No activity found in (" + city + ", " + country + ")");
-            return new LinkedList<>();
+            return new ActivityItem[0];
         }
-        LinkedList<service.core.Activity> translated = new LinkedList<>();
+        LinkedList<ActivityItem> translated = new LinkedList<>();
         for(Activity activity : activities) {
             translated.add(toCoreActivity(activity));
         }
-        return translated;
+        return listToArray(translated);
      }
 
     /**
      * Method to translate an Amadeus Java SDK Activity class instance into a Java Bean Activity class object
      * @param act an Amadeus Java SDK Activity class instance
-     * @return a Java Bean Activity class object
+     * @return a Java Bean ActivityItem class object
      */
-     public service.core.Activity toCoreActivity(Activity act) {
-        return new service.core.Activity(
+     public ActivityItem toCoreActivity(Activity act) {
+        return new ActivityItem(
                                 act.getName(),
                                 act.getShortDescription(),
                                 act.getRating(),
@@ -179,4 +269,34 @@ public class ActivitiesRecommenderService {
                                 act.getPrice().getCurrencyCode()
         );
      }
+
+     public ActivityItem[] listToArray(List<ActivityItem> activities) {
+
+         ActivityItem[] activitiesArray = new ActivityItem[activities.size()];
+         int index = 0;
+         while (index < activities.size()){
+             activitiesArray[index] = activities.get(index);
+             index++;
+         }
+
+         return activitiesArray;
+     }
+
+
+     /**
+	 * The following method adds all new activities found by ActivitesRecommenderService to searchedActivites map
+	 */
+
+	 public ActivityItem [] addActivitiesToSearchActivitiesMap(ActivityItem [] activities){
+
+		for (ActivityItem activity : activities){
+
+			searchedActivityReferenceNumber++; 
+			activity.setReferenceNumber(searchedActivityReferenceNumber);           // set the ref number in Activity so that we can cross reference 
+                                                                                    // with the client choice of activity booking
+            searchedActivities.put(searchedActivityReferenceNumber,activity);          // add new activity to map with new ref number
+		}
+		return activities;
+	 }
+
 }

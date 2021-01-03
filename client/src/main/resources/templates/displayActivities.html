@@ -59,20 +59,11 @@
 		</div>
 		<hr style="color: green; display: block;" >
 
-		<div class="container" th:if="${#arrays.isEmpty(hotelDetails)}">
-			<h2>No hotels found in the given city</h2>
-			<br>
-			<form action="/userHotelSelection" method="post" >
-				<button name="inputHotelIndex" type="submit" value="0">See activities</button>
-			</form>
-		</div>
-		<div class="container" th:unless="${#arrays.isEmpty(hotelDetails)}">
+		<div class="container">
 			<div class="row">
 				<div class="col-12"><h5>Search Results</h5>
-					<h6>Hotels found according to your requirements</h6>
-					<form action="/userHotelSelection" method="post" >
-						<div th:if= "${hotelDetails.length==0}">
-
+					<h6>Activities found according to your requirements</h6>
+                    <form action="/userHotelSelection" method="post" >
                         <div class="container">
                             <table class="table">
                             	<col style="width: 1%"/>

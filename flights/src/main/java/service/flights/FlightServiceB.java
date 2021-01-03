@@ -419,9 +419,9 @@ public class FlightServiceB {
 		for (Flight flight : flights){
 
 			searchedFlightReferenceNumber++; 
-			searchedFlights.put(searchedFlightReferenceNumber,flight);          // add new flight to map with new ref number
 			flight.setReferenceNumber(searchedFlightReferenceNumber);           // set the ref number in Flight so that we can cross reference 
 														  // with the client choice of flight booking
+			searchedFlights.put(searchedFlightReferenceNumber,flight);          // add new flight to map with new ref number
 		}
 		return flights;
 	 }

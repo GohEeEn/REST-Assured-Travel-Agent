@@ -1,5 +1,21 @@
+<<<<<<< HEAD
+<<<<<<< HEAD
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\flights\src\main\java\service\flights\Application.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\flights\src\main\java\service\flights\FlightService.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\flights\src\main\java\service\flights\FlightServiceB.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\flights\src\main\java\service\flights\FlightQuote.java
+C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\flights\src\main\java\service\flights\NoSuchFlightException.java
+=======
 /home/tam/Desktop/CLEAn3/quaranteam/flights/src/main/java/service/flights/FlightService.java
 /home/tam/Desktop/CLEAn3/quaranteam/flights/src/main/java/service/flights/NoSuchFlightException.java
 /home/tam/Desktop/CLEAn3/quaranteam/flights/src/main/java/service/flights/Application.java
 /home/tam/Desktop/CLEAn3/quaranteam/flights/src/main/java/service/flights/FlightServiceB.java
 /home/tam/Desktop/CLEAn3/quaranteam/flights/src/main/java/service/flights/FlightQuote.java
+>>>>>>> refs/remotes/origin/master
+=======
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\flights\src\main\java\service\flights\FlightService.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\flights\src\main\java\service\flights\FlightServiceB.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\flights\src\main\java\service\flights\FlightQuote.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\flights\src\main\java\service\flights\Application.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\flights\src\main\java\service\flights\NoSuchFlightException.java
+>>>>>>> origin/master

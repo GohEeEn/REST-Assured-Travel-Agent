@@ -443,9 +443,9 @@ public class HotelService2 {
 		for (Hotel hotel : hotels){
 
 			searchedHotelReferenceNumber++; 
-			searchedHotels.put(searchedHotelReferenceNumber,hotel);          // add new flight to map with new ref number
-			hotel.setReferenceNumber(searchedHotelReferenceNumber);           // set the ref number in Flight so that we can cross reference 
-														  // with the client choice of flight booking
+			hotel.setReferenceNumber(searchedHotelReferenceNumber);           // set the ref number in hotel so that we can cross reference 
+                                                                                      // with the client choice of hotel booking
+                  searchedHotels.put(searchedHotelReferenceNumber,hotel);          // add new hotel to map with new ref number
 		}
 		return hotels;
 	 }
