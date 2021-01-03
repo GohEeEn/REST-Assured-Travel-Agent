@@ -101,10 +101,17 @@ public class TravelAgentService {
 		 * POST request to ActivityService
 		 */
 
-		// ActivityItem[] activities = new ActivityItem[100];
-		// HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
-		// activities = restTemplate.postForObject("http://activities-service/activityservice/activityrequests", activityRequest, ActivityItem[].class);
-		// System.out.println("\nName of activity: "+activities[0].getName()+"\n");
+		ActivityItem[] activities = new ActivityItem[100];
+		HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
+		activities = restTemplate.postForObject("http://activities-service/activityservice/activityrequests", activityRequest, ActivityItem[].class);
+		
+		System.out.println("\nTesting activity Items\n");
+		for (ActivityItem a : activities){
+
+			System.out.println("\n"+a.toString()+"\n");
+		   }
+
+
 
 		// /**
 		//  * POST request to Attractions Service
@@ -116,6 +123,12 @@ public class TravelAgentService {
 		// attractions = restTemplate.postForObject("http://attraction-service/activities", attractionRequest, Attraction[].class);
 		// System.out.println("\n"+attractions[0].toString()+"\n");
 
+
+
+
+
+
+
 		/**
 		 * Create a new TravelPackage for client
 		 */
@@ -123,7 +136,7 @@ public class TravelAgentService {
 		TravelPackage travelPackage = new TravelPackage();
 		travelPackage.setFlights(flights);
 		travelPackage.setHotels(hotels);
-		// travelPackage.setActivities(activities);
+		travelPackage.setActivities(activities);
 
 		// storeBookingInMongo();
 		
