@@ -9,6 +9,7 @@ public class TravelPackage {
 
       private Flight [] flights;
       private Hotel [] hotels;
+      private Activity [] activities;
       private int travelPackageReferenceNumber;
 
       public Flight [] getFlights(){
@@ -25,6 +26,14 @@ public class TravelPackage {
 
       public void setHotels(Hotel [] hotels){
             this.hotels = hotels;
+      }
+
+      public Activity [] getActivities(){
+            return activities;
+      }
+
+      public void setActivities(Activity [] activities){
+            this.activities = activities;
       }
 
       public int getTravelPackageReferenceNumber(){

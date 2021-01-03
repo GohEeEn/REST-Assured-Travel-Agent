@@ -12,4 +12,27 @@ public class Booking {
         this.hotelDetails = hotelDetails;
         this.activitiesDetails = activitiesDetails;
     }
+
+    public void setFlightDetails(String flightDetails){
+        this.flightDetails = flightDetails;
+    }
+
+    public String getFlightDetails(){
+        return flightDetails;
+    }
+
+    public void setHotelDetails(String hotelDetails){
+        this.hotelDetails = hotelDetails;
+    }
+
+    public String getHotelDetails(){
+        return hotelDetails;
+    }
+    public void setActivitiesDetails(String activitiesDetails){
+        this.activitiesDetails = activitiesDetails;
+    }
+
+    public String getActivitiesDetails(){
+        return activitiesDetails;
+    }
 }
