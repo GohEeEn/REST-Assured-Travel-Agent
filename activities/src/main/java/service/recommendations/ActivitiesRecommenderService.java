@@ -48,8 +48,28 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import service.core.ClientChoices;
+
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collection;
+
+// import java.io.File;
+// import java.io.FileNotFoundException;
+// import java.io.FileReader;
+// import java.io.FileWriter;
+// import java.io.IOException;
+// import java.net.URI;
+// import java.net.http.HttpClient;
+// import java.net.http.HttpRequest;
+// import java.net.http.HttpResponse;
+// // import java.text.ParseException;
+// import java.nio.file.Path;
+// import java.nio.file.Paths;
+
+// import com.mashape.unirest.http.exceptions.UnirestException;
 
 
 
@@ -107,6 +127,36 @@ public class ActivitiesRecommenderService {
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(activityItems, headers, HttpStatus.CREATED);     // Returns activities to travel agent
     }
+
+
+    /**
+	 * POST REQUEST: Once the client has chosen their activities then these choices will be passed on to TravelAgentService which
+	 * will then pass them on to this method
+	 * 
+	 * @param clientChoiceOfActivities
+	 * @return activities
+	 */
+
+	@RequestMapping(value="/activityservice/activities",method=RequestMethod.POST)
+	public ResponseEntity<ActivityItem[]> createActivity(@RequestBody ClientChoices clientChoicesOfActivities)  throws URISyntaxException {
+
+        System.out.println("\nTESTING ACTIViTY POST BOOKING)");
+		ActivityItem activity = searchedActivities.get(clientChoicesOfActivities.getReferenceNumbers()[0]);        // find activity the client wishes to book
+        ActivityItem[] activities = new ActivityItem[1];
+        activities[0] = activity;
+		System.out.println("\nTesting /activityservice/activities\n");
+		System.out.println(activity.toString());
+		
+		// Add a new activity for this client to bookedActivities map (which contains booked activities for all clients)
+		bookedActivityReferenceNumber++;
+		bookedActivites.put(bookedActivityReferenceNumber,activity);
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+			build().toUriString()+ "/activityservice/activities/"+bookedActivityReferenceNumber;     // Create URI for this activity
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(new URI(path));
+		return new ResponseEntity<>(activities, headers, HttpStatus.CREATED);     // Returns activities to travel agent
+	}
     
 
     /**

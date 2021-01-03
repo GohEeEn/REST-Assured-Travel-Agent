@@ -98,7 +98,8 @@ public class AttractionsService2 {
          /**
           * TODO: Important
           */
-		// attractions = addAttractionsToSearchAttractionsMap(attractions);
+    
+          
 
 		attractionRequestReferenceNumber++;
 
@@ -108,6 +109,36 @@ public class AttractionsService2 {
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(attractions, headers, HttpStatus.CREATED);     // Returns attractions to travel agent
     }
+
+
+    /**
+	 * POST REQUEST: Once the client has chosen their attractions then these choices will be passed on to TravelAgentService which
+	 * will then pass them on to this method
+	 * 
+	 * @param clientChoiceOfActivities
+	 * @return attractions
+	 */
+
+	@RequestMapping(value="/attractionservice/attractions",method=RequestMethod.POST)
+	public ResponseEntity<Attraction[]> createAttraction(@RequestBody ClientChoices clientChoicesOfAttractions)  throws URISyntaxException {
+
+        System.out.println("\nTESTING ATTraction POST BOOKING)");
+		Attraction attraction = searchedAttractions.get(clientChoicesOfAttractions.getReferenceNumbers()[0]);        // find attraction the client wishes to book
+        Attraction[] attractions = new Attraction[1];
+        attractions[0] = attraction;
+		System.out.println("\nTesting /attractionservice/attractions\n");
+		System.out.println(attraction.toString());
+		
+		// Add a new attraction for this client to bookedAttractions map (which contains booked attractions for all clients)
+		bookedAttractionReferenceNumber++;
+		bookedAttractions.put(bookedAttractionReferenceNumber,attraction);
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+			build().toUriString()+ "/attractionservice/attractions/"+bookedAttractionReferenceNumber;     // Create URI for this attraction
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(new URI(path));
+		return new ResponseEntity<>(attractions, headers, HttpStatus.CREATED);     // Returns attractions to travel agent
+	}
 
 
     /**
