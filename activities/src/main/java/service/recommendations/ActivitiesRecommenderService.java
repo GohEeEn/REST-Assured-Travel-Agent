@@ -19,6 +19,7 @@ import service.core.Geocode;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -144,17 +145,38 @@ public class ActivitiesRecommenderService {
      * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
      */
     @GetMapping(value = PAGE + "/{country}/{city}")
-     public Activity[] getActivitiesWithQueries(@RequestParam("city") String city, @RequestParam("country") String country) {
+     public LinkedList<service.core.Activity> getActivitiesWithQueries(@RequestParam("city") String city, @RequestParam("country") String country) {
         Geocode destination = getDestinationGeocode(city, country);
         if(destination == null) {
             System.out.println("Invalid destination (" + city + ", " + country + ")");
-            return new Activity[0];
+            return new LinkedList<>();
         }
         Activity[] activities = getActivities(destination.getLatitude(), destination.getLongitude());
         if(activities == null) {
             System.out.println("No activity found in (" + city + ", " + country + ")");
-            return new Activity[0];
+            return new LinkedList<>();
         }
-        return activities;
+        LinkedList<service.core.Activity> translated = new LinkedList<>();
+        for(Activity activity : activities) {
+            translated.add(toCoreActivity(activity));
+        }
+        return translated;
+     }
+
+    /**
+     * Method to translate an Amadeus Java SDK Activity class instance into a Java Bean Activity class object
+     * @param act an Amadeus Java SDK Activity class instance
+     * @return a Java Bean Activity class object
+     */
+     public service.core.Activity toCoreActivity(Activity act) {
+        return new service.core.Activity(
+                                act.getName(),
+                                act.getShortDescription(),
+                                act.getRating(),
+                                act.getBookingLink(),
+                                act.getPictures(),
+                                act.getPrice().getAmount(),
+                                act.getPrice().getCurrencyCode()
+        );
      }
 }
