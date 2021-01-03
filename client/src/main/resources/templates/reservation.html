@@ -27,13 +27,6 @@
 			    counter-increment: tableCount; 
 			}
 
-/*			.text-truncate {
-			  display: inline-block;
-			  max-width: 150px;
-			  white-space: nowrap;
-			  overflow: hidden;
-			  text-overflow: ellipsis;
-			}*/
 
 		</style>
 
@@ -61,7 +54,7 @@
 
 		<div class="container">
 			<div class="row">
-				<div class="col-12"><h5>Search Results</h5>
+				<div class="col-12"><h5>Your Boooking Reservation</h5>
 					<h6>Hotels found according to your requirements</h6>
                     <form action="/userHotelSelection" method="post" >
                         <div class="container">
@@ -106,13 +99,7 @@
  -->							                <li th:text="${eachAmenities}"></li>
 							            </p>
 							        </td>
-
-
-
-                                   <td th:text="${hotelDetail.description}" >
- 									<!-- 	<span id="ellipsis-ex" class="text-truncate" style="max-width: 150px;" onclick="toggleEllipsis()"></span> -->
-
-
+                                   <td th:text="${hotelDetail.description}" >									
 									 </td>
                                 </tr>
                                 </tbody>
@@ -139,14 +126,6 @@
 		 <div class="footer">
 		 	<p>&copy; 2021 Email: <a href="mailto:olanipekun.akintola@ucdconnect.ie">olanipekun.akintola@ucdconnect.ie</a>.</p>
  		 </div>
-
- <!-- 		 <script>
- 		 	var element = document.querySelector("#ellipsis-ex");
-			function toggleEllipsis() {
-			  element.classList.toggle("text-truncate");
-			}
-		</script>  -->
-
 		<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 		<script type="text/javascript" src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 	</body>
