@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import service.core.FlightRequest;
 import service.core.Flight;
 import service.core.Hotel;
+import service.core.Attraction;
 import service.core.ActivityRequest;
 import service.core.ActivityItem;
 import service.core.AttractionRequest;
@@ -69,6 +70,12 @@ public class Client {
 								if (a != null){
 									System.out.println("Description of activity is: " + a.getDescription());
 									System.out.println("Booking link of activity is: " + a.getBookingLink());
+								}
+								Attraction [] attractions2 = travelPackage.getAttractions();
+								Attraction at = attractions2[0];
+								if (at != null){
+									System.out.println("Category of attraction is: " + at.getCategory());
+									System.out.println("Name of attraction is: " + at.getName());
 								}
 
 							//    System.out.println(travelPackage.getActivities());

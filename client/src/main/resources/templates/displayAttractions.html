@@ -59,70 +59,51 @@
 		</div>
 		<hr style="color: green; display: block;" >
 
-		<div class="container">
+		<div class="container" th:if="${#arrays.isEmpty(attractionsDetails)}">
+			<h2>No attractions found in the destination city</h2>
+			<br>
+			<form action="/userAttractionsSelection" method="post" >
+				<button name="inputAttractionsIndex" type="submit" value="0">Finish booking</button>
+			</form>
+		</div>
+
+		<div class="container" th:unless="${#arrays.isEmpty(attractionsDetails)}">
 			<div class="row">
 				<div class="col-12"><h5>Search Results</h5>
-					<h6>Activities found according to your requirements</h6>
-                    <form action="/userHotelSelection" method="post" >
+					<h6>Attractions found in the city you are staying</h6>
+                    <form action="/userAttractionsSelection" method="post" >
                         <div class="container">
                             <table class="table">
                             	<col style="width: 1%"/>
-                            	<col style="width: 10%"/>
-                            	<col style="width: 5%"/>
-                            	<col style="width: 10%"/>
-                            	<col style="width: 4%"/>
-                            	<col style="width: 15%"/>
-                            	<col style="width: 5%"/>
-                            	<col style="width: 15%"/>
                             	<col style="width: 20%"/>
                             	<col style="width: 15%"/>
+                            	<col style="width: 10%"/>
+                            	<col style="width: 10%"/>
                             	<thead>
                                 <tr>
                                 	<th>#</th>
                                     <th>Name</th>
-                                    <th>Price</th>
-                                    <th>Room</th>
-                                    <th>Bed</th>
-                                    <th>Address</th>
-                                    <th>Rating</th>
-                                    <th>Phone</th>
-                                     <!-- <th>Amenities</th> -->
-                                     <th>Description</th>
+                                    <th>Category</th>
+                                    <th>Type</th>
+                                    <th>Subtype</th>
                                 </tr>
 								</thead>
 								<tbody>
-                                <tr th:each="hotelDetail : ${hotelDetails}">
+                                <tr th:each="attractionsDetail : ${attractionsDetails}">
                                 	<td class="counterCell"></td>
-                                    <td th:text="${hotelDetail.name} "></td>
-                                    <td th:text="${hotelDetail.price} "></td>
-                                    <td th:text="${hotelDetail.roomType} "></td>
-                                    <td th:text="${hotelDetail.bedType} "></td>
-                                    <td th:text="${hotelDetail.address} "></td>
-                                    <td th:text="${hotelDetail.rating} "></td>
-                                    <td th:text="${hotelDetail.phoneNumber} "></td>
-							        <!-- <td>
-							            <p th:each="eachAmenities : ${hotelDetail.amenities}">
- 							                <span th:text="${address.street}">Street</span>
-							                <li th:text="${eachAmenities}"></li>
-							            </p>
-							        </td> -->
-
-
-
-                                   <td th:text="${hotelDetail.description}" >
- 									<!-- 	<span id="ellipsis-ex" class="text-truncate" style="max-width: 150px;" onclick="toggleEllipsis()"></span> -->
-
-
-									 </td>
+                                    <td th:text="${attractionsDetail.name} "></td>
+                                    <td th:text="${attractionsDetail.category} "></td>
+                                    <td th:text="${attractionsDetail.type}"></td>
+                                    <td th:text="${attractionsDetail.subtype} "></td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                         <br>
 						  <div class="form-group row">
-						    <label for="inputHotelIndex" class="col-sm-4 col-form-label">Enter the Index of Hotel</label>
+						    <label for="inputAttractionsIndex" class="col-sm-4 col-form-label">Enter the Indexes of Attractions seperated by a space</label>
 						    <div class="col-sm-2">
-						      <input type="text" class="form-control" id="inputHotelIndex" placeholder="Hotel" name="inputHotelIndex" required="required">
+						      <input type="text" class="form-control" id="inputAttractionsIndex" placeholder="Attractions" name="inputAttractionsIndex" required="required">
 						    </div>
 						    <div class="col-sm-6">
 						    </div>

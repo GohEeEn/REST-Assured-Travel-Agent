@@ -89,11 +89,11 @@ public class AttractionsService2 {
         
 
         System.out.println("\nATTRACTIONS\n");
-         for (int i=0; i<3; i++){
+        //  for (int i=0; i<3; i++){
             
-                System.out.println("\n"+attractions[i].toString()+"\n");
+        //         System.out.println("\n"+attractions[i].toString()+"\n");
             
-         }
+        //  }
          
          /**
           * TODO: Important
@@ -162,6 +162,7 @@ public class AttractionsService2 {
      */
     public Geocode getDestinationGeocode(String city, String country) {
 
+        System.out.println("LINE 134");
         if(!isValidLocationName(city) || !isValidLocationName(country)) {
             System.out.println("Invalid City or Country Queries (City : '" + city + "', Country : '" + country + "')");
             return null;
@@ -250,12 +251,17 @@ public class AttractionsService2 {
      * @return list of attractions in given destination, empty if the given location is unavailable or no attraction can be found
      */
     public Attraction[] getAttractionsWithQueries(String city, String country) {
+        System.out.println("LINE 222");
+        System.out.println("CITY = "+city);
+        System.out.println("COUNTRY = "+country);
         Geocode destination = getDestinationGeocode(city, country);
         if(destination == null) {
             System.out.println("Invalid destination (" + city + ", " + country + ")");
             return new Attraction[0];
         }
         PointOfInterest[] activities = getAttractions(destination.getLatitude(), destination.getLongitude());
+        System.out.println("LINE 228");
+        System.out.println("POI size = "+activities.length);
         if(activities == null) {
             System.out.println("No activity found in (" + city + ", " + country + ")");
             return new Attraction[0];
