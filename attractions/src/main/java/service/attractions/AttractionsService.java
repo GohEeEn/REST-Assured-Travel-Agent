@@ -135,7 +135,6 @@ public class AttractionsService {
 
             return pois;
 
-
         } catch(ResponseException e) {
             System.out.println("Error " + e.getCode() + " : " + e.getDescription());
         }
