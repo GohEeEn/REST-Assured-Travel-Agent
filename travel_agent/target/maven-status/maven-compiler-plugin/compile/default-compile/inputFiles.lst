@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\NoSuchBookingException.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\Application.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\Booking.java
@@ -13,3 +14,11 @@ C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\j
 /home/tam/Desktop/CLEAn3/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoRepository.java
 /home/tam/Desktop/CLEAn3/quaranteam/travel_agent/src/main/java/service/travel_agent/TravelAgentService.java
 >>>>>>> refs/remotes/origin/master
+=======
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\travel_agent\src\main\java\service\travel_agent\NoSuchBookingException.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\travel_agent\src\main\java\service\travel_agent\Booking.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\travel_agent\src\main\java\service\travel_agent\MongoConfig.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\travel_agent\src\main\java\service\travel_agent\MongoRepository.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\travel_agent\src\main\java\service\travel_agent\Application.java
+C:\Users\UCD\Desktop\YEAR 4\Quaranteam\quaranteam\travel_agent\src\main\java\service\travel_agent\TravelAgentService.java
+>>>>>>> origin/master
