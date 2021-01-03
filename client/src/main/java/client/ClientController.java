@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 import service.core.ActivityRequest;
+import service.core.ClientResponse;
 import service.core.FlightRequest;
 import service.core.HotelRequest;
 import service.core.TravelPackage;
@@ -53,6 +54,7 @@ public class ClientController {
 	private HotelRequest hotelRequest = new HotelRequest();
 	private ActivityRequest activityRequest = new ActivityRequest();
 	private TravelPackage tp = new TravelPackage();
+	private ClientResponse cr = new ClientResponse();
 	final static String locale = "en-GB";
 //	@RequestMapping(value="/",method=RequestMethod.GET)
 //	@ResponseBody 
@@ -237,7 +239,13 @@ public class ClientController {
 			}
 			else{
 				System.out.println("chosen index is = "+i);
-				response.sendRedirect("/displayHotels");
+				if (i==0){
+					response.sendRedirect("/");
+				}
+				else{
+					cr.setFlightReferenceNumber(tb.getFlights()[i-1].getReferenceNumber());
+					response.sendRedirect("/displayHotels");
+				}
 			}
 		}
 	}
@@ -264,6 +272,13 @@ public class ClientController {
 			}
 			else{
 				System.out.println("chosen index is = "+i);
+				if (i!=0){
+					cr.setHotelReferenceNumber(tb.getHotels()[i-1].getReferenceNumber());
+				}
+				else{
+					cr.setHotelReferenceNumber(0);
+				}
+				Client.
 				response.sendRedirect("/");
 			}
 		}

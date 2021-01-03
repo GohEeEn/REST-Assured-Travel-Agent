@@ -8,6 +8,31 @@
 // import org.springframework.web.client.RestTemplate; 
 // import org.springframework.http.HttpEntity;
  
+<<<<<<< HEAD
+import service.core.FlightRequest;
+import service.core.Flight;
+import service.core.Hotel;
+import service.core.ClientRequest;
+import service.core.ClientResponse;
+import service.core.HotelRequest;
+import service.core.TravelPackage;
+import service.core.ActivityRequest;
+import service.core.Booking;
+import service.core.ReplaceBooking;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException; 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.io.IOException;
+
+public class ClientB {
+=======
 // import service.core.FlightRequest;
 // import service.core.Flight;
 // import service.core.Hotel;
@@ -30,6 +55,7 @@
 // import java.io.IOException;
 
 // public class ClientB {
+>>>>>>> refs/remotes/origin/master
 	
 //       public static final String newArgs = "http://localhost:8081/travelagent/travelpackagerequests";
 //       public static final String newArgs2 = "http://localhost:8081/travelagent/bookings";
@@ -56,6 +82,13 @@
 // 		ClientRequest clientRequest = new ClientRequest();
 // 		clientRequest.setFlightRequest(flightRequest);
 // 		clientRequest.setHotelRequest(hotelRequest);
+
+		ActivityRequest ar = new ActivityRequest();
+		ar.setCountry("Ireland");
+		ar.setCity("Dublin");
+		ar.setLatitude(53.3498);
+		ar.setLongitude(6.2603);
+		clientRequest.setActivityRequest(ar);
 
 		
 // 		ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
