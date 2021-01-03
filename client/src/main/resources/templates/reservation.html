@@ -76,6 +76,11 @@
 									<td>ACTIVITIES :</td>
 									<td th:text="${userBooking.activities} "></td>	
 								</tr>
+
+								<tr th:each="userBooking : ${userBookings}">
+									<td>ATTRACTIONS :</td>
+									<td th:text="${userBooking.attractions} "></td>	
+								</tr>
 							</table>
                         </div>
                         <br>
