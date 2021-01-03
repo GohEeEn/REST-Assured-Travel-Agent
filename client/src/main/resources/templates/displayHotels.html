@@ -60,11 +60,20 @@
 		</div>
 		<hr style="color: green; display: block;" >
 
-		<div class="container">
+		<div class="container" th:if="${#arrays.isEmpty(hotelDetails)}">
+			<h2>No hotels found in the given city</h2>
+			<br>
+			<form action="/userHotelSelection" method="post" >
+				<button name="inputHotelIndex" type="submit" value="0">See activities</button>
+			</form>
+		</div>
+		<div class="container" th:unless="${#arrays.isEmpty(hotelDetails)}">
 			<div class="row">
 				<div class="col-12"><h5>Search Results</h5>
 					<h6>Hotels found according to your requirements</h6>
-                    <form action="/userHotelSelection" method="post" >
+					<form action="/userHotelSelection" method="post" >
+						<div th:if= "${hotelDetails.length==0}">
+
                         <div class="container">
                             <table class="table">
                             	<col style="width: 1%"/>
@@ -87,7 +96,7 @@
                                     <th>Address</th>
                                     <th>Rating</th>
                                     <th>Phone</th>
-                                     <th>Amenities</th>
+                                     <!-- <th>Amenities</th> -->
                                      <th>Description</th>
                                 </tr>
 								</thead>
@@ -101,12 +110,12 @@
                                     <td th:text="${hotelDetail.address} "></td>
                                     <td th:text="${hotelDetail.rating} "></td>
                                     <td th:text="${hotelDetail.phoneNumber} "></td>
-							        <td>
+							        <!-- <td>
 							            <p th:each="eachAmenities : ${hotelDetail.amenities}">
-<!-- 							                <span th:text="${address.street}">Street</span>
- -->							                <li th:text="${eachAmenities}"></li>
+ 							                <span th:text="${address.street}">Street</span>
+							                <li th:text="${eachAmenities}"></li>
 							            </p>
-							        </td>
+							        </td> -->
 
 
 

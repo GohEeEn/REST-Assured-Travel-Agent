@@ -120,6 +120,6 @@ public class ActivityItem {
 
 
     public String toString() {
-        return name + " " + rating + " " + price.toString() + " " + bookingLink;
+        return name + " " + rating + " " + price.toString() + " " + bookingLink + "\n";
     }
 }

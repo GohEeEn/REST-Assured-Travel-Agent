@@ -12,6 +12,7 @@ This module is meant to be an activity finder for users who have input both the 
 | 2    | Validate the query received        | Done with Regular Expression, to reject queries with unwanted characters or blank | Done           |
 | 3    | Search for geocode of a location   | Finding the location through its geocode with Nominatim Search API                | Done           |
 | 4    | Use the geocode to find activities | Required parameter : Geo-coordinate^                                              | Done           |
+| 5    | Translate Actvity class            | Amadeus Java SDK Activity object -> Java Bean Activity object (Array)             | Done           |
 
 Given 2 Parameters (CityName, CountryName) as the location -> A list of Activity objects which represent individual activities available in that location
 
