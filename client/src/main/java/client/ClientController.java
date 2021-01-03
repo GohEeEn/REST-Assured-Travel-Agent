@@ -228,7 +228,7 @@ public class ClientController {
 		}
 		else{
 			int i = Integer.parseInt(inputFlightIndex);
-			if(i<0 || i>tp.getFlights().length){
+			if(i<0 || (i == 0 && tp.getFlights().length!=0) || (i!=0 && i>tp.getFlights().length)){
 				PrintWriter out = response.getWriter();
             out.println("<script>");
             out.println("alert('" + "invalid index entered, enter again" + "');");
@@ -255,7 +255,7 @@ public class ClientController {
 		}
 		else{
 			int i = Integer.parseInt(inputHotelIndex);
-			if(i<0 || i>tp.getHotels().length){
+			if(i<0 || (i == 0 && tp.getHotels().length!=0) || (i!=0 && i>tp.getHotels().length)){
 				PrintWriter out = response.getWriter();
             out.println("<script>");
             out.println("alert('" + "invalid index entered, enter again" + "');");

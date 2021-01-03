@@ -1,6 +1,6 @@
 package service.core;
 
-public class Activity {
+public class ActivityItem {
 
     private String name;
     private String description;
@@ -9,9 +9,9 @@ public class Activity {
     private String[] pictures;
     private Price price;
 
-    public Activity() {}
+    public ActivityItem() {}
 
-    public Activity(String name, String description, String rating, String bookingLink, String[] pictures, String amount, String currencyCode) {
+    public ActivityItem(String name, String description, String rating, String bookingLink, String[] pictures, String amount, String currencyCode) {
         this.name = name;
         this.description = description;
         this.rating = rating;
@@ -101,6 +101,6 @@ public class Activity {
     }
 
     public String toString() {
-        return name + " " + rating + " " + price.toString() + " " + bookingLink;
+        return name + " " + rating + " " + price.toString() + " " + bookingLink + "\n";
     }
 }
