@@ -13,6 +13,7 @@ import service.core.Flight;
 import service.core.Hotel;
 import service.core.ActivityRequest;
 import service.core.ClientRequest;
+import service.core.ClientResponse;
 import service.core.HotelRequest;
 import service.core.TravelPackage;
 
@@ -82,5 +83,9 @@ public class Client {
 						//  }
 						 return travelPackage;
 						}
-	
+
+	//Send the clientResponse to the travel agent
+	public static void sendBookinChoicesToTravelTragent(ClientResponse cr){
+
+	}
 }
