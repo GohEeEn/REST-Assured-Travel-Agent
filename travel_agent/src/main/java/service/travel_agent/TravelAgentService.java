@@ -212,6 +212,7 @@ public class TravelAgentService {
 		// ClientChoice clientChoiceOfActivities = new ClientChoice();      // create ClientChoice to hold array of ref number (if a negative number then no activities were chosen)
 		HttpEntity<ClientChoices> requestActivities = new HttpEntity<>(clientChoicesOfActivities);
 		activities = restTemplate.postForObject("http://activities-service/activityservice/activities",requestActivities, ActivityItem[].class);
+		System.out.println("TEsting after activity post booking");
 		System.out.println(activities[0].getName());
 
 		/**
@@ -237,6 +238,8 @@ public class TravelAgentService {
 
 		booking.setFlight(flight);
 		booking.setHotel(hotel);
+		booking.setActivities(activities);
+		booking.setAttractions(attractions);
 		clientBookingReferenceNumber++; // create unique ref num
 		booking.setReferenceNumber(clientBookingReferenceNumber);   // give booking this unique ref num
 		clientBookings.put(clientBookingReferenceNumber,booking);
@@ -322,7 +325,7 @@ public class TravelAgentService {
 		System.out.println("\n GET HOTEL:" +hotel.toString());
 
 		/**
-		 * Create a new Booking for client
+		 * Create a new Booking to replace the old booking 
 		 */
 
 		System.out.println("\n"+flight.toString());

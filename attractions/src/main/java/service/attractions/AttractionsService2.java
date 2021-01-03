@@ -45,6 +45,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import service.core.ClientChoices;
+
 
 @RestController
 public class AttractionsService2 {
@@ -82,7 +84,8 @@ public class AttractionsService2 {
         System.out.println("\nTesting AttractionService POST Request\n");
 
         Attraction[] attractions = getAttractionsWithQueries(attractionRequest.getCity(), attractionRequest.getCountry());
-        
+        addAttractionsToSearchAttractionsMap(attractions);
+
         /** 
 		 * The following code prints all attractions which were found through the Amadeus API
 		 */
@@ -213,7 +216,7 @@ public class AttractionsService2 {
      * @param longitude Double value in range of -90 to 90
      * @return list of attractions in a given destination, empty if the given location is unavailable or no attractions can be found
      */
-    @GetMapping(value = PAGE)
+    // @GetMapping(value = PAGE)
     public PointOfInterest[] getAttractions(double latitude, double longitude) {
         if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
             System.out.println("Invalid coordinate(s) given (Lat=" + latitude + ", Lon=" + longitude + ")");
