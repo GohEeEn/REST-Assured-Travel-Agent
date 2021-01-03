@@ -13,6 +13,7 @@ public class Hotel{
       private String rating;
       private String phoneNumber;
       private String name;
+      private int referenceNumber;
 
       public String getPrice(){
             return price;
@@ -86,6 +87,23 @@ public class Hotel{
             this.name = name;
       }
 
+      public int getReferenceNumber(){
+            return referenceNumber;
+      }
+
+      public void setReferenceNumber(int referenceNumber){
+            this.referenceNumber = referenceNumber;
+      }
+
+      public String amenitiesToString(){
+            
+            String amenitiesString = "";
+            for (String amenity : amenities){
+                  amenitiesString += amenity + " ";
+            }
+            return amenitiesString;
+      }
+
       public String toString(){
             String string = "\n******************* HOTEL *******************\n";
             string += "\nPrice: " + price +"\n";
@@ -93,7 +111,7 @@ public class Hotel{
             string += "Bed Type: " + bedType +"\n";
             string += "Description: " + description +"\n";
             string += "Address: " + address +"\n";
-            string += "Amenities: " + amenities +"\n";;
+            string += "Amenities: " + amenitiesToString() +"\n";;
             string += "Rating: " + rating +"\n";
             string += "PhoneNumber: " + phoneNumber +"\n";
             string += "Name: " + name +"\n";

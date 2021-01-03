@@ -49,29 +49,33 @@ import org.json.simple.parser.ParseException;
 import service.core.Flight; 
 import service.core.FlightRequest;
 import service.flights.NoSuchFlightException;
+import service.core.ClientChoice;
 
 import java.util.Iterator;
 
 @RestController
 public class FlightServiceB {
 	
-	private static int referenceNumber = 0;    // unique reference number for each booking
+	private static int flightRequestReferenceNumber = 0;    // unique reference number for each flightRequest
+	private static int searchedFlightReferenceNumber = 0;           // unique reference number for each flight found by FlightService that matches requirements from flightRequest
+	private static int bookedFlightReferenceNumber = 0;           // unique reference number for each flight booked by a client
 	final String locale = "en-GB";     // need to call Skycanner API
-	private Map<Integer, Flight []> flights = new HashMap<>();      // Map of all flights created with new reference number as key
+	private Map<Integer, Flight> bookedFlights = new HashMap<>();      // Map of all flights created with new reference number as key
+	private Map<Integer, Flight> searchedFlights = new HashMap<>();    // Map of all flights that FlightService searched for
 
 	@Autowired
 	private RestTemplate restTemplate;
  
 	/**
-	 * POST REQUEST: handles all flights requests from travel agent
+	 * POST REQUEST: handles all flight requests from travel agent
 	 * 
 	 * @param flightRequest
 	 * @return clientFlghts
 	 * @throws URISyntaxException
 	 */
 
-	@RequestMapping(value="/flights",method=RequestMethod.POST)
-	public ResponseEntity<Flight[]> createFlights(@RequestBody FlightRequest flightRequest)  throws URISyntaxException {
+	@RequestMapping(value="/flightservice/flightrequests",method=RequestMethod.POST)
+	public ResponseEntity<Flight[]> searchFlights(@RequestBody FlightRequest flightRequest)  throws URISyntaxException {
 
 		ArrayList<FlightQuote> flightQuotes = new ArrayList();  // FlightQuote object holds data that is needed to access JSON elements that hold
 											  // data needed for Flight class
@@ -107,29 +111,56 @@ public class FlightServiceB {
 			System.out.println(flight.toString());
 		}
 
-		// Add a new array of flights for this client to flights map (which contains flights for all clients)
-		referenceNumber++;
-		flights.put(referenceNumber,clientFlights);
+		clientFlights = addFlightsToSearchFlightsMap(clientFlights);
+
+		flightRequestReferenceNumber++;
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/flights/"+referenceNumber;     // Create URI for this flight
+			build().toUriString()+ "/flightservice/flightrequests/"+flightRequestReferenceNumber;     // Create URI for this flight
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(clientFlights, headers, HttpStatus.CREATED);     // Returns flights to travel agent
-	} 
+	}
+	
+	/**
+	 * POST REQUEST: Once the client has chosen a flight then this choice will be passed on to TravelAgentService which
+	 * will then pass it on to this method
+	 * 
+	 * @param clientChoice
+	 * @return flight
+	 */
+
+	@RequestMapping(value="/flightservice/flights",method=RequestMethod.POST)
+	public ResponseEntity<Flight> createFlight(@RequestBody ClientChoice clientChoice)  throws URISyntaxException {
+
+		Flight flight = searchedFlights.get(clientChoice.getReferenceNumber());        // find flight the client wishes to book
+
+		System.out.println("\nTesting /flightservice/flights\n");
+		System.out.println(flight.toString());
+		
+		// Add a new flight for this client to bookedFlights map (which contains booked flights for all clients)
+		bookedFlightReferenceNumber++;
+		bookedFlights.put(bookedFlightReferenceNumber,flight);
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+			build().toUriString()+ "/flightservice/flights/"+bookedFlightReferenceNumber;     // Create URI for this flight
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(new URI(path));
+		return new ResponseEntity<>(flight, headers, HttpStatus.CREATED);     // Returns flights to travel agent
+	}
 
 	/**
 	 * GET REQUEST
 	 * 
 	 * @param reference
-	 * @return clientFlights
+	 * @return flight
 	 */
-	@RequestMapping(value="/flights/{reference}",method=RequestMethod.GET)
-	public Flight[] getFlights(@PathVariable("reference") int reference) {
+	@RequestMapping(value="/flightservice/flights/{reference}",method=RequestMethod.GET)
+	public Flight getFlight(@PathVariable("reference") int reference) {
 
-		Flight[] clientFlights = flights.get(reference);
-		if (clientFlights == null) throw new NoSuchFlightException();
-		return clientFlights;
+		Flight flight = bookedFlights.get(reference);
+		if (flight == null) throw new NoSuchFlightException();
+		return flight;
 	}
 
 	/**
@@ -137,38 +168,38 @@ public class FlightServiceB {
 	 * 
 	 * @return flights.values()
 	 */
-	@RequestMapping(value="/flights",method=RequestMethod.GET)
-	public @ResponseBody Collection<Flight[]> listEntries() {
-		if (flights.size() == 0) throw new NoSuchFlightException();
-		return flights.values();
+	@RequestMapping(value="/flightservice/flights",method=RequestMethod.GET)
+	public @ResponseBody Collection<Flight> listEntries() {
+
+		if (bookedFlights.size() == 0) throw new NoSuchFlightException();
+		return bookedFlights.values();
 	}
 
 	/**
-	 * PUT REQUEST: Replaces flights with given reference number
+	 * PUT REQUEST: replace flight with given reference number
 	 * 
 	 * @param referenceNumber
-	 * @param flightRequest
-	 * @return
+	 * @param clientChoice 
 	 * @throws URISyntaxException
 	 */
 
-// 	@RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.PUT)
-//     	public ResponseEntity<Flight []> replaceFlights(@PathVariable int referenceNumber, @RequestBody FlightRequest flightRequest) throws URISyntaxException{
+	@RequestMapping(value="/flightservice/flights/{referenceNumber}", method=RequestMethod.PUT)
+    	public ResponseEntity<Flight> replaceFlight(@PathVariable int referenceNumber, @RequestBody ClientChoice clientChoice) throws URISyntaxException{
 
-// 		Flight [] clientFlights = flights.get(referenceNumber);
-// 		if (clientFlights == null) throw new NoSuchFlightException();
+		Flight newChoiceOfFlight = searchedFlights.get(clientChoice.getReferenceNumber());        // find flight the client wishes to book
 
-// 		flights.remove(referenceNumber);
+		System.out.println("\nTesting PUT /flightservice/flight\n");
+		System.out.println(newChoiceOfFlight.toString());
+		
+		// Replace old flight with a new flight 
+		Flight previouslyBookedFlight = bookedFlights.remove(referenceNumber);
+		bookedFlights.put(referenceNumber,newChoiceOfFlight);
 
-// 		// Update set of flights for this client
-// 		clientFlights = createFlights(flightRequest);   
-// 		flights.add(referenceNumber,clientFlights);
-
-// 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/flights/"+referenceNumber;
-// 		HttpHeaders headers = new HttpHeaders();
-// 		headers.set("Content-Location", path);
-// 		return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-//     }
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/flightservice/flights/"+referenceNumber;
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Location", path);
+		return new ResponseEntity<>(headers, HttpStatus.OK);
+    }
 	    
     	/**
 	     * DELETE REQUEST: removes flights with given reference number
@@ -184,7 +215,7 @@ public class FlightServiceB {
 	// 	if (clientFlights == null) throw new NoSuchFlightException();
 	// }
 
-	// If there is no flight listed with the given reference after calling GET method then throw this exception
+	// If there is no flight listed with the given reference then throw this exception
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
 	public class NoSuchFlightException extends RuntimeException {
 		static final long serialVersionUID = -6516152229878843037L;
@@ -378,5 +409,21 @@ public class FlightServiceB {
 		}
 		return flights;
 	}
+
+	/**
+	 * The following method adds all new flights found by FlightService to searchedFlights map
+	 */
+
+	 public Flight [] addFlightsToSearchFlightsMap(Flight [] flights){
+
+		for (Flight flight : flights){
+
+			searchedFlightReferenceNumber++; 
+			searchedFlights.put(searchedFlightReferenceNumber,flight);          // add new flight to map with new ref number
+			flight.setReferenceNumber(searchedFlightReferenceNumber);           // set the ref number in Flight so that we can cross reference 
+														  // with the client choice of flight booking
+		}
+		return flights;
+	 }
 
 }

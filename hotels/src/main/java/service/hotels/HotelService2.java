@@ -22,6 +22,7 @@ import java.util.HashMap;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -47,6 +48,7 @@ import service.core.FlightRequest;
 import service.core.Hotel;
 import service.hotels.NoSuchHotelException;
 import service.core.HotelRequest;
+import service.core.ClientChoice;
 
 import java.util.Iterator;
 
@@ -66,8 +68,11 @@ public class HotelService2 {
 	@LoadBalanced
 	private RestTemplate restTemplate;
 
-      private Map<Integer, Hotel[]> hotels = new HashMap<>();      // Map of all hotels created with hotel.reference as key
-      private static int referenceNumber = 0;
+      private static int hotelRequestReferenceNumber = 0;    // unique reference number for each hotelRequest
+	private static int searchedHotelReferenceNumber = 0;           // unique reference number for each hotel found by HotelService that matches requirements from flightRequest
+	private static int bookedHotelReferenceNumber = 0;           // unique reference number for each hotel booked by a client
+	private Map<Integer, Hotel> bookedHotels = new HashMap<>();      // Map of all hotels created with new reference number as key
+	private Map<Integer, Hotel> searchedHotels = new HashMap<>();    // Map of all hotels that HotelService searched for
 
 	/**
        * POST REQUEST: takes requests from TravelAgentService
@@ -77,7 +82,7 @@ public class HotelService2 {
        * @throws URISyntaxException
        */
 
-	@RequestMapping(value="/hotels",method=RequestMethod.POST)
+	@RequestMapping(value="/hotelservice/hotelrequests",method=RequestMethod.POST)
 	public ResponseEntity<Hotel[]> getHotelInfo(@RequestBody HotelRequest hotelRequest)  throws URISyntaxException {
 		
 		ArrayList<Hotel> clientHotels = new ArrayList<>();
@@ -90,21 +95,107 @@ public class HotelService2 {
             Hotel [] hotelsArray = convertHotelListToHotelArray(clientHotels);
 
             /**
-             * Prints all hotels found
+             * The following code prints all hotels which were found through the Amadeus API
              */
 
             for (Hotel hotel : hotelsArray){
                   System.out.println(hotel.toString());
             }
 
-            referenceNumber++;
+            hotelsArray = addHotelsToSearchHotelsMap(hotelsArray);
+
+		hotelRequestReferenceNumber++;
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/hotels/"+referenceNumber;     // Create URI for this hotel
+			build().toUriString()+ "/hotelservice/hotelrequests/"+hotelRequestReferenceNumber;     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();
             headers.setLocation(new URI(path));    
             
 		return new ResponseEntity<>(hotelsArray, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
       } 
+
+      /**
+       * POST REQUEST: Once the client has chosen a hotel then this choice will be passed on to TravelAgentService which
+	 * will then pass it on to this method
+       * 
+       * @param clientChoice
+       * @return hotel
+       * @throws URISyntaxException
+       */
+      @RequestMapping(value="/hotelservice/hotels",method=RequestMethod.POST)
+	public ResponseEntity<Hotel> createHotel(@RequestBody ClientChoice clientChoice)  throws URISyntaxException {
+
+            Hotel hotel = searchedHotels.get(clientChoice.getReferenceNumber());        // find hotel the client wishes to book
+            
+            System.out.println("\nTesting /hotelservice/hotels\n");
+            System.out.println(hotel.toString());
+		
+		// Add a new hotel for this client to bookedHotels map (which contains booked flights for all clients)
+		bookedHotelReferenceNumber++;
+		bookedHotels.put(bookedHotelReferenceNumber,hotel);
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
+			build().toUriString()+ "/hotelservice/hotels/"+bookedHotelReferenceNumber;     // Create URI for this flight
+		HttpHeaders headers = new HttpHeaders();
+		headers.setLocation(new URI(path));
+		return new ResponseEntity<>(hotel, headers, HttpStatus.CREATED);     // Returns flights to travel agent
+      }
+
+
+      /**
+	 * GET REQUEST
+	 * 
+	 * @param reference
+	 * @return hotel
+	 */
+	@RequestMapping(value="/hotelservice/hotels/{reference}",method=RequestMethod.GET)
+	public Hotel getHotel(@PathVariable("reference") int reference) {
+
+		Hotel hotel = bookedHotels.get(reference);
+		if (hotel == null) throw new NoSuchHotelException();
+		return hotel;
+	}
+
+	/**
+	 * GET REQUEST (all instances)
+	 * 
+	 * @return hotels.values()
+	 */
+	@RequestMapping(value="/hotelservice/hotels",method=RequestMethod.GET)
+	public @ResponseBody Collection<Hotel> listEntries() {
+
+		if (bookedHotels.size() == 0) throw new NoSuchHotelException();
+		return bookedHotels.values();
+	}
+
+
+      
+      /**
+	 * PUT REQUEST: replaces hotel with given reference number
+	 * 
+	 * @param referenceNumber
+	 * @param clientChoice
+	 * @return newChoiceOfHotel
+	 * @throws URISyntaxException
+	 */
+
+	@RequestMapping(value="/hotelservice/hotels/{referenceNumber}", method=RequestMethod.PUT)
+      public ResponseEntity<Hotel> replaceHotel(@PathVariable int referenceNumber, @RequestBody ClientChoice clientChoice) throws URISyntaxException{
+
+        Hotel newChoiceOfHotel = searchedHotels.get(clientChoice.getReferenceNumber());        // find hotel the client wishes to book
+
+        System.out.println("\nTesting PUT /hotelservice/hotels\n");
+        System.out.println(newChoiceOfHotel.toString());
+        
+        // Replace old hotel with a new hotel
+        Hotel previouslyBookedHotel = bookedHotels.remove(referenceNumber);
+        bookedHotels.put(referenceNumber,newChoiceOfHotel);
+
+        String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/hotelservice/hotels/"+referenceNumber;
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Content-Location", path);
+        return new ResponseEntity<>(headers, HttpStatus.OK);
+      }
+
 
       /**
        * The following code converts a list of hotels to an array of hotels
@@ -271,40 +362,11 @@ public class HotelService2 {
 		return hotelList;
       }
 	
-
-// 	// GET request, returns the flight with the reference passed as argument
-// 	@RequestMapping(value="/flights/{reference}",method=RequestMethod.GET)
-// 		public Quotation getResource(@PathVariable("reference") int reference) {
-// 		Flight flight = flights.get(reference);
-// 		if (flight == null) throw new NoSuchQuotationException();
-// 		return flight;
-// 	}
-
-// 	@RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.PUT)
-//     public ResponseEntity<Flight []> replaceEntity(@PathVariable int referenceNumber, @RequestBody ClientBooking clientBooking) {
-// 	  Flight [] clientFlights = flights.get(referenceNumber);
-//         if (clientFlights == null) throw new NoSuchFlightQuoteException();
-
-// 	  clientFlights = createBooking(clientBooking);   // update set of flights for this client
-
-//         String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/flights/"+referenceNumber;
-//         HttpHeaders headers = new HttpHeaders();
-//         headers.set("Content-Location", path);
-//         return new ResponseEntity<>(headers, HttpStatus.NO_CONTENT);
-//     }
-
-//     @RequestMapping(value="/flights/{referenceNumber}", method=RequestMethod.DELETE)
-//     @ResponseStatus(value=HttpStatus.NO_CONTENT)
-//     public void deleteEntity(@PathVariable int referenceNumber) {
-//         Flight [] clientFlights = flights.remove(referenceNumber);
-//         if (clientFlights == null) throw new NoSuchFlighQuoteException();
-//     }
-
-// 	// If there is no quotation listed with the given reference after calling GET method then throw this exception
-// 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
-// 	public class NoSuchQuotationException extends RuntimeException {
-// 		static final long serialVersionUID = -6516152229878843037L;
-// 	} 
+      // If there is no hotel listed with the given reference then throw this exception
+      @ResponseStatus(value = HttpStatus.NOT_FOUND)
+      public class NoSuchHotelException extends RuntimeException {
+            static final long serialVersionUID = -6516152229878843037L;
+      } 
 
       /**
        * The following method converts a string to a JSON Object
@@ -370,7 +432,23 @@ public class HotelService2 {
                   e.printStackTrace();
 		}
 		return token;
-	}
+      }
+      
+      /**
+	 * The following method adds all new hotels found by HotelService to searchedHotels map
+	 */
+
+	 public Hotel [] addHotelsToSearchHotelsMap(Hotel [] hotels){
+
+		for (Hotel hotel : hotels){
+
+			searchedHotelReferenceNumber++; 
+			searchedHotels.put(searchedHotelReferenceNumber,hotel);          // add new flight to map with new ref number
+			hotel.setReferenceNumber(searchedHotelReferenceNumber);           // set the ref number in Flight so that we can cross reference 
+														  // with the client choice of flight booking
+		}
+		return hotels;
+	 }
 	
 
 }
