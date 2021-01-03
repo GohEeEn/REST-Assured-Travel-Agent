@@ -6,14 +6,14 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    io.kompose.service: eureka
-  name: eureka
+    io.kompose.service: attractions
+  name: attractions
 spec:
   ports:
-  - name: "8081"
-    port: 8761
-    targetPort: 8081
+  - name: "8086"
+    port: 8086
+    targetPort: 8086
   selector:
-    app: travel-agent
+    io.kompose.service: attractions
 status:
   loadBalancer: {}

@@ -1,3 +1,12 @@
+<<<<<<< HEAD
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\NoSuchBookingException.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\Application.java
 C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\TravelAgentService.java
+=======
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/NoSuchTravelPackageException.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoConfig.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoRepository.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/Booking.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/Application.java
+/home/tam/Desktop/CLEAN2/quaranteam/travel_agent/src/main/java/service/travel_agent/TravelAgentService.java
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4

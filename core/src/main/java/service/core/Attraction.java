@@ -5,16 +5,14 @@ public class Attraction {
     String category;
     String type;
     String subtype;
-    int rank;
 
     public Attraction() {}
 
-    public Attraction(String name, String category, String type, String subtype, int rank){
+    public Attraction(String name, String category, String type, String subtype){
         this.name = name;
         this.category = category;
         this.type = type;
         this.subtype = subtype;
-        this.rank = rank;
     }
 
     public String getName() { return name; }
@@ -29,10 +27,8 @@ public class Attraction {
     public String getSubtype() { return subtype; }
     public void setSubtype(String subtype) { this.subtype = subtype; }
 
-    public int getRank() { return rank; }
-    public void setRank(int rank) { this.rank = rank; }
 
     public String toString(){
-        return "Name: " + getName() + "\nCategory: " + getCategory() + "\nType: " + getType() + "\nSubType: " + getSubtype() + "\nRank: " + getRank();
+        return "Name: " + getName() + "\nCategory: " + getCategory() + "\nType: " + getType() + "\nSubType: " + getSubtype();
     }
 }

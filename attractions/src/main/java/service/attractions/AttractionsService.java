@@ -4,15 +4,15 @@ import com.amadeus.Amadeus;
 import com.amadeus.Params;
 import com.amadeus.exceptions.ResponseException;
 import com.amadeus.resources.PointOfInterest;
-import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
+import service.core.Attraction;
 import service.core.Geocode;
 
 import java.io.IOException;
@@ -112,30 +112,38 @@ public class AttractionsService {
      * @return list of attractions in a given destination, empty if the given location is unavailable or no attractions can be found
      */
     @GetMapping(value = PAGE)
-    public PointOfInterest[] getAttractions(double latitude, double longitude) {
+    public Attraction[] getAttractions(double latitude, double longitude) {
         if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
             System.out.println("Invalid coordinate(s) given (Lat=" + latitude + ", Lon=" + longitude + ")");
-            return new PointOfInterest[0];
+            return new Attraction[0];
         }
 
         try {
-            PointOfInterest[] attractions = amadeus.referenceData.locations.pointsOfInterest.get(Params
+            PointOfInterest[] pois = amadeus.referenceData.locations.pointsOfInterest.get(Params
                     .with("latitude", Double.toString(latitude))
                     .and("longitude", Double.toString(longitude)));
+            Attraction[] attractions = new Attraction[100];
 
-            if(attractions.length != 0) {
-                if(attractions[0].getResponse().getStatusCode() != 200) {
-                    System.out.println(STATUS_CODE_ERROR + attractions[0].getResponse().getStatusCode());
+            for(int i = 0;i<pois.length;i++){
+                PointOfInterest poi = pois[i];
+                attractions[i] = new Attraction(poi.getName(),poi.getCategory(),poi.getType(),poi.getSubType());
+            }
+
+            if(attractions[0]!=null) {
+                if(pois[0].getResponse().getStatusCode() != 200) {
+                    System.out.println(STATUS_CODE_ERROR + pois[0].getResponse().getStatusCode());
                 }
             } else {
                 System.out.println(EMPTY_RECOMMENDATION);
             }
             return attractions;
 
+
         } catch(ResponseException e) {
             System.out.println("Error " + e.getCode() + " : " + e.getDescription());
         }
 
-        return new PointOfInterest[0];
+        return new Attraction[0];
     }
+
 }

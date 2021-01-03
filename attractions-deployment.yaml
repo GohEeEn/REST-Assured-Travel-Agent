@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    app: travel-agent
-  name: travel-agent
+    app: attractions
+  name: attractions
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: travel-agent
+      io.kompose.service: attractions
   strategy: {}
   template:
     metadata:
@@ -21,17 +21,17 @@ spec:
         kompose.version: 1.21.0 (992df58d8)
       creationTimestamp: null
       labels:
-        app: travel-agent
+        io.kompose.service: attractions
     spec:
       containers:
       - env:
         - name: eureka.client.serviceUrl.defaultZone
           value: http://10.103.202.113:8761/eureka/
-        image: conchobar/travel_agent:latest
+        image: conchobar/attractions:latest
         imagePullPolicy: ""
-        name: travel-agent
+        name: attractions
         ports:
-        - containerPort: 8081
+        - containerPort: 8086
         resources: {}
       restartPolicy: Always
       serviceAccountName: ""

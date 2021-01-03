@@ -1,5 +1,16 @@
+<<<<<<< HEAD
 service\travel_agent\ServiceInstanceRestController.class
 service\travel_agent\NoSuchBookingException.class
 service\travel_agent\Application.class
 service\travel_agent\TravelAgentService$NoSuchBookingException.class
 service\travel_agent\TravelAgentService.class
+=======
+service/travel_agent/NoSuchTravelPackageException.class
+service/travel_agent/Booking.class
+service/travel_agent/TravelAgentService$NoSuchTravelPackageException.class
+service/travel_agent/MongoRepository.class
+service/travel_agent/ServiceInstanceRestController.class
+service/travel_agent/TravelAgentService.class
+service/travel_agent/Application.class
+service/travel_agent/MongoConfig.class
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4

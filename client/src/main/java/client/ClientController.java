@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 // package client;
 
 // import java.io.IOException;
@@ -54,12 +55,74 @@
 // 	public String greeting(){
 // 		return "index.html";
 // 	}
+=======
+package client;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import javax.servlet.http.HttpServletResponse;
+import service.core.FlightRequest;
+import service.core.HotelRequest;
+import service.core.TravelPackage;
+import client.Client;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+// import org.json.simple.*;
+
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException; 
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.io.IOException;
+
+
+
+
+
+/**
+ * Implementation of the AuldFellas insurance quotation service.
+ * 
+ * @author Rem
+ *
+ */
+@Controller
+public class ClientController { 
+    private HashMap<String, String> cityCodes = new HashMap<String, String>();
+    private FlightRequest flightRequest = new FlightRequest();
+    private HotelRequest hotelRequest = new HotelRequest();
+	private TravelPackage tp = new TravelPackage();
+	final static String locale = "en-GB";
+//	@RequestMapping(value="/",method=RequestMethod.GET)
+//	@ResponseBody 
+	@GetMapping("/")
+	public String greeting(){
+		return "index.html";
+	}
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 	
 // 	@GetMapping("/hotels")
 // 	public String hotelsForm(){
 // 		return "hotels.html";
 // 	}
 	
+<<<<<<< HEAD
 // 	@RequestMapping(value="/processFlightsForm",method=RequestMethod.POST)  
 // 	public void processFlightsForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
 
@@ -78,6 +141,95 @@
 //             cityCodeGenerator();
 // 			response.sendRedirect("/hotels");
 //     }
+=======
+	@RequestMapping(value="/processFlightsForm",method=RequestMethod.POST)  
+	public void processFlightsForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
+
+		cityCodeGenerator();
+			// ClientBooking[] clientArray = new ClientBooking[1] ;
+			// ClientBooking clientBooking = new ClientBooking();
+		
+			String capOriginCountry = countryOfOrigin.substring(0, 1).toUpperCase() + countryOfOrigin.substring(1).toLowerCase();
+			String capDestinaptionCountry = countryOfDestination.substring(0,1).toUpperCase() + countryOfDestination.substring(1).toLowerCase();
+			System.out.println("caporigincountry is = "+capOriginCountry);
+			System.out.println("capDestncountry is = "+capDestinaptionCountry);
+			String originCountryCode = getListMarkets(capOriginCountry);
+			String destinatonCountryCode = getListMarkets(capDestinaptionCountry);
+
+			if(originCountryCode.isEmpty()){
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('" + "invalid country of origin entered, enter again" + "');");
+				out.println("window.location.replace('" + "/" + "');");
+				out.println("</script>");
+			}
+			else{
+				if(destinatonCountryCode.isEmpty()){
+					PrintWriter out = response.getWriter();
+					out.println("<script>");
+					out.println("alert('" + "invalid country of destination entered, enter again" + "');");
+					out.println("window.location.replace('" + "/" + "');");
+					out.println("</script>");
+				}
+				else{
+					if(cityCodes.get(cityOfOrigin.toLowerCase())==null){
+						PrintWriter out = response.getWriter();
+						out.println("<script>");
+						out.println("alert('" + "invalid city of origin entered, enter again" + "');");
+						out.println("window.location.replace('" + "/" + "');");
+						out.println("</script>");
+					}
+					else{
+						if(cityCodes.get(cityOfDestination.toLowerCase())==null){
+							PrintWriter out = response.getWriter();
+							out.println("<script>");
+							out.println("alert('" + "invalid city of destination entered, enter again" + "');");
+							out.println("window.location.replace('" + "/" + "');");
+							out.println("</script>");
+						}
+						else{
+
+					ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
+					ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
+
+					flightRequest.setCountryOfOriginCode(originCountryCode);
+					System.out.println(flightRequest.getCountryOfOriginCode());
+					flightRequest.setCountryOfDestinationCode(destinatonCountryCode);
+					System.out.println(flightRequest.getCountryOfDestinationCode());
+
+					originAirportIDs = getListPlaces(cityOfOrigin, countryOfOrigin, originCountryCode, currency);
+					String [] originAirportIDsArray = convertAirportIDsListToAirportIDsArray(originAirportIDs);    // converts list to array
+					
+					destinationAirportIDs = getListPlaces(cityOfDestination, countryOfDestination, destinatonCountryCode, currency); 
+					String [] destAirportIDsArray = convertAirportIDsListToAirportIDsArray(destinationAirportIDs);    // converts list to array
+					
+					System.out.println("\n ORIGIN AIRPORT IDS: "+originAirportIDsArray+"\n");
+					for(String s : originAirportIDsArray){
+						System.out.println(s);
+					}
+					System.out.println("\n ORIGIN AIRPORT IDS: "+destAirportIDsArray+"\n");
+					for(String s : destAirportIDsArray){
+						System.out.println(s);
+					}
+					flightRequest.setOriginAirortIDs(originAirportIDsArray);
+					flightRequest.setDestAirortIDs(destAirportIDsArray);
+					flightRequest.setName(name);
+					flightRequest.setCityOfOrigin(cityOfOrigin);
+					flightRequest.setCountryOfOrigin(countryOfOrigin);
+					flightRequest.setCityOfDestination(cityOfDestination);
+					flightRequest.setCountryOfDestination(countryOfDestination);
+					flightRequest.setOneWayTrip(oneWayTrip);
+					flightRequest.setReturnDate(returnDate);
+					flightRequest.setOutboundDate(outboundDate);
+					flightRequest.setCurrency(currency);
+            // clientArray[0] = clientBooking;
+					response.sendRedirect("/hotels");
+	}
+}
+				}
+			}
+		}
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
     
 //     private void cityCodeGenerator(){
 //         File file = new File("city_codes.txt");
@@ -113,6 +265,7 @@
 //             hotelRequest.setCityCode(cityCodes.get(location.toLowerCase()));
 //             hotelRequest.setNumberOfGuests(Integer.parseInt(guests));
             
+<<<<<<< HEAD
 //             int minNumOfStars = 0;
 //             switch (minRatings){
 //                 case "oneStar":
@@ -154,6 +307,110 @@
 // 	 */
 
 // 	 public static String [] convertAirportIDsListToAirportIDsArray(ArrayList<String> airportIDsList){
+=======
+            int minNumOfStars = 0;
+            switch (minRatings){
+                case "oneStar":
+                    minNumOfStars = 1;
+                    break;
+                case "twoStar":
+                    minNumOfStars = 2;
+                    break;
+                case "threeStar":
+                    minNumOfStars = 3;
+                    break;
+                case "fourStar":
+                    minNumOfStars = 4;
+                    break;
+                case "fiveStar":
+                    minNumOfStars = 5;
+                    break;
+            }
+
+            hotelRequest.setMinNumberOfStarsRequiredForHotel(minNumOfStars);
+            tp = Client.sendBookingToTravelAgent(flightRequest, hotelRequest);
+			response.sendRedirect("/displayFlights");
+        } 
+    }
+
+	@RequestMapping(value="/userFlightSelection",method=RequestMethod.POST)
+	public void userFlightSelection(String inputFlightIndex, HttpServletResponse response) throws IOException
+	{
+		boolean isNumeric = inputFlightIndex.chars().allMatch( Character::isDigit );
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayFlights" + "');");
+            out.println("</script>");
+		}
+		else{
+			int i = Integer.parseInt(inputFlightIndex);
+			if(i<0 || i>tp.getFlights().length){
+				PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayFlights" + "');");
+            out.println("</script>");
+			}
+			else{
+				System.out.println("chosen index is = "+i);
+				response.sendRedirect("/displayHotels");
+			}
+		}
+	}
+
+	@RequestMapping(value="/userHotelSelection",method=RequestMethod.POST)
+	public void userHotelSelection(String inputHotelIndex, HttpServletResponse response) throws IOException
+	{
+		boolean isNumeric = inputHotelIndex.chars().allMatch( Character::isDigit );
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayHotels" + "');");
+            out.println("</script>");
+		}
+		else{
+			int i = Integer.parseInt(inputHotelIndex);
+			if(i<0 || i>tp.getHotels().length){
+				PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayHotels" + "');");
+            out.println("</script>");
+			}
+			else{
+				System.out.println("chosen index is = "+i);
+				response.sendRedirect("/");
+			}
+		}
+	}
+
+    @GetMapping("/displayFlights")
+    public String displayflights(Model model){
+        model.addAttribute("flightDetails", tp.getFlights());
+        return "displayFlights.html";
+    }
+    
+    @GetMapping("/displayHotels")
+    public String displayhotels(Model model){
+        model.addAttribute("hotelDetails", tp.getHotels());
+        return "displayHotels.html";
+    }
+    
+    
+
+    /**
+	 * The following method converts the array list of airport IDs to an array of airport IDs as we cannot pass a list
+	 * using REST
+	 * 
+	 * @param countryName
+	 * @return
+	 */
+
+	 public static String [] convertAirportIDsListToAirportIDsArray(ArrayList<String> airportIDsList){
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 		 
 // 		String [] airportIDsArray = new String[airportIDsList.size()];
 
@@ -204,6 +461,7 @@
 // 				JSONObject jsonObject = (JSONObject) countryCodesArray.get(index);
 // 				String name = (String) jsonObject.get("Name");
 				
+<<<<<<< HEAD
 // 				if (name.equals(countryName)){
 // 					countryCode = (String) jsonObject.get("Code");
 // 				}
@@ -231,6 +489,35 @@
 
 // 	// GET ListPlaces (Skyscanner API)
 // 	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String locale, String countryOfOriginCode, String currency) { 
+=======
+				if (name.equals(countryName)){
+					countryCode = (String) jsonObject.get("Code");
+				}
+				index++;
+			}	
+
+		} catch(IOException e) {
+                  e.printStackTrace();
+		}
+		catch(InterruptedException e) {
+                  e.printStackTrace();
+		}  
+		return countryCode;
+	}
+
+	/**
+	 * The following method will retrieve the airport IDs 
+	 * 
+	 * @param cityOfDestination
+	 * @param countryOfDestination
+	 * @param countryOfOriginCode
+	 * @param currency
+	 * @return
+	 */
+
+	// GET ListPlaces (Skyscanner API)
+	public static ArrayList<String> getListPlaces(String cityOfDestination, String countryOfDestination, String countryOfOriginCode, String currency) { 
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 		
 // 		ArrayList<String> airportIDs = new ArrayList();
 
@@ -257,6 +544,7 @@
 // 		      placesArray = (JSONArray) placesJson.get("Places");
 // 			System.out.println("Places array: "+placesArray);
 			
+<<<<<<< HEAD
 // 			int index = 0;
 // 			while (index < placesArray.size()) {
 // 				JSONObject jsonObject = (JSONObject) placesArray.get(index);
@@ -271,6 +559,51 @@
 //                   e.printStackTrace();
 // 		}  
 // 		return airportIDs;
+=======
+			int index = 0;
+			while (index < placesArray.size()) {
+				JSONObject jsonObject = (JSONObject) placesArray.get(index);
+				airportIDs.add((String) jsonObject.get("PlaceId"));
+				index++;
+			}	
+
+		} catch(IOException e) {
+                  e.printStackTrace();
+		}
+		catch(InterruptedException e) {
+                  e.printStackTrace();
+		}  
+		return airportIDs;
+	}
+
+	/**
+	 * The following code converts a given string to a JSON object
+	 * 
+	 * @param response
+	 * @return jsonObject
+	 */
+
+	public static JSONObject parseJSONObject(String response){
+
+		JSONObject jsonObject = new JSONObject();
+		try{
+			JSONParser parser = new JSONParser();
+			jsonObject = (JSONObject) parser.parse(response);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
+	}
+
+
+}
+
+// //	@RequestMapping(value="/",method=RequestMethod.GET)
+// //	@ResponseBody 
+// 	@GetMapping("/")
+// 	public String greeting(){
+// 		return "index.html";
+>>>>>>> 3efc7b1a9722e247bee71b8436ce6aa6fc4865d4
 // 	}
 
 // 	/**

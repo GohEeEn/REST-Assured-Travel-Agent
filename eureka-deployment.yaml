@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    io.kompose.service: eureka
+    app: eureka
   name: eureka
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: eureka
+      app: eureka
   strategy: {}
   template:
     metadata:
@@ -21,7 +21,7 @@ spec:
         kompose.version: 1.21.0 (992df58d8)
       creationTimestamp: null
       labels:
-        io.kompose.service: eureka
+        app: eureka
     spec:
       containers:
       - image: conchobar/eureka:latest

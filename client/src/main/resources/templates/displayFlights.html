@@ -19,6 +19,14 @@
 				padding-right: 1%;
 			}
 
+			table {
+			    counter-reset: tableCount;     
+			}
+			.counterCell:before {              
+			    content: counter(tableCount); 
+			    counter-increment: tableCount; 
+			}
+
 		</style>
 
 		<script src="https://code.jquery.com/jquery-3.5.0.js"></script>
@@ -46,34 +54,48 @@
 
 		<div class="container">
 			<div class="row">
-				<div class="col-8"><h3>Find Deals on Adventure Trips</h3>
-					<h4>Flights found according to your requirements</h4>
+				<div class="col-12"><h5>Search Results</h5>
+					<h6>Flights found according to your requirements</h6>
                     <form action="/userFlightSelection" method="post" >
                         <div class="container">
-                            <table>
+                            <table class="table">
+                            	<thead>
                                 <tr>
-                                    <th class="col-md-auto">Origin</th>
-                                    <th class="col-md-auto">Destination</th>
-                                    <th class="col-md-auto">Outbound Date</th>
-                                    <th class="col-md-auto">Return Date</th>
-                                    <th class="col-md-auto">Airline</th>
-                                    <th class="col-md-auto">Price</th>
-                                    <th class="col-md-auto">Origin Airport</th>
-                                    <th class="col-md-auto">Destination Airport</th>
+                                	<th>#</th>
+                                    <th>Origin</th>
+                                    <th>Destination</th>
+                                    <th>Outbound Date</th>
+                                    <th>Return Date</th>
+                                    <th>Airline</th>
+                                    <th>Price</th>
+                                    <th>Origin Airport</th>
+                                    <th>Destination Airport</th>
                                 </tr>
+								</thead>
+								<tbody>
                                 <tr th:each="flightDetail : ${flightDetails}">
-                                    <td class="col-md-auto" th:text="${flightDetail.cityOfOrigin} "></td>
-                                    <td class="col-md-auto" th:text="${flightDetail.cityOfDestination} "></td>
-                                    <td class="col-md-auto" th:text="${flightDetail.outboundDate} "></td>
-                                    <td class="col-md-auto" th:text="${flightDetail.returnDate} "></td>
-                                    <td class="col-md-auto" th:text="${flightDetail.airline} "></td>
-                                    <td class="col-md-auto" th:text="${flightDetail.price} "></td>
-                                    <td class="col-md-auto" th:text="${flightDetail.originAirportName} "></td>
-                                    <td class="col-md-auto" th:text="${flightDetail.destinationAirportName} "></td>                
+                                	<td class="counterCell"></td>
+                                    <td th:text="${flightDetail.cityOfOrigin} "></td>
+                                    <td th:text="${flightDetail.cityOfDestination} "></td>
+                                    <td th:text="${flightDetail.outboundDate} "></td>
+                                    <td th:text="${flightDetail.returnDate} "></td>
+                                    <td th:text="${flightDetail.airline} "></td>
+                                    <td th:text="${flightDetail.price} "></td>
+                                    <td th:text="${flightDetail.originAirportName} "></td>
+                                    <td th:text="${flightDetail.destinationAirportName} "></td>
                                 </tr>
+                                </tbody>
                             </table>
                         </div>
-
+                        <br>
+						  <div class="form-group row">
+						    <label for="inputFlightIndex" class="col-sm-4 col-form-label">Enter the Index of Flight</label>
+						    <div class="col-sm-2">
+						      <input type="text" class="form-control" id="inputFlightIndex" placeholder="Flight" name="inputFlightIndex" required="required">
+						    </div>
+						    <div class="col-sm-6">
+						    </div>
+						  </div>
 						<br>
 						<button type="submit" class="btn btn-primary">Submit</button>
 
