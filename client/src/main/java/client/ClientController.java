@@ -247,7 +247,7 @@ public class ClientController {
 					response.sendRedirect("/");
 				}
 				else{
-					cr.setFlightReferenceNumber(tb.getFlights()[i-1].getReferenceNumber());
+					cr.setFlightReferenceNumber(tp.getFlights()[i-1].getReferenceNumber());
 					response.sendRedirect("/displayHotels");
 				}
 			}
@@ -277,25 +277,26 @@ public class ClientController {
 			else{
 				System.out.println("chosen index is = "+i);
 				if (i!=0){
-					cr.setHotelReferenceNumber(tb.getHotels()[i-1].getReferenceNumber());
+					cr.setHotelReferenceNumber(tp.getHotels()[i-1].getReferenceNumber());
 				}
 				else{
 					cr.setHotelReferenceNumber(0);
 				}
-				// response.sendRedirect("/displayActivities");
-				response.sendRedirect("/");
+				response.sendRedirect("/displayActivities");
+				// response.sendRedirect("/");
 			}
 		}
 	}
 
 	@RequestMapping(value="/userActivitiesSelection",method=RequestMethod.POST)
-	public void userHotelSelection(String inputActivitiesIndex, HttpServletResponse response) throws IOException
+	public void userActivitiesSelection(String inputActivitiesIndex, HttpServletResponse response) throws IOException
 	{
+		System.out.println("CHOSEN STRING = "+inputActivitiesIndex);
 		ArrayList<Integer> chosenActivities = new ArrayList<Integer>();
-		boolean isNumeric;
+		boolean isNumeric=true;
 		String[] splited = inputActivitiesIndex.split("\\s+");
 		for(String s: splited){
-			isNumeric = inputHotelIndex.chars().allMatch( Character::isDigit );
+			isNumeric = s.chars().allMatch( Character::isDigit );
 			if (!isNumeric){
 				break;
 			}
@@ -304,7 +305,7 @@ public class ClientController {
 			PrintWriter out = response.getWriter();
             out.println("<script>");
             out.println("alert('" + "invalid indexes entered, enter again" + "');");
-            out.println("window.location.replace('" + "/displayHotels" + "');");
+            out.println("window.location.replace('" + "/displayActivities" + "');");
             out.println("</script>");
 		}
 		else{
@@ -312,22 +313,33 @@ public class ClientController {
 			for(String s: splited){
 			int i = Integer.parseInt(s);
 			chosenActivities.add(i);
-			if(i<0 || (i == 0 && tp.getHotels().length!=0) || (i!=0 && i>tp.getActivities().length)){
+			if(i<0 || (i == 0 && tp.getActivities().length!=0) || (i!=0 && i>tp.getActivities().length)){
 				checkerB = false;
+				break;
 			}
 			}
+			int [] chosenActivitiesRefs = new int[chosenActivities.size()];
+			int index0=0;
 			if(checkerB){
 				if (chosenActivities.get(0)!=0){
 					for(int in: chosenActivities){
-						
+						chosenActivitiesRefs[index0]=tp.getActivities()[in-1].getReferenceNumber();
+						index0++;
 					}
-					cr.setActivitiesReferenceNumber(tb.getHotels()[i-1].getReferenceNumber());
+					cr.setActivitiesReferenceNumber(chosenActivitiesRefs);
 				}
 				else{
-					cr.setHotelReferenceNumber(0);
+					chosenActivitiesRefs[0] = 0;
+					cr.setActivitiesReferenceNumber(chosenActivitiesRefs);
 				}
-				// response.sendRedirect("/displayActivities");
 				response.sendRedirect("/");
+			}
+			else{
+				PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid indexes entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayActivities" + "');");
+            out.println("</script>");
 			}
 		}
 	}
@@ -350,11 +362,11 @@ public class ClientController {
         return "displayActivities.html";
 	}
 
-	@GetMapping("/displayAttractions")
-    public String displayAttraction(Model model){
-        model.addAttribute("attractionsDetails", tp.getAttractions());
-        return "displayAttractions.html";
-    }
+	// @GetMapping("/displayAttractions")
+    // public String displayAttraction(Model model){
+    //     model.addAttribute("attractionsDetails", tp.getAttractions());
+    //     return "displayAttractions.html";
+    // }
     
 
     /**

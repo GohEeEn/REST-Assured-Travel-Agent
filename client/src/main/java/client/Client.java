@@ -12,6 +12,7 @@ import service.core.FlightRequest;
 import service.core.Flight;
 import service.core.Hotel;
 import service.core.ActivityRequest;
+import service.core.ActivityItem;
 import service.core.AttractionRequest;
 import service.core.ClientRequest;
 import service.core.ClientResponse;
@@ -31,7 +32,8 @@ import java.io.IOException;
 
 public class Client {
 	
-	public static final String newArgs = "http://localhost:8081/bookings";
+	public static final String argsRequest = "http://localhost:8081/travelagent/travelpackagerequests";
+	public static final String argsResponse = "http://localhost:8081/travelagent/bookings";
 	public static int referenceNumber = 0;
 	final static String locale = "en-GB";     // need to call Skycanner API
 	
@@ -57,13 +59,21 @@ public class Client {
 							  
 							   TravelPackage travelPackage = new TravelPackage();
 							   System.out.println("TEST3");
-							   travelPackage = restTemplate.postForObject(newArgs,request,TravelPackage.class);
+							   travelPackage = restTemplate.postForObject(argsRequest,request,TravelPackage.class);
 							   System.out.println("TEST4");
+
+							   ActivityItem [] activities2 = travelPackage.getActivities();
+							   ActivityItem a = activities2[0];
+							   System.out.println("\n");
+								if (a != null){
+									System.out.println("Description of activity is: " + a.getDescription());
+									System.out.println("Booking link of activity is: " + a.getBookingLink());
+								}
 
 							//    System.out.println(travelPackage.getActivities());
 			 			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
 			
-							  
+							  //106, 111, 121-125
 			                   Hotel [] hotels2 = travelPackage.getHotels();
 			                   System.out.println(hotels2);
 							   Flight [] flights2 = travelPackage.getFlights();

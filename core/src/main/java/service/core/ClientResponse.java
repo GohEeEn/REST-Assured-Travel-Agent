@@ -6,8 +6,17 @@ public class ClientResponse {
 
       private int flightReferenceNumber;        // holds client's choice of flight
       private int hotelReferenceNumber;         // holds client's choice of hotel
+      private int[] activitiesReferenceNumber;
       private int travelPackageReferenceNumber;     // holds client's TravelPackageReference;
       
+      public int[] getActivitiesReferenceNumber(){
+            return activitiesReferenceNumber;
+      }
+
+      public void setActivitiesReferenceNumber(int[] activitiesReferenceNumber){
+            this.activitiesReferenceNumber = activitiesReferenceNumber;
+      }
+
       public int getFlightReferenceNumber(){
             return flightReferenceNumber;
       }
