@@ -40,6 +40,8 @@ import service.core.Booking;
 import service.core.ClientResponse;
 import service.core.ClientChoice;
 import service.core.ReplaceBooking;
+import service.core.Attraction;
+import service.core.AttractionRequest;
 
 /**
  * Implementation of the broker service that uses the Service Registry.
@@ -114,14 +116,16 @@ public class TravelAgentService {
 
 
 		// /**
-		//  * POST request to Attractions Service
-		//  * TODO (Barry & Sean): Insert code below
+		//  * POST request to AttractionsService
 		//  */
 
-		// Attraction[] attractions = new Attraction[10];
-		// HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
-		// attractions = restTemplate.postForObject("http://attraction-service/activities", attractionRequest, Attraction[].class);
-		// System.out.println("\n"+attractions[0].toString()+"\n");
+		System.out.println("Testing attractionRequest: \n");
+		System.out.println("City: "+clientRequest.getAttractionRequest().getCity());
+		System.out.println("Country: "+clientRequest.getAttractionRequest().getCountry()+"\n");
+		Attraction[] attractions = new Attraction[200];
+		HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
+		attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
+		System.out.println("\n"+attractions[0].toString()+"\n");
 
 
 
@@ -137,6 +141,7 @@ public class TravelAgentService {
 		travelPackage.setFlights(flights);
 		travelPackage.setHotels(hotels);
 		travelPackage.setActivities(activities);
+		travelPackage.setAttractions(attractions);
 
 		// storeBookingInMongo();
 		

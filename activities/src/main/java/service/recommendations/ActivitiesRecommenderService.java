@@ -28,12 +28,13 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
+
+
 import service.core.ActivityItem;
 import service.core.Geocode;
 import service.core.ActivityRequest;
@@ -74,10 +75,10 @@ public class ActivitiesRecommenderService {
     
 
     /**
-	 * POST REQUEST: handles all flight requests from travel agent
+	 * POST REQUEST: handles all activity requests from travel agent
 	 * 
-	 * @param flightRequest
-	 * @return clientFlghts
+	 * @param activityRequest
+	 * @return activityItems
 	 * @throws URISyntaxException
 	 */
 

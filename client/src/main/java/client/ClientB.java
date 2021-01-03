@@ -16,6 +16,8 @@
 // import service.core.HotelRequest;
 // import service.core.TravelPackage;
 // import service.core.ActivityRequest;
+// import service.core.Attraction;
+// import service.core.AttractionRequest;
 // import service.core.ActivityItem;
 // import service.core.Booking;
 // import service.core.ReplaceBooking;
@@ -66,6 +68,11 @@
 // 		// ar.setLongitude(6.2603);
 // 		clientRequest.setActivityRequest(ar);
 
+// 		AttractionRequest attractionRequest = new AttractionRequest();
+// 		attractionRequest.setCity("Paris");
+// 		attractionRequest.setCountry("France");
+// 		clientRequest.setAttractionRequest(attractionRequest);
+
 		
 // 		ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
 // 		ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
@@ -104,11 +111,13 @@
 //                   Hotel [] hotels2 = travelPackage.getHotels();
 // 			Flight [] flights2 = travelPackage.getFlights();
 // 			ActivityItem [] activities2 = travelPackage.getActivities();
+// 			Attraction [] attractions2 = travelPackage.getAttractions();
 
 // 			for (int i=0; i < 1; i++){
 //                         Flight f = flights2[i];
 // 				Hotel h = hotels2[i];
 // 				ActivityItem a = activities2[i];
+// 				Attraction at = attractions2[i];
 // 				if (f != null){
 // 					System.out.println("City of Destination is: " + f.getCityOfDestination());
 // 					System.out.println("Price of flight is: " + f.getPrice());
@@ -122,6 +131,11 @@
 // 				if (a != null){
 // 					System.out.println("Description of activity is: " + a.getDescription());
 // 					System.out.println("Booking link of activity is: " + a.getBookingLink());
+// 				}
+// 				System.out.println("\n");
+// 				if (at != null){
+// 					System.out.println("Category of attraction is: " + at.getCategory());
+// 					System.out.println("Name of attraction is: " + at.getName());
 // 				}
 //                         System.out.println("\n");
 //                   }
