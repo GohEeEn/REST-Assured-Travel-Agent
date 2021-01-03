@@ -1,52 +1,17 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 service\core\AttractionRequest.class
 service\core\Geocode.class
 service\core\ActivityItem$Price.class
-=======
-service\core\AttractionRequest.class
-service\core\Geocode.class
->>>>>>> origin/master
 service\core\ActivityRequest.class
 service\core\ClientChoice.class
 service\core\HotelRequest.class
 service\core\Travel.class
 service\core\Booking.class
 service\core\ClientRequest.class
-<<<<<<< HEAD
-=======
-service\core\Activity$Price.class
->>>>>>> origin/master
 service\core\Attraction.class
 service\core\FlightRequest.class
 service\core\TravelPackage.class
 service\core\Flight.class
 service\core\ReplaceBooking.class
-<<<<<<< HEAD
 service\core\ClientResponse.class
 service\core\Hotel.class
 service\core\ActivityItem.class
-=======
-service/core/ReplaceBooking.class
-service/core/ActivityRequest.class
-service/core/TravelPackage.class
-service/core/FlightRequest.class
-service/core/Flight.class
-service/core/ClientResponse.class
-service/core/ClientRequest.class
-service/core/AttractionRequest.class
-service/core/Attraction.class
-service/core/Geocode.class
-service/core/Travel.class
-service/core/Hotel.class
-service/core/Booking.class
-service/core/Activity$Price.class
-service/core/Activity.class
-service/core/ClientChoice.class
-service/core/HotelRequest.class
->>>>>>> refs/remotes/origin/master
-=======
-service\core\Activity.class
-service\core\ClientResponse.class
-service\core\Hotel.class
->>>>>>> origin/master
