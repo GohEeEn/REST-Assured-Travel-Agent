@@ -12,8 +12,11 @@
 // import service.core.Flight;
 // import service.core.Hotel;
 // import service.core.ClientRequest;
+// import service.core.ClientResponse;
 // import service.core.HotelRequest;
 // import service.core.TravelPackage;
+// import service.core.Booking;
+// import service.core.ReplaceBooking;
 
 // import org.json.simple.JSONArray;
 // import org.json.simple.JSONObject;
@@ -28,7 +31,8 @@
 
 // public class ClientB {
 	
-// 	public static final String newArgs = "http://localhost:8081/bookings";
+//       public static final String newArgs = "http://localhost:8081/travelagent/travelpackagerequests";
+//       public static final String newArgs2 = "http://localhost:8081/travelagent/bookings";
 // 	public static int referenceNumber = 0;
 // 	final static String locale = "en-GB";     // need to call Skycanner API
 	
@@ -103,7 +107,49 @@
 // 					System.out.println("Price of hotel is: " + h.getPrice());
 //                         }
 //                         System.out.println("\n");
-// 			}
+//                   }
+
+//                   /**
+//                    * Prints out the ref nums for travelPackage, each flight and each hotel
+//                    */
+
+//                    System.out.println("\nTravel package ref num: "+ travelPackage.getTravelPackageReferenceNumber()+"\n");
+
+//                    for(Flight f : travelPackage.getFlights()){
+//                          System.out.println("Flight ref num: "+f.getReferenceNumber());
+//                    }
+
+//                    System.out.println("\n");
+
+//                    for (Hotel h : travelPackage.getHotels()){
+//                          System.out.println("Hotel ref num: "+h.getReferenceNumber());
+//                    }
+
+
+//             /**
+//              * Testing code for POST (clientResponse)
+//              */
+
+//             ClientResponse clientResponse = new ClientResponse();
+//             clientResponse.setTravelPackageReferenceNumber(travelPackage.getTravelPackageReferenceNumber());
+//             clientResponse.setHotelReferenceNumber(1);
+//             clientResponse.setFlightReferenceNumber(2);
+//             HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(clientResponse);
+                  
+//             Booking booking = new Booking();
+//             booking = restTemplate.postForObject(newArgs2,requestClientResponse,Booking.class);
+
+//             System.out.println("\nAirline: "+booking.getFlight().getAirline());
+//             System.out.println("Hotel Address: "+booking.getHotel().getAddress());
+//             System.out.println("Booking ref Num: "+booking.getReferenceNumber()+"\n");
+            
+                  
+//             /**
+//              * Testing code for GET below
+//              */
+
+//              Booking getBooking = restTemplate.getForObject("http://localhost:8081/travelagent/bookings/1",Booking.class);
+//              System.out.println("\nGET TEST: "+getBooking.getFlight().getAirline()+"\n");
 
 // 		/**
 // 		 * Testing code for DELETE below
@@ -114,25 +160,26 @@
 // 		/**
 // 		 *  Testing code for PUT below
 // 		 *  */ 
-// 		// HotelRequest h = clientRequest.getHotelRequest();
-// 		// h.setNumberOfGuests(14);
-// 		// clientRequest.setHotelRequest(h);
-// 		//  HttpEntity<ClientRequest> request2 = new HttpEntity<>(clientRequest);
-// 		// restTemplate.put(newArgs+"/1",request2);
+// 		travelPackage = restTemplate.postForObject(newArgs,request,TravelPackage.class);
+//             clientResponse.setHotelReferenceNumber(1);
+//             clientResponse.setFlightReferenceNumber(2);
+//             ReplaceBooking replaceBooking = new ReplaceBooking();
+//             replaceBooking.setNewChoiceOfBooking(clientResponse);
+//             replaceBooking.setPreviousBooking(booking);
+
+//             HttpEntity<ReplaceBooking> requestClientResponsePut = new HttpEntity<>(replaceBooking);
+//             restTemplate.put("http://localhost:8081/travelagent/bookings/1",requestClientResponsePut);
+//             System.out.println("\nPUT TEST COMPLETE\n");
 
 // 		 /**
 // 		 *  Testing code for PATCH below
 // 		 *  */ 
-// 		//  HotelRequest h2 = clientRequest.getHotelRequest();
-// 		// h2.setNumberOfGuests(26);
-// 		// clientRequest.setHotelRequest(h2);
-// 		//  HttpEntity<ClientRequest> request3 = new HttpEntity<>(clientRequest);
-// 		//  TravelPackage travelPackage2 = new TravelPackage();
-// 		//  travelPackage2 = restTemplate.patchForObject(newArgs+"/1",request3,TravelPackage.class);
-// 		// Flight [] testFly = new Flight[10];
-// 		// testFly = travelPackage2.getFlights();
-// 		// System.out.println("\n "+testFly[0].getAirline()+"\n");		
-
+//             // travelPackage = restTemplate.postForObject(newArgs,request,TravelPackage.class);
+//             // clientResponse.setHotelReferenceNumber(1);
+//             // clientResponse.setFlightReferenceNumber(2);
+//             // HttpEntity<ClientResponse> requestClientResponsePatch = new HttpEntity<>(clientResponse);
+//             // Booking patchBooking = restTemplate.patchForObject("http://localhost:8081/travelagent/bookings/1",requestClientResponsePatch,Booking.class);
+//             // System.out.println("\nPATCH TEST: "+patchBooking.getFlight().getAirline()+"\n");
 		
 // 	} 
 

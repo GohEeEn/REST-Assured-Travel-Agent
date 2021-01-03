@@ -34,9 +34,10 @@ public class MongoRepository {
 
     private Booking createBookingFromMongoDocument(final Document document) {
         String uni_id = document.get("_id").toString();
-        String id = document.get("id").toString();
-        String flight = document.get("flight").toString(); 
-        return new Booking(id, flight);
+        String flight = document.get("flight").toString();
+        String hotel = document.get("hotel").toString(); 
+        String activities = document.get("activities").toString(); 
+        return new Booking(flight, hotel, activities);
     }
 
     public Booking getBookingFromMongo(final String search) throws NoSuchFieldException{

@@ -6,6 +6,8 @@ import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import javax.servlet.http.HttpServletResponse;
+
+import service.core.ActivityRequest;
 import service.core.FlightRequest;
 import service.core.HotelRequest;
 import service.core.TravelPackage;
@@ -48,7 +50,8 @@ import java.io.IOException;
 public class ClientController { 
     private HashMap<String, String> cityCodes = new HashMap<String, String>();
     private FlightRequest flightRequest = new FlightRequest();
-    private HotelRequest hotelRequest = new HotelRequest();
+	private HotelRequest hotelRequest = new HotelRequest();
+	private ActivityRequest activityRequest = new ActivityRequest();
 	private TravelPackage tp = new TravelPackage();
 	final static String locale = "en-GB";
 //	@RequestMapping(value="/",method=RequestMethod.GET)
@@ -66,21 +69,91 @@ public class ClientController {
 	@RequestMapping(value="/processFlightsForm",method=RequestMethod.POST)  
 	public void processFlightsForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
 
+		cityCodeGenerator();
 			// ClientBooking[] clientArray = new ClientBooking[1] ;
 			// ClientBooking clientBooking = new ClientBooking();
-		flightRequest.setName(name);
-		flightRequest.setCityOfOrigin(cityOfOrigin);
-		flightRequest.setCountryOfOrigin(countryOfOrigin);
-		flightRequest.setCityOfDestination(cityOfDestination);
-		flightRequest.setCountryOfDestination(countryOfDestination);
-		flightRequest.setOneWayTrip(oneWayTrip);
-		flightRequest.setReturnDate(returnDate);
-		flightRequest.setOutboundDate(outboundDate);
-		flightRequest.setCurrency(currency);
+		
+			String capOriginCountry = countryOfOrigin.substring(0, 1).toUpperCase() + countryOfOrigin.substring(1).toLowerCase();
+			String capDestinaptionCountry = countryOfDestination.substring(0,1).toUpperCase() + countryOfDestination.substring(1).toLowerCase();
+			System.out.println("caporigincountry is = "+capOriginCountry);
+			System.out.println("capDestncountry is = "+capDestinaptionCountry);
+			String originCountryCode = getListMarkets(capOriginCountry);
+			String destinatonCountryCode = getListMarkets(capDestinaptionCountry);
+
+			if(originCountryCode.isEmpty()){
+				PrintWriter out = response.getWriter();
+				out.println("<script>");
+				out.println("alert('" + "invalid country of origin entered, enter again" + "');");
+				out.println("window.location.replace('" + "/" + "');");
+				out.println("</script>");
+			}
+			else{
+				if(destinatonCountryCode.isEmpty()){
+					PrintWriter out = response.getWriter();
+					out.println("<script>");
+					out.println("alert('" + "invalid country of destination entered, enter again" + "');");
+					out.println("window.location.replace('" + "/" + "');");
+					out.println("</script>");
+				}
+				else{
+					if(cityCodes.get(cityOfOrigin.toLowerCase())==null){
+						PrintWriter out = response.getWriter();
+						out.println("<script>");
+						out.println("alert('" + "invalid city of origin entered, enter again" + "');");
+						out.println("window.location.replace('" + "/" + "');");
+						out.println("</script>");
+					}
+					else{
+						if(cityCodes.get(cityOfDestination.toLowerCase())==null){
+							PrintWriter out = response.getWriter();
+							out.println("<script>");
+							out.println("alert('" + "invalid city of destination entered, enter again" + "');");
+							out.println("window.location.replace('" + "/" + "');");
+							out.println("</script>");
+						}
+						else{
+							activityRequest.setCountry(capDestinaptionCountry);
+
+					ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
+					ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
+
+					flightRequest.setCountryOfOriginCode(originCountryCode);
+					System.out.println(flightRequest.getCountryOfOriginCode());
+					flightRequest.setCountryOfDestinationCode(destinatonCountryCode);
+					System.out.println(flightRequest.getCountryOfDestinationCode());
+
+					originAirportIDs = getListPlaces(cityOfOrigin, countryOfOrigin, originCountryCode, currency);
+					String [] originAirportIDsArray = convertAirportIDsListToAirportIDsArray(originAirportIDs);    // converts list to array
+					
+					destinationAirportIDs = getListPlaces(cityOfDestination, countryOfDestination, destinatonCountryCode, currency); 
+					String [] destAirportIDsArray = convertAirportIDsListToAirportIDsArray(destinationAirportIDs);    // converts list to array
+					
+					System.out.println("\n ORIGIN AIRPORT IDS: "+originAirportIDsArray+"\n");
+					for(String s : originAirportIDsArray){
+						System.out.println(s);
+					}
+					System.out.println("\n ORIGIN AIRPORT IDS: "+destAirportIDsArray+"\n");
+					for(String s : destAirportIDsArray){
+						System.out.println(s);
+					}
+					flightRequest.setOriginAirortIDs(originAirportIDsArray);
+					flightRequest.setDestAirortIDs(destAirportIDsArray);
+					flightRequest.setName(name);
+					flightRequest.setCityOfOrigin(cityOfOrigin);
+					flightRequest.setCountryOfOrigin(countryOfOrigin);
+					flightRequest.setCityOfDestination(cityOfDestination);
+					flightRequest.setCountryOfDestination(countryOfDestination);
+					flightRequest.setOneWayTrip(oneWayTrip);
+					flightRequest.setReturnDate(returnDate);
+					flightRequest.setOutboundDate(outboundDate);
+					flightRequest.setCurrency(currency);
             // clientArray[0] = clientBooking;
-            cityCodeGenerator();
-			response.sendRedirect("/hotels");
-    }
+					response.sendRedirect("/hotels");
+	}
+}
+				}
+			}
+		}
     
     private void cityCodeGenerator(){
         File file = new File("city_codes.txt");
@@ -113,6 +186,7 @@ public class ClientController {
             out.println("window.location.replace('" + "/hotels" + "');");
             out.println("</script>");
         }else {
+			activityRequest.setCity(location.toLowerCase());
             hotelRequest.setCityCode(cityCodes.get(location.toLowerCase()));
             hotelRequest.setNumberOfGuests(Integer.parseInt(guests));
             
@@ -136,10 +210,64 @@ public class ClientController {
             }
 
             hotelRequest.setMinNumberOfStarsRequiredForHotel(minNumOfStars);
-            tp = Client.sendBookingToTravelAgent(flightRequest, hotelRequest);
+            tp = Client.sendBookingToTravelAgent(flightRequest, hotelRequest, activityRequest);
 			response.sendRedirect("/displayFlights");
         } 
     }
+
+	@RequestMapping(value="/userFlightSelection",method=RequestMethod.POST)
+	public void userFlightSelection(String inputFlightIndex, HttpServletResponse response) throws IOException
+	{
+		boolean isNumeric = inputFlightIndex.chars().allMatch( Character::isDigit );
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayFlights" + "');");
+            out.println("</script>");
+		}
+		else{
+			int i = Integer.parseInt(inputFlightIndex);
+			if(i<0 || i>tp.getFlights().length){
+				PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayFlights" + "');");
+            out.println("</script>");
+			}
+			else{
+				System.out.println("chosen index is = "+i);
+				response.sendRedirect("/displayHotels");
+			}
+		}
+	}
+
+	@RequestMapping(value="/userHotelSelection",method=RequestMethod.POST)
+	public void userHotelSelection(String inputHotelIndex, HttpServletResponse response) throws IOException
+	{
+		boolean isNumeric = inputHotelIndex.chars().allMatch( Character::isDigit );
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayHotels" + "');");
+            out.println("</script>");
+		}
+		else{
+			int i = Integer.parseInt(inputHotelIndex);
+			if(i<0 || i>tp.getHotels().length){
+				PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid index entered, enter again" + "');");
+            out.println("window.location.replace('" + "/displayHotels" + "');");
+            out.println("</script>");
+			}
+			else{
+				System.out.println("chosen index is = "+i);
+				response.sendRedirect("/");
+			}
+		}
+	}
 
     @GetMapping("/displayFlights")
     public String displayflights(Model model){
@@ -272,8 +400,7 @@ public class ClientController {
 				JSONObject jsonObject = (JSONObject) placesArray.get(index);
 				airportIDs.add((String) jsonObject.get("PlaceId"));
 				index++;
-			}	
-
+			}
 		} catch(IOException e) {
                   e.printStackTrace();
 		}
@@ -301,39 +428,7 @@ public class ClientController {
 		}
 		return jsonObject;
 	}
-
-
-
-
 }
-
-// //	@RequestMapping(value="/",method=RequestMethod.GET)
-// //	@ResponseBody 
-// 	@GetMapping("/")
-// 	public String greeting(){
-// 		return "index.html";
-// 	}
-
-// 	@RequestMapping(value="/processForm",method=RequestMethod.POST)  
-// 	public void processForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
-
-// 			ClientBooking[] clientArray = new ClientBooking[1] ;
-// 			ClientBooking clientBooking = new ClientBooking();
-// 			clientBooking.setName(name);
-// 			clientBooking.setCityOfOrigin(cityOfOrigin);
-// 			clientBooking.setCountryOfOrigin(countryOfOrigin);
-// 			clientBooking.setCityOfDestination(cityOfDestination);
-// 			clientBooking.setCountryOfDestination(countryOfDestination);
-// 			clientBooking.setOneWayTrip(oneWayTrip);
-// 			clientBooking.setReturnDate(returnDate);
-// 			clientBooking.setOutboundDate(outboundDate);
-// 			clientBooking.setCurrency(currency);
-// 			clientArray[0] = clientBooking;
-// 			Client.bookingAdventure(clientArray);
-// 			response.sendRedirect("/");
-// 	}
-// }
-// 
 
 
 
