@@ -48,7 +48,7 @@ import org.json.simple.parser.ParseException;
 
 import service.core.Flight; 
 import service.core.FlightRequest;
-import service.flights.NoSuchActivityException;
+import service.flights.NoSuchFlightException;
 import service.core.ClientChoice;
 
 import java.util.Iterator;
