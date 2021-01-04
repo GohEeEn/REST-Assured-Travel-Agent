@@ -88,17 +88,10 @@ public class TravelAgentService {
 		/**
 		 * POST request to Flight service for a FlightRequest which will return a list of available flights
 		 */
-<<<<<<< HEAD
-		// Flight[] flights = new Flight[50];	
-		HttpEntity<FlightRequest> requestForFlights = new HttpEntity<>(clientRequest.getFlightRequest());
-		Flight[] flights = restTemplate.postForObject("http://flights-service/flightservice/flightrequests",requestForFlights, Flight[].class);
-
-=======
 		Flight[] flights = new Flight[50];	
 		HttpEntity<FlightRequest> request = new HttpEntity<>(clientRequest.getFlightRequest());
 		flights = restTemplate.postForObject("http://flights-service/flightservice/flightrequests",request, Flight[].class);
 		System.out.println("COMESHERE97");
->>>>>>> 54fda2865a30befc2e48969eef06600366a96ae0
 		/**
 		 * POST request to Hotel Service for a HotelRequest which will return a list of available hotels
 		 */
@@ -131,14 +124,7 @@ public class TravelAgentService {
 		Attraction[] attractions = new Attraction[200];  // must instantiate the array as we will be sending back a null array if there are no client requests for attractions
 
 
-<<<<<<< HEAD
-		// System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity().equals(null)+"\n");
-
-		// AttractionRequest at = new AttractionRequest();
-		// System.out.println("TESTING attractionREquest null: "+at.getCity());
-=======
 		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity()==null+"\n");
->>>>>>> 54fda2865a30befc2e48969eef06600366a96ae0
 
 		if (!(clientRequest.getAttractionRequest().getCity()==null)){
 
@@ -354,18 +340,9 @@ public class TravelAgentService {
 	 */
 	@RequestMapping(value="/travelagent/bookings/{referenceNumber}",method=RequestMethod.GET)
 	@ResponseStatus(value=HttpStatus.OK)
-<<<<<<< HEAD
-	public Booking getBooking(@PathVariable int referenceNumber) {
-
-		// System.out.println("\nTEsting GET \n");
-		Booking booking = clientBookings.get(referenceNumber);  // Find booking with given reference
-		if (booking == null) throw new NoSuchBookingException();  // If no booking exists matching this reference then throw an exception
-		return booking;
-=======
 	public MongoBooking getBooking(@PathVariable String referenceNumber) throws NoSuchFieldException{
 		MongoBooking mb = mongoRepository.getBookingFromMongo(referenceNumber);
 		return mb;
->>>>>>> 54fda2865a30befc2e48969eef06600366a96ae0
 	}
 
 
