@@ -10,7 +10,7 @@ metadata:
   name: activities
 spec:
   ports:
-  - name: "blah"
+  - protocol: TCP
     port: 8083
     targetPort: 8083
   selector:
