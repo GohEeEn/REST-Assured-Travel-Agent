@@ -37,6 +37,7 @@ import service.core.ActivityRequest;
 import service.core.ActivityItem;
 import service.core.Hotel;
 import service.core.Booking;
+import service.core.MongoBooking;
 import service.core.ClientResponse;
 import service.core.ClientChoice;
 import service.core.ClientChoices;
@@ -125,9 +126,9 @@ public class TravelAgentService {
 		Attraction[] attractions = new Attraction[200];
 
 
-		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity().equals(null)+"\n");
+		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity()==null+"\n");
 
-		if (!(clientRequest.getAttractionRequest().getCity().equals(null))){
+		if (!(clientRequest.getAttractionRequest().getCity()==null)){
 
 			HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
 			attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
@@ -306,7 +307,6 @@ public class TravelAgentService {
 		return new ResponseEntity<>(booking, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
 		
 	} 
-
 	
 	/**
 	 * GET REQUEST (single instance)
@@ -316,12 +316,9 @@ public class TravelAgentService {
 	 */
 	@RequestMapping(value="/travelagent/bookings/{referenceNumber}",method=RequestMethod.GET)
 	@ResponseStatus(value=HttpStatus.OK)
-	public Booking getBooking(@PathVariable int referenceNumber) {
-
-		System.out.println("\nTEsting GET \n");
-		Booking booking = clientBookings.get(referenceNumber);  // Find booking with given reference
-		if (booking == null) throw new NoSuchBookingException();  // If no booking exists matching this reference then throw an exception
-		return booking;
+	public MongoBooking getBooking(@PathVariable String referenceNumber) throws NoSuchFieldException{
+		MongoBooking mb = mongoRepository.getBookingFromMongo(referenceNumber);
+		return mb;
 	}
 
 

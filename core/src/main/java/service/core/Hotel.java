@@ -105,18 +105,11 @@ public class Hotel{
       }
 
       public String toString(){
-            String string = "\n******************* HOTEL *******************\n";
-            string += "\nPrice: " + price +"\n";
-            string += "Room Type: " + roomType +"\n";
-            string += "Bed Type: " + bedType +"\n";
-            string += "Description: " + description +"\n";
-            string += "Address: " + address +"\n";
-            string += "Amenities: " + amenitiesToString() +"\n";;
-            string += "Rating: " + rating +"\n";
-            string += "PhoneNumber: " + phoneNumber +"\n";
+            String string = "";
             string += "Name: " + name +"\n";
-            string += "\n******************* HOTEL *******************\n";
-            
+            string += "Address: " + address +"\n";
+            string += "PhoneNumber: " + phoneNumber +"\n";
+            string += "Price: " + price;
             return string;
       }
 

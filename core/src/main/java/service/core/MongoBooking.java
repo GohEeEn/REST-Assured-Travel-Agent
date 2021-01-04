@@ -1,4 +1,4 @@
-package service.travel_agent;
+package service.core;
 
 public class MongoBooking {
     // private String id;
