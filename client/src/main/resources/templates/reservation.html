@@ -60,26 +60,44 @@
  -->           <!--          <form action="/userHotelSelection" method="post" > -->
                         <div class="container">
 							<table>
-								<tr th:each="userBooking : ${userBookings}">
-									<td>REFERENCE ID :</td>
-									<td th:text="${userBooking.bookingReferenceID} "></td>	
+								<tr>
+									<td>REFERENCE ID -  </td>
+									<td th:text="${userBooking.getRefId()} "></td>	
 								</tr>
-								<tr th:each="userBooking : ${userBookings}">
-									<td>HOTEL :</td>
-									<td th:text="${userBooking.hotelToString} "></td>	
+								<tr>
+									<td>FLIGHT - </td>
+									 <td>
+							            <p th:each="str : ${userBooking.getFlight()}">
+							                <li th:text="${str}"></li>
+							            </p>
+							        </td>
 								</tr>
-								<tr th:each="userBooking : ${userBookings}">
-									<td>FLIGHT :</td>
-									<td th:text="${userBooking.flightsToString} "></td>	
+								<tr>
+									<td>HOTEL - </td>
+									<td>
+							            <p th:each="str1 : ${userBooking.getHotel()}">
+							                <li th:text="${str1}"></li>
+							            </p>
+							        </td>
 								</tr>
-								<tr th:each="userBooking : ${userBookings}">
-									<td>ACTIVITIES :</td>
-									<td th:text="${userBooking.activities} "></td>	
+								<tr>
+									<td>ACTIVITIES - </td>
+									<td>
+							            <p th:each="str2 : ${userBooking.getActivities()}">
+							                <li th:text="${str2}"></li>
+							            </p>
+							        </td>
 								</tr>
-
-								<tr th:each="userBooking : ${userBookings}">
-									<td>ATTRACTIONS :</td>
-									<td th:text="${userBooking.attractions} "></td>	
+								<tr>
+									
+								</tr>
+								<tr>
+									<td>ATTRACTIONS - </td>
+									<td>
+							            <p th:each="str3 : ${userBooking.getAttractions()}">
+							                <li th:text="${str3}"></li>
+							            </p>
+							        </td>
 								</tr>
 							</table>
                         </div>

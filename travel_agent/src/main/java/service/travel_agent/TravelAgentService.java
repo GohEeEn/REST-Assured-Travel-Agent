@@ -37,6 +37,7 @@ import service.core.ActivityRequest;
 import service.core.ActivityItem;
 import service.core.Hotel;
 import service.core.Booking;
+import service.core.MongoBooking;
 import service.core.ClientResponse;
 import service.core.ClientChoice;
 import service.core.ClientChoices;
@@ -306,7 +307,6 @@ public class TravelAgentService {
 		return new ResponseEntity<>(booking, headers, HttpStatus.CREATED);  // return the newly created Client Application to client class
 		
 	} 
-
 	
 	/**
 	 * GET REQUEST (single instance)
@@ -316,12 +316,9 @@ public class TravelAgentService {
 	 */
 	@RequestMapping(value="/travelagent/bookings/{referenceNumber}",method=RequestMethod.GET)
 	@ResponseStatus(value=HttpStatus.OK)
-	public Booking getBooking(@PathVariable int referenceNumber) {
-
-		System.out.println("\nTEsting GET \n");
-		Booking booking = clientBookings.get(referenceNumber);  // Find booking with given reference
-		if (booking == null) throw new NoSuchBookingException();  // If no booking exists matching this reference then throw an exception
-		return booking;
+	public MongoBooking getBooking(@PathVariable String referenceNumber) throws NoSuchFieldException{
+		MongoBooking mb = mongoRepository.getBookingFromMongo(referenceNumber);
+		return mb;
 	}
 
 

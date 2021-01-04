@@ -99,21 +99,13 @@ public class Flight {
       }
 
       public String toString(){
-            String flightInfo = "\n******************* FLIGHT *******************\n";
-            flightInfo += "\nCity of Origin: " + cityOfOrigin + "\n";
-            flightInfo += "City of Destination: " + cityOfDestination  + "\n";
-            flightInfo += "Date of Departure: " + outboundDate + "\n";
-            flightInfo += "Date of return: " + returnDate  + "\n";
+            String flightInfo = "";
             flightInfo += "Airline: " + airline  + "\n";
             flightInfo += "Price: " + price  + "\n";
-            flightInfo += "Departure flight airport: " + originAirportName  + "\n";
-            flightInfo += "Return flight airport: " + destinationAirportName + "\n";
-            flightInfo += "\n******************* FLIGHT *******************\n";
+            flightInfo += "From "+cityOfOrigin+ "To"+cityOfDestination+"\n";
+            flightInfo += "Departure on "+outboundDate;
+            flightInfo += "and Return on "+returnDate;
             return flightInfo;
       }
-
-      /**
-	 * TODO (Barry): Must iimplement equals method 
-	 */
       
 }

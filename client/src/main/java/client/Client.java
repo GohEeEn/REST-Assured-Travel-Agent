@@ -20,6 +20,7 @@ import service.core.ClientRequest;
 import service.core.ClientResponse;
 import service.core.HotelRequest;
 import service.core.TravelPackage;
+import service.core.MongoBooking;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -111,7 +112,7 @@ public class Client {
 						}
 
 	//Send the clientResponse to the travel agent
-	public static void sendBookingChoicesToTravelAgent(ClientResponse clientResponse){
+	public static Booking sendBookingChoicesToTravelAgent(ClientResponse clientResponse){
 
 		HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(clientResponse);
 		Booking booking = new Booking();
@@ -125,7 +126,18 @@ public class Client {
             System.out.println("Hotel Address: "+booking.getHotel().getAddress());
 		System.out.println("Booking ref Num: "+booking.getReferenceNumber());
 		System.out.println("Activity 1: "+booking.getActivities()[0]);
-            System.out.println("Attraction 1: "+booking.getAttractions()[0]);
+			System.out.println("Attraction 1: "+booking.getAttractions()[0]);
+			return booking;
                   
+	}
+
+	public static MongoBooking getBookingFromTravelAgent(String inputBookingReference){
+		// HttpEntity<String> requestuserBooking = new HttpEntity<>(inputBookingReference);
+		// Booking booking = new Booking();
+		RestTemplate restTemplate = new RestTemplate();
+		// booking = restTemplate.postForObject(argsResponse,requestuserBooking,Booking.class);
+		MongoBooking getBooking = restTemplate.getForObject("http://localhost:8081/travelagent/bookings/"+inputBookingReference, MongoBooking.class);
+		return getBooking;
+        // System.out.println("\nGET TEST: "+getBooking.getFlight().getAirline()+"\n");
 	}
 }
