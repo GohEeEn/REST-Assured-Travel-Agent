@@ -397,7 +397,12 @@ public class ClientController {
 					chosenAttractionsRefs[0] = -1;
 					cr.setAttractionsReferenceNumber(chosenAttractionsRefs);
 				}
-				response.sendRedirect("/");
+				cr.setTravelPackageReferenceNumber(tp.getTravelPackageReferenceNumber());
+				PrintWriter out = response.getWriter();
+            	out.println("<script>");
+            	out.println("alert('" + "Booking Successful!! your Booking Reference ID is - " +tp.getTravelPackageReferenceNumber()+ "');");
+            	out.println("window.location.replace('" + "/" + "');");
+            	out.println("</script>");
 			}
 			else{
 				PrintWriter out = response.getWriter();
