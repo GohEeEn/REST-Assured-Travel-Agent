@@ -26,13 +26,13 @@ public class ClientResponse {
             this.activitiesReferenceNumber = activitiesReferenceNumber;
       }
 
-      public int[] getAttractionsReferenceNumber(){
-            return attractionsReferenceNumber;
-      }
+      // public int[] getAttractionsReferenceNumber(){
+      //       return attractionsReferenceNumber;
+      // }
 
-      public void setAttractionsReferenceNumber(int[] attractionsReferenceNumber){
-            this.attractionsReferenceNumber = attractionsReferenceNumber;
-      }
+      // public void setAttractionsReferenceNumber(int[] attractionsReferenceNumber){
+      //       this.attractionsReferenceNumber = attractionsReferenceNumber;
+      // }
 
       public int getFlightReferenceNumber(){
             return flightReferenceNumber;
