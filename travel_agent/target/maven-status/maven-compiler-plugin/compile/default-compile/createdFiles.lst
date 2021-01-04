@@ -6,3 +6,5 @@ service\travel_agent\TravelAgentService.class
 service\travel_agent\ServiceInstanceRestController.class
 service\travel_agent\MongoConfig.class
 service\travel_agent\TravelAgentService$NoSuchBookingException.class
+
+
