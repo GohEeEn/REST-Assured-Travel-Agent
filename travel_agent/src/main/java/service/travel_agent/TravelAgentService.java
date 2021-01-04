@@ -83,7 +83,7 @@ public class TravelAgentService {
 	@RequestMapping(value="/travelagent/travelpackagerequests",method=RequestMethod.POST)
 	public ResponseEntity<TravelPackage> createTravelPackageRequest(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
 		System.out.println("COMESHERE90");
-		mongoRepository.insertBooking(new MongoBooking("CLEINTLIN91", "TANMAY", "JOSHI", "SEAN", "MCL"));
+		mongoRepository.insertBooking(new MongoBooking("Sean", "MCLOU", "S", "m", "Hello"));
 		/**
 		 * POST request to Flight service for a FlightRequest which will return a list of available flights
 		 */

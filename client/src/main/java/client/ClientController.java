@@ -14,6 +14,7 @@ import service.core.FlightRequest;
 import service.core.HotelRequest;
 import service.core.TravelPackage;
 import client.Client;
+import service.core.ClientResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -399,7 +400,7 @@ public class ClientController {
 				}
 				cr.setTravelPackageReferenceNumber(tp.getTravelPackageReferenceNumber());
 				PrintWriter out = response.getWriter();
-				Client.sendBookingChoicesToTravelTragent(cr);
+				Client.sendBookingChoicesToTravelAgent(cr);
             	out.println("<script>");
             	out.println("alert('" + "Booking Successful!! your Booking Reference ID is - " +tp.getTravelPackageReferenceNumber()+ "');");
             	out.println("window.location.replace('" + "/" + "');");
@@ -577,7 +578,7 @@ public class ClientController {
 	public static JSONObject parseJSONObject(String response){
 
 		JSONObject jsonObject = new JSONObject();
-		try{.
+		try{
 			JSONParser parser = new JSONParser();
 			jsonObject = (JSONObject) parser.parse(response);
 		} catch (ParseException e) {

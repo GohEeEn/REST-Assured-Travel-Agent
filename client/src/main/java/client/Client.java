@@ -111,10 +111,11 @@ public class Client {
 						}
 
 	//Send the clientResponse to the travel agent
-	public static void sendBookinChoicesToTravelTragent(ClientResponse clientResponse){
+	public static void sendBookingChoicesToTravelAgent(ClientResponse clientResponse){
 
 		HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(clientResponse);
 		Booking booking = new Booking();
+		RestTemplate restTemplate = new RestTemplate();
             booking = restTemplate.postForObject(argsResponse,requestClientResponse,Booking.class);
 
 		/**

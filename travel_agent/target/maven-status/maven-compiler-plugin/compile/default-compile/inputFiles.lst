@@ -1,24 +1,6 @@
-<<<<<<< HEAD
-/home/tam/Desktop/CLEAn3/quaranteam/travel_agent/src/main/java/service/travel_agent/NoSuchBookingException.java
-/home/tam/Desktop/CLEAn3/quaranteam/travel_agent/src/main/java/service/travel_agent/Application.java
-/home/tam/Desktop/CLEAn3/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoConfig.java
-/home/tam/Desktop/CLEAn3/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoRepository.java
-/home/tam/Desktop/CLEAn3/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoBooking.java
-/home/tam/Desktop/CLEAn3/quaranteam/travel_agent/src/main/java/service/travel_agent/TravelAgentService.java
-=======
-<<<<<<< HEAD
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\NoSuchBookingException.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\Application.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\Booking.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\TravelAgentService.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\MongoConfig.java
-C:\DistSystemsDevFolder\Dist_syst\assignment2\quaranteam\travel_agent\src\main\java\service\travel_agent\MongoRepository.java
-=======
 /home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/NoSuchBookingException.java
 /home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/TravelAgentService.java
 /home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/Application.java
-/home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/Booking.java
+/home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoBooking.java
 /home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoConfig.java
 /home/sean/Documents/DS/Before_merge/quaranteam/travel_agent/src/main/java/service/travel_agent/MongoRepository.java
->>>>>>> e68d7902f71b536c082ecd5fb85b3528f8d7c054
->>>>>>> a0908619dad5d67716e598cd07f4d669bd87ddfc
