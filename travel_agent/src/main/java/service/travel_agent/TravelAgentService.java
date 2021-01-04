@@ -140,6 +140,7 @@ public class TravelAgentService {
 		travelPackage.setHotels(hotels);
 		travelPackage.setActivities(activities);
 		travelPackage.setAttractions(attractions);
+		travelPackage.setTravelPackageReferenceNumber(travelPackageRequestReferenceNumber);
 
 		// storeBookingInMongo();
 		
