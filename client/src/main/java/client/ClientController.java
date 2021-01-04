@@ -576,7 +576,7 @@ public class ClientController {
 	public static JSONObject parseJSONObject(String response){
 
 		JSONObject jsonObject = new JSONObject();
-		try{
+		try{.
 			JSONParser parser = new JSONParser();
 			jsonObject = (JSONObject) parser.parse(response);
 		} catch (ParseException e) {

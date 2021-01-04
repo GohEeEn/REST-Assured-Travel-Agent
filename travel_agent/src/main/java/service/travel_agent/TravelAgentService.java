@@ -46,13 +46,8 @@ import service.core.AttractionRequest;
 
 import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
 
-// import java.net.URLDecoder;
-//  import java.net.URLEncoder;
-
 /**
- * Implementation of the broker service that uses the Service Registry.
- * 
- * @author Rem
+ * This service is in charge of taking requests from the client for flights, hotels, activities and attractions
  *
  */
 @RestController
@@ -70,7 +65,7 @@ public class TravelAgentService {
 	@LoadBalanced
 	private RestTemplate restTemplate;
 
-	public static LinkedList<String> URIs = new LinkedList();        // Holds our URI's that will be passed as an argument when running broker
+	public static LinkedList<String> URIs = new LinkedList();        
 
 	private Map<Integer, Booking> clientBookings = new TreeMap();
 	private static int travelPackageRequestReferenceNumber = 0;
@@ -127,6 +122,7 @@ public class TravelAgentService {
 		System.out.println("City: "+clientRequest.getAttractionRequest().getCity());
 		System.out.println("Country: "+clientRequest.getAttractionRequest().getCountry()+"\n");
 		Attraction[] attractions = new Attraction[200];
+
 
 		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity().equals(null)+"\n");
 
@@ -231,12 +227,18 @@ public class TravelAgentService {
 
 		System.out.println("\nTesting attractions booking: "+clientResponse.getAttractionsReferenceNumber()[0]);
 		Attraction [] attractions = new Attraction[20];
-		ClientChoices clientChoicesOfAttractions = new ClientChoices();
-		clientChoicesOfAttractions.setReferenceNumbers(clientResponse.getAttractionsReferenceNumber());
-		// ClientChoice clientChoiceOfActivities = new ClientChoice();      // create ClientChoice to hold array of ref number (if a negative number then no activities were chosen)
-		HttpEntity<ClientChoices> requestAttractions = new HttpEntity<>(clientChoicesOfAttractions);
-		attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractions",requestAttractions, Attraction[].class);
-		System.out.println(attractions[0].getName());
+
+		if(clientResponse.getAttractionsReferenceNumber()[0] > 0); // if the reference number at index 0 is a negative number then we don't call AttractionsService
+		{
+			System.out.println("TESTING attractions booking IF STATEMENT");
+			ClientChoices clientChoicesOfAttractions = new ClientChoices();
+			clientChoicesOfAttractions.setReferenceNumbers(clientResponse.getAttractionsReferenceNumber());
+			// ClientChoice clientChoiceOfActivities = new ClientChoice();      // create ClientChoice to hold array of ref number (if a negative number then no activities were chosen)
+			HttpEntity<ClientChoices> requestAttractions = new HttpEntity<>(clientChoicesOfAttractions);
+			attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractions",requestAttractions, Attraction[].class);
+			System.out.println(attractions[0].getName());
+		}
+		
 
 		/**
 		 * Create a new Booking for client
