@@ -13,10 +13,10 @@ import java.util.Arrays;
 import static org.junit.Assert.*;
 public class AttractionsServiceTest {
 
-    private static AttractionsService service;
+    private static AttractionsService2 service;
 
     @Before
-    public void setUp() { service = new AttractionsService(); }
+    public void setUp() { service = new AttractionsService2(); }
 
     @Test
     public void getDestinationGeocodeTest() {
