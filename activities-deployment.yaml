@@ -12,7 +12,7 @@ spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: activities
+      app: activities
   strategy: {}
   template:
     metadata:
@@ -21,12 +21,16 @@ spec:
         kompose.version: 1.21.0 (992df58d8)
       creationTimestamp: null
       labels:
-        io.kompose.service: activities
+        app: activities
     spec:
       containers:
       - env:
-        - name: eureka.client.serviceUrl.defaultZone
-          value: http://10.103.202.113:8761/eureka/
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: _JAVA_OPTIONS
+          value: -Deureka.client.serviceUrl.defaultZone=http://eureka-0.eureka:8761/eureka/,http://eureka-1.eureka:8761/eureka/
         image: conchobar/activities:latest
         imagePullPolicy: ""
         name: activities
