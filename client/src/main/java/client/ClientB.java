@@ -73,6 +73,9 @@
 // 		attractionRequest.setCountry("France");
 // 		clientRequest.setAttractionRequest(attractionRequest);
 
+// 		Attraction [] attractionsTest = new Attraction[10];
+// 		System.out.println("TESTING attraction null: "+attractionsTest[0]);
+
 		
 // 		ArrayList<String> originAirportIDs = new ArrayList();          // Holds all airports for the given origin city
 // 		ArrayList<String> destinationAirportIDs = new ArrayList();      //Holds all airports for the given destination city
@@ -170,9 +173,11 @@
 //             clientResponse.setTravelPackageReferenceNumber(travelPackage.getTravelPackageReferenceNumber());
 //             clientResponse.setHotelReferenceNumber(1);
 // 		clientResponse.setFlightReferenceNumber(2);
-// 		int [] intArray = new int[2];
+// 		int [] intArray = new int[3];
 // 		intArray[0] = 1;   
-		
+// 		intArray[1] = 2;   
+// 		intArray[2] = -1;   
+
 // 		clientResponse.setActivitiesReferenceNumber(intArray);
 // 		clientResponse.setAttractionsReferenceNumber(intArray);
 

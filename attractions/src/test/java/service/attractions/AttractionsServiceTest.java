@@ -59,6 +59,8 @@
 //         assertEquals("Error : The ActivityItem array should be empty since Madrid is an invalid location for this API", 0, madrid.length);
 //     }
 // }
+<<<<<<< HEAD
+=======
 package service.attractions;
 
 import com.amadeus.resources.Activity;
@@ -120,3 +122,4 @@ public class AttractionsServiceTest {
         assertEquals("Error : The ActivityItem array should be empty since Madrid is an invalid location for this API", 0, madrid.length);
     }
 }
+>>>>>>> 54fda2865a30befc2e48969eef06600366a96ae0
