@@ -48,6 +48,7 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import service.core.ClientChoice;
 import service.core.ClientChoices;
 
 import java.util.Map;
@@ -55,21 +56,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collection;
-
-// import java.io.File;
-// import java.io.FileNotFoundException;
-// import java.io.FileReader;
-// import java.io.FileWriter;
-// import java.io.IOException;
-// import java.net.URI;
-// import java.net.http.HttpClient;
-// import java.net.http.HttpRequest;
-// import java.net.http.HttpResponse;
-// // import java.text.ParseException;
-// import java.nio.file.Path;
-// import java.nio.file.Paths;
-
-// import com.mashape.unirest.http.exceptions.UnirestException;
 
 
 
@@ -95,7 +81,8 @@ public class ActivitiesRecommenderService {
     
 
     /**
-	 * POST REQUEST: handles all activity requests from travel agent
+	 * POST REQUEST:  Handles all activity requests from travel agent. TravelAgentService sends a activityRequest object specifying
+	 * the user requirements and then uses this info to search for activities
 	 * 
 	 * @param activityRequest
 	 * @return activityItems
@@ -105,7 +92,7 @@ public class ActivitiesRecommenderService {
 	@RequestMapping(value="/activityservice/activityrequests",method=RequestMethod.POST)
 	public ResponseEntity<ActivityItem []> searchActivities(@RequestBody ActivityRequest activityRequest)  throws URISyntaxException {
 
-        System.out.println("\nTesting ActivityService POST Request\n");
+        // System.out.println("\nTesting ActivityService POST Request\n");
         ActivityItem [] activityItems = getActivitiesWithQueries(activityRequest.getCity(), activityRequest.getCountry());
         
         /** 
@@ -138,16 +125,15 @@ public class ActivitiesRecommenderService {
 	 */
 
 	@RequestMapping(value="/activityservice/activities",method=RequestMethod.POST)
-	public ResponseEntity<ActivityItem[]> createActivity(@RequestBody ClientChoices clientChoicesOfActivities)  throws URISyntaxException {
+	public ResponseEntity<ActivityItem> createActivity(@RequestBody ClientChoice clientChoiceOfActivity)  throws URISyntaxException {
 
+        ActivityItem activity = new ActivityItem();   // holds new activity the client wishes to book
+        activity = searchedActivities.get(clientChoiceOfActivity.getReferenceNumber()); 
         System.out.println("\nTESTING ACTIViTY POST BOOKING)");
-		ActivityItem activity = searchedActivities.get(clientChoicesOfActivities.getReferenceNumbers()[0]);        // find activity the client wishes to book
-        ActivityItem[] activities = new ActivityItem[1];
-        activities[0] = activity;
-		System.out.println("\nTesting /activityservice/activities\n");
+		
 		System.out.println(activity.toString());
 		
-		// Add a new activity for this client to bookedActivities map (which contains booked activities for all clients)
+		// Add new activities for this client to bookedActivities map (which contains booked activities for all clients)
 		bookedActivityReferenceNumber++;
 		bookedActivities.put(bookedActivityReferenceNumber,activity);
 
@@ -155,7 +141,7 @@ public class ActivitiesRecommenderService {
 			build().toUriString()+ "/activityservice/activities/"+bookedActivityReferenceNumber;     // Create URI for this activity
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(activities, headers, HttpStatus.CREATED);     // Returns activities to travel agent
+		return new ResponseEntity<>(activity, headers, HttpStatus.CREATED);     // Returns activity to travel agent
     }
     
 

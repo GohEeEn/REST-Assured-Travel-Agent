@@ -75,7 +75,8 @@ public class HotelService2 {
 	private Map<Integer, Hotel> searchedHotels = new HashMap<>();    // Map of all hotels that HotelService searched for
 
 	/**
-       * POST REQUEST: takes requests from TravelAgentService
+       * POST REQUEST: takes requests from TravelAgentService. Handles all hotel requests from travel agent. TravelAgentService sends a hotelRequest object specifying
+	 * the user requirements and then uses this info to search for hotels
        * 
        * @param hotelRequest
        * @return
@@ -104,9 +105,9 @@ public class HotelService2 {
 
             hotelsArray = addHotelsToSearchHotelsMap(hotelsArray);
 
-		hotelRequestReferenceNumber++;
+		hotelRequestReferenceNumber++;               
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/hotelservice/hotelrequests/"+hotelRequestReferenceNumber;     // Create URI for this hotel
+			build().toUriString()+ "/hotelservice/hotelrequests/"+hotelRequestReferenceNumber;     // Create URI for this hotel request
 		HttpHeaders headers = new HttpHeaders();
             headers.setLocation(new URI(path));    
             
@@ -126,18 +127,18 @@ public class HotelService2 {
 
             Hotel hotel = searchedHotels.get(clientChoice.getReferenceNumber());        // find hotel the client wishes to book
             
-            System.out.println("\nTesting /hotelservice/hotels\n");
-            System.out.println(hotel.toString());
+            // System.out.println("\nTesting /hotelservice/hotels\n");
+            // System.out.println(hotel.toString());
 		
-		// Add a new hotel for this client to bookedHotels map (which contains booked flights for all clients)
+		// Add a new hotel for this client to bookedHotels map (which contains booked hotels for all clients)
 		bookedHotelReferenceNumber++;
 		bookedHotels.put(bookedHotelReferenceNumber,hotel);
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/hotelservice/hotels/"+bookedHotelReferenceNumber;     // Create URI for this flight
+			build().toUriString()+ "/hotelservice/hotels/"+bookedHotelReferenceNumber;     // Create URI for this hotel
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(hotel, headers, HttpStatus.CREATED);     // Returns flights to travel agent
+		return new ResponseEntity<>(hotel, headers, HttpStatus.CREATED);     // Returns hotels to travel agent
       }
 
 
@@ -170,7 +171,8 @@ public class HotelService2 {
 
       
       /**
-	 * PUT REQUEST: replaces hotel with given reference number
+	 * PUT REQUEST: replaces hotel with given reference number. New choice of hotel is specified in clientChoice which
+       * has an instance variable that holds the reference number of the new hotel
 	 * 
 	 * @param referenceNumber
 	 * @param clientChoice
@@ -183,8 +185,8 @@ public class HotelService2 {
 
         Hotel newChoiceOfHotel = searchedHotels.get(clientChoice.getReferenceNumber());        // find hotel the client wishes to book
 
-        System.out.println("\nTesting PUT /hotelservice/hotels\n");
-        System.out.println(newChoiceOfHotel.toString());
+      //   System.out.println("\nTesting PUT /hotelservice/hotels\n");
+      //   System.out.println(newChoiceOfHotel.toString());
         
         // Replace old hotel with a new hotel
         Hotel previouslyBookedHotel = bookedHotels.remove(referenceNumber);
@@ -229,8 +231,8 @@ public class HotelService2 {
 
             ArrayList<Hotel> hotelList = new ArrayList<>();
             // Hotel [] testArray = new Hotel[10];
-		System.out.println("findHotels method \n");
-		try{
+		// System.out.println("findHotels method \n");
+		try{   // request made to Amadeus API to get available hotel info
                   HttpRequest request = HttpRequest.newBuilder()
                   .uri(URI.create("https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode="+hotelRequest.getCityCode()+"&roomQuantity=1&adults="+hotelRequest.getNumberOfGuests()+"&radius=5&radiusUnit=KM&paymentPolicy=NONE&includeClosed=false&bestRateOnly=true&view=FULL&sort=NONE"))
                   .header("Authorization", "Bearer " + getToken())
@@ -244,10 +246,12 @@ public class HotelService2 {
                   JSONArray hotelInfoArray = new JSONArray();    
 	    		hotelInfoArray = (JSONArray) hotelInfo.get("data");   // extracts 'data' array from JSON object
 
-                  // System.out.println(hotelInfoArray + "\n");
+                  System.out.println(hotelInfoArray + "\n");
                   // System.out.println("Response \n");
                   int index = 0;
                   
+                  // If data is received from the Amadeus API call then extract the relevant hotel info and create a Hotel object
+                  // This Hotel object is then sent back to travel agent
                   if (hotelInfoArray.size() > 0){
                         
                         while(index < hotelInfoArray.size()){
@@ -255,10 +259,10 @@ public class HotelService2 {
                               JSONObject jsonObject = (JSONObject) hotelInfoArray.get(index);   // create a new JSON object with the current index of the array
       
                               JSONObject hotel = (JSONObject) jsonObject.get("hotel");   // hotel holds some of the data we need to extract
-                              // System.out.println("hotel: "+hotel+"\n");
+                              System.out.println("hotel: "+hotel+"\n");
       
                               JSONArray offers = (JSONArray) jsonObject.get("offers"); // offers holds the rest of the data we need to extract
-                              // System.out.println("offers: "+offers +"\n");
+                              System.out.println("offers: "+offers +"\n");
                               jsonObject = (JSONObject) offers.get(0);
       
                               Hotel currentHotel = new Hotel();
@@ -435,7 +439,10 @@ public class HotelService2 {
       }
       
       /**
-	 * The following method adds all new hotels found by HotelService to searchedHotels map
+	 * The following method adds all new hotels found by HotelService to searchedHotels map. Each hotel object is given 
+       * a unique reference number which is also the key for the object itself. The client can choose the ref number associated 
+       * with the hotel he/she would like to book and HotelService will cross reference this number with the one stored in
+       * searchedHotels map.
 	 */
 
 	 public Hotel [] addHotelsToSearchHotelsMap(Hotel [] hotels){

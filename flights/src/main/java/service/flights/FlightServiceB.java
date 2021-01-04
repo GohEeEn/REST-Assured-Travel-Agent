@@ -59,7 +59,7 @@ public class FlightServiceB {
 	private static int flightRequestReferenceNumber = 0;    // unique reference number for each flightRequest
 	private static int searchedFlightReferenceNumber = 0;           // unique reference number for each flight found by FlightService that matches requirements from flightRequest
 	private static int bookedFlightReferenceNumber = 0;           // unique reference number for each flight booked by a client
-	final String locale = "en-GB";     // need to call Skycanner API
+	final String locale = "en-GB";     // argument needed to call Skycanner API
 	private Map<Integer, Flight> bookedFlights = new HashMap<>();      // Map of all flights created with new reference number as key
 	private Map<Integer, Flight> searchedFlights = new HashMap<>();    // Map of all flights that FlightService searched for
 
@@ -67,7 +67,8 @@ public class FlightServiceB {
 	private RestTemplate restTemplate;
  
 	/**
-	 * POST REQUEST: handles all flight requests from travel agent
+	 * POST REQUEST: handles all flight requests from travel agent. TravelAgentService sends a flightRequest object specifying
+	 * the user requirements and then uses this info to search for flights
 	 * 
 	 * @param flightRequest
 	 * @return clientFlghts
@@ -84,12 +85,19 @@ public class FlightServiceB {
 		String[] destAirportIDs = flightRequest.getDestAirportIDs();
 
 		// Only uses the first origin airport and finds flights to all destination airports
-		for (String airportID : destAirportIDs){
-			System.out.println(airportID);
-			flightQuotes.addAll(findFlights(flightRequest.getCountryOfOriginCode(),flightRequest.getCurrency(),locale,originAirportIDs[0],airportID,
-			flightRequest.getOutboundDate(), flightRequest.getReturnDate()));
-		}
+		// String test = null;
+		// System.out.println("\nTESTING null string: \n"+ test);
+		// System.out.println("\nTESTING .equals null: " + (originAirportIDs[0].equals(null) && destAirportIDs[0].equals(null)));
+		if( !(originAirportIDs[0].equals(null)) && !(destAirportIDs[0].equals(null)) ){   // search for flights only if there is an origin airport and at least one destination airport
 
+			for (String airportID : destAirportIDs){
+				System.out.println(airportID);
+				flightQuotes.addAll(findFlights(flightRequest.getCountryOfOriginCode(),flightRequest.getCurrency(),locale,originAirportIDs[0],airportID,
+				flightRequest.getOutboundDate(), flightRequest.getReturnDate()));
+			}
+	
+		}
+		
 		/**
 		 * The following code removes any duplicate flightQuotes
 		 */
@@ -113,10 +121,10 @@ public class FlightServiceB {
 
 		clientFlights = addFlightsToSearchFlightsMap(clientFlights);
 
-		flightRequestReferenceNumber++;
+		flightRequestReferenceNumber++;        // give this request a unique reference number. Further functionality would have made better use of this ref number
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/flightservice/flightrequests/"+flightRequestReferenceNumber;     // Create URI for this flight
+			build().toUriString()+ "/flightservice/flightrequests/"+flightRequestReferenceNumber;     // Create URI for this flight request
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(clientFlights, headers, HttpStatus.CREATED);     // Returns flights to travel agent
@@ -124,7 +132,8 @@ public class FlightServiceB {
 	
 	/**
 	 * POST REQUEST: Once the client has chosen a flight then this choice will be passed on to TravelAgentService which
-	 * will then pass it on to this method
+	 * will then pass it on to this method. FlightService will then create a booking for this flight which can
+	 * be requested via a GET request
 	 * 
 	 * @param clientChoice
 	 * @return flight
@@ -133,10 +142,10 @@ public class FlightServiceB {
 	@RequestMapping(value="/flightservice/flights",method=RequestMethod.POST)
 	public ResponseEntity<Flight> createFlight(@RequestBody ClientChoice clientChoice)  throws URISyntaxException {
 
-		Flight flight = searchedFlights.get(clientChoice.getReferenceNumber());        // find flight the client wishes to book
+		Flight flight = searchedFlights.get(clientChoice.getReferenceNumber());        // find flight the client wishes to book from searchedFlights map
 
 		System.out.println("\nTesting /flightservice/flights\n");
-		System.out.println(flight.toString());
+		// System.out.println(flight.toString());
 		
 		// Add a new flight for this client to bookedFlights map (which contains booked flights for all clients)
 		bookedFlightReferenceNumber++;
@@ -188,8 +197,8 @@ public class FlightServiceB {
 
 		Flight newChoiceOfFlight = searchedFlights.get(clientChoice.getReferenceNumber());        // find flight the client wishes to book
 
-		System.out.println("\nTesting PUT /flightservice/flight\n");
-		System.out.println(newChoiceOfFlight.toString());
+		// System.out.println("\nTesting PUT /flightservice/flight\n");
+		// System.out.println(newChoiceOfFlight.toString());
 		
 		// Replace old flight with a new flight 
 		Flight previouslyBookedFlight = bookedFlights.remove(referenceNumber);
@@ -214,6 +223,7 @@ public class FlightServiceB {
 	// 	Flight [] clientFlights = flights.remove(referenceNumber);
 	// 	if (clientFlights == null) throw new NoSuchFlightException();
 	// }
+
 
 	// If there is no flight listed with the given reference then throw this exception
 	@ResponseStatus(value = HttpStatus.NOT_FOUND)
@@ -241,8 +251,9 @@ public class FlightServiceB {
 	}
 
 	/**
-	 * The following method is used to call the call the GET BrowseQuotes (Skyscanner API method). This is the last skyscanner 
-	 * method to be called and returns the flight info we are looking for.
+	 * The following method is used to call the call the GET BrowseQuotes (Skyscanner API method). This method returns the 
+	 * flight info we are looking for. This info is then used to create a Flight object which is then sent back to the travel
+	 * agent
 	 * 
 	 * @param countryOfOriginCode
 	 * @param currency
@@ -258,7 +269,7 @@ public class FlightServiceB {
 
 		ArrayList<FlightQuote> flightQuotes = new ArrayList();
 
-		try{
+		try{  // The following request is used to call skyscanner API
 			HttpRequest request = HttpRequest.newBuilder()
 					.uri(URI.create("https://skyscanner-skyscanner-flight-search-v1.p.rapidapi.com/apiservices/browsequotes/v1.0/"+
 						countryOfOriginCode+"/"+currency+"/"+locale+"/"+originAirportCode+"/"+destAirportCode+"/"+outboundDate+"?inboundpartialdate="+returnDate))
@@ -267,7 +278,7 @@ public class FlightServiceB {
 					.method("GET", HttpRequest.BodyPublishers.noBody())
 					.build();
 			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-			System.out.println("FindFlights: "+ response.body());
+			// System.out.println("FindFlights: "+ response.body());
 
 			String flightQuotations = response.body();   // Puts response into a string
 			JSONObject placesJson = parseJSONObject(flightQuotations);  // Converts the string into a JSON object
@@ -282,7 +293,8 @@ public class FlightServiceB {
 			JSONArray placesArray = new JSONArray();
 			placesArray = (JSONArray) placesJson.get("Places");   // Find 'places' array in placesJson JSON object
 
-			
+			// If there data is received from the skyscanner API call then extract the relevant info and use it to 
+			// create a Flight object
 			if (flightQuotesArray.size() > 0){
 
 				int index = 0;
@@ -318,7 +330,7 @@ public class FlightServiceB {
 					}
 
 					// Finds 'Name' which is the name of the airport
-					// This code find both the origin and destination airport name
+					// This code finds both the origin and destination airport name
 					for(int k=0; k<placesArray.size(); k++){
 
 						JSONObject places = (JSONObject) placesArray.get(k);

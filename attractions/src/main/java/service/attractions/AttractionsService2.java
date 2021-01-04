@@ -38,6 +38,7 @@ import service.core.Attraction;
 import service.core.Geocode;
 import service.core.AttractionRequest;
 import service.core.ClientChoices;
+import service.core.ClientChoice;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -124,15 +125,13 @@ public class AttractionsService2 {
 	 */
 
 	@RequestMapping(value="/attractionservice/attractions",method=RequestMethod.POST)
-	public ResponseEntity<Attraction[]> createAttraction(@RequestBody ClientChoices clientChoicesOfAttractions)  throws URISyntaxException {
+	public ResponseEntity<Attraction> createAttraction(@RequestBody ClientChoice clientChoiceOfAttraction)  throws URISyntaxException {
 
         System.out.println("\nTESTING ATTraction POST BOOKING)");
-		Attraction attraction = searchedAttractions.get(clientChoicesOfAttractions.getReferenceNumbers()[0]);        // find attraction the client wishes to book
-        Attraction[] attractions = new Attraction[1];
-        attractions[0] = attraction;
-		System.out.println("\nTesting /attractionservice/attractions\n");
+        System.out.println(clientChoiceOfAttraction.getReferenceNumber());
+		Attraction attraction = searchedAttractions.get(clientChoiceOfAttraction.getReferenceNumber());        // find attraction the client wishes to book
+        
 		System.out.println(attraction.toString());
-		
 		// Add a new attraction for this client to bookedAttractions map (which contains booked attractions for all clients)
 		bookedAttractionReferenceNumber++;
 		bookedAttractions.put(bookedAttractionReferenceNumber,attraction);
@@ -141,7 +140,7 @@ public class AttractionsService2 {
 			build().toUriString()+ "/attractionservice/attractions/"+bookedAttractionReferenceNumber;     // Create URI for this attraction
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
-		return new ResponseEntity<>(attractions, headers, HttpStatus.CREATED);     // Returns attractions to travel agent
+		return new ResponseEntity<>(attraction, headers, HttpStatus.CREATED);     // Returns attraction to travel agent
     }
     
     
