@@ -59,3 +59,7 @@ public class AttractionsServiceTest {
         assertEquals("Error : The ActivityItem array should be empty since Madrid is an invalid location for this API", 0, madrid.length);
     }
 }
+<<<<<<< HEAD
+=======
+>>>>>>> e68d7902f71b536c082ecd5fb85b3528f8d7c054
+>>>>>>> a0908619dad5d67716e598cd07f4d669bd87ddfc

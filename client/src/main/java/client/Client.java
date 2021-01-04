@@ -34,6 +34,7 @@ import java.io.IOException;
 
 public class Client {
 	
+	// Use ip address found through "minikube ip" in format"IP:31500" to access kubernetes travel_agent
 	// public static final String argsRequest = "http://192.168.49.2:31500/travelagent/travelpackagerequests";
 	// public static final String argsResponse = "http://192.168.49.2:31500/travelagent/bookings";
 
@@ -110,12 +111,20 @@ public class Client {
 						}
 
 	//Send the clientResponse to the travel agent
-	public static void sendBookingChoicesToTravelTragent(ClientResponse cr){
-		System.out.println("GETS TO CLINET 114");
-		RestTemplate restTemplate = new RestTemplate();
-		HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(cr);
+	public static void sendBookinChoicesToTravelTragent(ClientResponse clientResponse){
+
+		HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(clientResponse);
 		Booking booking = new Booking();
-		 booking = restTemplate.postForObject(argsResponse,requestClientResponse,Booking.class);
-		 System.out.println("GETS TO CLINET 119");
+            booking = restTemplate.postForObject(argsResponse,requestClientResponse,Booking.class);
+
+		/**
+		 * TESTING code for clientResponse sent to travel agent
+		 */
+            System.out.println("\nAirline: "+booking.getFlight().getAirline());
+            System.out.println("Hotel Address: "+booking.getHotel().getAddress());
+		System.out.println("Booking ref Num: "+booking.getReferenceNumber());
+		System.out.println("Activity 1: "+booking.getActivities()[0]);
+            System.out.println("Attraction 1: "+booking.getAttractions()[0]);
+                  
 	}
 }
