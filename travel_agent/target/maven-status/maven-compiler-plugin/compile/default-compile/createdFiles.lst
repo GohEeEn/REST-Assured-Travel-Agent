@@ -1,4 +1,18 @@
+<<<<<<< HEAD
+service/travel_agent/MongoBooking.class
+=======
+<<<<<<< HEAD
+service\travel_agent\MongoRepository.class
+service\travel_agent\Booking.class
+service\travel_agent\NoSuchBookingException.class
+service\travel_agent\Application.class
+service\travel_agent\TravelAgentService.class
+service\travel_agent\ServiceInstanceRestController.class
+service\travel_agent\MongoConfig.class
+service\travel_agent\TravelAgentService$NoSuchBookingException.class
+=======
 service/travel_agent/Booking.class
+>>>>>>> a0908619dad5d67716e598cd07f4d669bd87ddfc
 service/travel_agent/MongoRepository.class
 service/travel_agent/TravelAgentService.class
 service/travel_agent/ServiceInstanceRestController.class
@@ -6,3 +20,4 @@ service/travel_agent/NoSuchBookingException.class
 service/travel_agent/Application.class
 service/travel_agent/MongoConfig.class
 service/travel_agent/TravelAgentService$NoSuchBookingException.class
+>>>>>>> e68d7902f71b536c082ecd5fb85b3528f8d7c054

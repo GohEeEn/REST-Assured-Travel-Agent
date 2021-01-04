@@ -399,6 +399,7 @@ public class ClientController {
 				}
 				cr.setTravelPackageReferenceNumber(tp.getTravelPackageReferenceNumber());
 				PrintWriter out = response.getWriter();
+				Client.sendBookingChoicesToTravelTragent(cr);
             	out.println("<script>");
             	out.println("alert('" + "Booking Successful!! your Booking Reference ID is - " +tp.getTravelPackageReferenceNumber()+ "');");
             	out.println("window.location.replace('" + "/" + "');");
@@ -576,7 +577,7 @@ public class ClientController {
 	public static JSONObject parseJSONObject(String response){
 
 		JSONObject jsonObject = new JSONObject();
-		try{
+		try{.
 			JSONParser parser = new JSONParser();
 			jsonObject = (JSONObject) parser.parse(response);
 		} catch (ParseException e) {

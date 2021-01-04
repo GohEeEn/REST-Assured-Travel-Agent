@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import service.core.FlightRequest;
 import service.core.Flight;
 import service.core.Hotel;
+import service.core.Booking;
 import service.core.Attraction;
 import service.core.ActivityRequest;
 import service.core.ActivityItem;
@@ -110,7 +111,20 @@ public class Client {
 						}
 
 	//Send the clientResponse to the travel agent
-	public static void sendBookinChoicesToTravelTragent(ClientResponse cr){
+	public static void sendBookinChoicesToTravelTragent(ClientResponse clientResponse){
 
+		HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(clientResponse);
+		Booking booking = new Booking();
+            booking = restTemplate.postForObject(argsResponse,requestClientResponse,Booking.class);
+
+		/**
+		 * TESTING code for clientResponse sent to travel agent
+		 */
+            System.out.println("\nAirline: "+booking.getFlight().getAirline());
+            System.out.println("Hotel Address: "+booking.getHotel().getAddress());
+		System.out.println("Booking ref Num: "+booking.getReferenceNumber());
+		System.out.println("Activity 1: "+booking.getActivities()[0]);
+            System.out.println("Attraction 1: "+booking.getAttractions()[0]);
+                  
 	}
 }
