@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import service.core.FlightRequest;
 import service.core.Flight;
 import service.core.Hotel;
+import service.core.Booking;
 import service.core.Attraction;
 import service.core.ActivityRequest;
 import service.core.ActivityItem;
@@ -33,11 +34,11 @@ import java.io.IOException;
 
 public class Client {
 	
-	public static final String argsRequest = "http://192.168.49.2:31500/travelagent/travelpackagerequests";
-	public static final String argsResponse = "http://192.168.49.2:31500/travelagent/bookings";
+	// public static final String argsRequest = "http://192.168.49.2:31500/travelagent/travelpackagerequests";
+	// public static final String argsResponse = "http://192.168.49.2:31500/travelagent/bookings";
 
-	// public static final String argsRequest = "http://localhost:8081/travelagent/travelpackagerequests";
-	// public static final String argsResponse = "http://localhost:8081/travelagent/bookings";
+	public static final String argsRequest = "http://localhost:8081/travelagent/travelpackagerequests";
+	public static final String argsResponse = "http://localhost:8081/travelagent/bookings";
 
 	public static int referenceNumber = 0;
 
@@ -109,7 +110,12 @@ public class Client {
 						}
 
 	//Send the clientResponse to the travel agent
-	public static void sendBookinChoicesToTravelTragent(ClientResponse cr){
-
+	public static void sendBookingChoicesToTravelTragent(ClientResponse cr){
+		System.out.println("GETS TO CLINET 114");
+		RestTemplate restTemplate = new RestTemplate();
+		HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(cr);
+		Booking booking = new Booking();
+		 booking = restTemplate.postForObject(argsResponse,requestClientResponse,Booking.class);
+		 System.out.println("GETS TO CLINET 119");
 	}
 }

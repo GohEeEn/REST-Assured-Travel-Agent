@@ -1,4 +1,4 @@
-service/travel_agent/Booking.class
+service/travel_agent/MongoBooking.class
 service/travel_agent/MongoRepository.class
 service/travel_agent/NoSuchBookingException.class
 service/travel_agent/ServiceInstanceRestController.class

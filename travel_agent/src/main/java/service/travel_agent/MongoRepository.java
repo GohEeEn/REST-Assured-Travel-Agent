@@ -20,7 +20,7 @@ public class MongoRepository {
         this.collection = database.getCollection("booking");
     }
 
-    public boolean insertBooking(Booking booking) {
+    public boolean insertBooking(MongoBooking booking) {
         try {
             final String json = new Gson().toJson(booking);
             final Document doc = Document.parse(json);
@@ -32,21 +32,21 @@ public class MongoRepository {
         }
     }
 
-    private Booking createBookingFromMongoDocument(final Document document) {
-        String uni_id = document.get("_id").toString();
-        String flight = document.get("flight").toString();
-        String hotel = document.get("hotel").toString(); 
-        String activities = document.get("activities").toString(); 
-        return new Booking(flight, hotel, activities);
+    private MongoBooking createBookingFromMongoDocument(final Document document) {
+        String referenceId = document.get("referenceId").toString();
+        String flightDetails = document.get("flightDetails").toString();
+        String hotelDetails = document.get("hotelDetails").toString(); 
+        String activitiesDetails = document.get("activitiesDetails").toString(); 
+        String attractionsDetails = document.get("attractionsDetails").toString(); 
+        return new MongoBooking(referenceId, flightDetails, hotelDetails, activitiesDetails, attractionsDetails);
     }
 
-    public Booking getBookingFromMongo(final String search) throws NoSuchFieldException{
+    public MongoBooking getBookingFromMongo(final String search) throws NoSuchFieldException{
         try {
-            final Document document = collection.find(eq("id", search)).first();
+            final Document document = collection.find(eq("referenceId", search)).first();
             return createBookingFromMongoDocument(document);
         } catch (final Exception e) {
-            throw new NoSuchFieldException(
-            String.format("The given ref id: <{%s}> does not correspond to a booking.", search));
+            return new MongoBooking();
         }
     }
 

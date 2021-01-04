@@ -87,14 +87,15 @@ public class TravelAgentService {
 
 	@RequestMapping(value="/travelagent/travelpackagerequests",method=RequestMethod.POST)
 	public ResponseEntity<TravelPackage> createTravelPackageRequest(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
-	
+		System.out.println("COMESHERE90");
+		mongoRepository.insertBooking(new MongoBooking("CLEINTLIN91", "TANMAY", "JOSHI", "SEAN", "MCL"));
 		/**
 		 * POST request to Flight service for a FlightRequest which will return a list of available flights
 		 */
 		Flight[] flights = new Flight[50];	
 		HttpEntity<FlightRequest> request = new HttpEntity<>(clientRequest.getFlightRequest());
 		flights = restTemplate.postForObject("http://flights-service/flightservice/flightrequests",request, Flight[].class);
-
+		System.out.println("COMESHERE97");
 		/**
 		 * POST request to Hotel Service for a HotelRequest which will return a list of available hotels
 		 */
@@ -164,21 +165,59 @@ public class TravelAgentService {
 		
 	} 
 
-	// public void storeBookingInMongo(){
-	// 	// Booking b = new Booking("try", "ni");
-	// 	// mongoRepository.insertBooking(b);
-	// }
+	public void storeBookingInMongo(Booking b){
+		System.out.println("GETS TO travel agent 168");
+		MongoBooking mb = new MongoBooking();
+		mb.setReferenceId(String.valueOf(b.getReferenceNumber()));
+		mb.setFlightDetails(b.getFlight().toString());
+		mb.setHotelDetails(b.getHotel().toString());
 
-	// public Booking getBookingFromMongo(String referenceId){
-	// 	Booking b = new Booking();
-	// 	try{
-	// 		b = mongoRepository.getBookingFromMongo(referenceId);
-	// 	}
-	// 	catch(Exception e){
-	// 		e.printStackTrace();
-	// 	}
-	// 	return b;
-	// }
+		String temp="";
+		boolean bool = true;
+		for(ActivityItem ai:b.getActivities()){
+			if(ai!=null){
+				bool = false;
+				temp+= ai.toString();
+				temp+="\n";
+			}
+		}
+		if(bool){
+			temp = "None";
+		}
+		mb.setActivitiesDetails(temp);
+
+		String temp2="";
+		boolean bool2 = true;
+		for(Attraction at:b.getAttractions()){
+			if(at!=null){
+				bool2 = false;
+				temp2+= at.toString();
+				temp2+="\n";
+			}
+		}
+		if(bool2){
+			temp2 = "None";
+		}
+		mb.setAttractionsDetails(temp2);
+		System.out.println("REF - "+mb.getReferenceId());
+		System.out.println("FLIGHT - "+mb.getFlightDetails());
+		System.out.println("HOTEL - "+mb.getHotelDetails());
+		System.out.println("ACTI - "+mb.getActivitiesDetails());
+		System.out.println("ATTRA - "+mb.getAttractionsDetails());
+
+		mongoRepository.insertBooking(mb);
+	}
+
+	public MongoBooking getBookingFromMongo(String referenceId){
+		MongoBooking b = new MongoBooking();
+		try{
+			b = mongoRepository.getBookingFromMongo(referenceId);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return b;
+	}
 
 
 	/**
@@ -254,6 +293,7 @@ public class TravelAgentService {
 		booking.setReferenceNumber(clientBookingReferenceNumber);   // give booking this unique ref num
 		clientBookings.put(clientBookingReferenceNumber,booking);
 
+		storeBookingInMongo(booking);
 		/**
 		 * Send response back to the client
 		 */
