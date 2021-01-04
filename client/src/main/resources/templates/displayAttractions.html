@@ -41,7 +41,6 @@
 		<script src="javascript/script.js"></script>
 		<script src="script.js"></script>
 
-
 	</head>
 	<body>
 		<div class="container">
@@ -52,14 +51,12 @@
 		    <div class="col-md-auto">
 		    </div>
 		    <div class="col col-lg-2">
-<!-- 		    	<button type="button" class="btn btn-primary btn-lg">Terms and Conditions</button>
- -->		    	<button type="button" class="btn btn-outline-info">Terms and Conditions</button>
+ 		    	<button type="button" class="btn btn-outline-info">Terms and Conditions</button>
 		    </div>
 		  </div>
 		</div>
 		<hr style="color: green; display: block;" >
-
-		<div class="container" th:if="${#arrays.isEmpty(attractionsDetails)}">
+		<div class="container" th:if="${attractionsDetails[0]==null}">
 			<h2>No attractions found in the destination city</h2>
 			<br>
 			<form action="/userAttractionsSelection" method="post" >
@@ -67,7 +64,7 @@
 			</form>
 		</div>
 
-		<div class="container" th:unless="${#arrays.isEmpty(attractionsDetails)}">
+		<div class="container" th:unless="${attractionsDetails[0]==null}">
 			<div class="row">
 				<div class="col-12"><h5>Search Results</h5>
 					<h6>Attractions found in the city you are staying</h6>
@@ -89,12 +86,12 @@
                                 </tr>
 								</thead>
 								<tbody>
-                                <tr th:each="attractionsDetail : ${attractionsDetails}">
+                                <tr th:each="attractionDetail : ${attractionsDetails}">
                                 	<td class="counterCell"></td>
-                                    <td th:text="${attractionsDetail.name} "></td>
-                                    <td th:text="${attractionsDetail.category} "></td>
-                                    <td th:text="${attractionsDetail.type}"></td>
-                                    <td th:text="${attractionsDetail.subtype} "></td>
+                                    <td th:text="${attractionDetail.name} "></td>
+                                    <td th:text="${attractionDetail.category} "></td>
+                                    <td th:text="${attractionDetail.type}"></td>
+                                    <td th:text="${attractionDetail.subtype} "></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -110,10 +107,8 @@
 						  </div>
 						<br>
 						<button type="submit" class="btn btn-primary">Submit</button>
-
 					</form>
 					<br>
-
 				</div>
 			</div>
 		</div>

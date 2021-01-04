@@ -8,12 +8,17 @@ import java.io.FileNotFoundException;
 import javax.servlet.http.HttpServletResponse;
 
 import service.core.ActivityRequest;
+import service.core.ActivityItem;
+import service.core.Attraction;
 import service.core.AttractionRequest;
 import service.core.ClientResponse;
 import service.core.FlightRequest;
 import service.core.HotelRequest;
 import service.core.TravelPackage;
+import service.core.Booking;
 import client.Client;
+import service.core.MongoBooking;
+import service.core.ClientResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -58,6 +63,7 @@ public class ClientController {
 	private AttractionRequest attractionRequest = new AttractionRequest();
 	private TravelPackage tp = new TravelPackage();
 	private ClientResponse cr = new ClientResponse();
+	private MongoBooking userBooking = new MongoBooking();
 	final static String locale = "en-GB";
 //	@RequestMapping(value="/",method=RequestMethod.GET)
 //	@ResponseBody 
@@ -119,8 +125,12 @@ public class ClientController {
 						else{
 							activityRequest.setCity(cityOfDestination.toLowerCase());
 							if (Arrays.stream(attractionCities).anyMatch(cityOfDestination.toLowerCase()::equals)){
+								System.out.println("IT MATCHEDDDD");
 								attractionRequest.setCity(cityOfDestination.toLowerCase());
 								attractionRequest.setCountry(capDestinaptionCountry);
+							}
+							else{
+								System.out.println("IT DIDNT MATCHE");
 							}
             				hotelRequest.setCityCode(cityCodes.get(cityOfDestination.toLowerCase()));
 							activityRequest.setCountry(capDestinaptionCountry);
@@ -378,7 +388,7 @@ public class ClientController {
 			for(String s: splited){
 			int i = Integer.parseInt(s);
 			chosenAttractions.add(i);
-			if(i<0 || (i == 0 && tp.getAttractions().length!=0) || (i!=0 && i>tp.getAttractions().length)){
+			if(i<0 || (i == 0 && tp.getAttractions()[0]!=null) || (i!=0 && i>tp.getAttractions().length)){
 				checkerB = false;
 				break;
 			}
@@ -399,20 +409,90 @@ public class ClientController {
 				}
 				cr.setTravelPackageReferenceNumber(tp.getTravelPackageReferenceNumber());
 				PrintWriter out = response.getWriter();
+				Booking bookingObj = Client.sendBookingChoicesToTravelAgent(cr);
+				userBooking = convertBookingToMongoBooking(bookingObj);
             	out.println("<script>");
-            	out.println("alert('" + "Booking Successful!! your Booking Reference ID is - " +tp.getTravelPackageReferenceNumber()+ "');");
-            	out.println("window.location.replace('" + "/" + "');");
+            	out.println("alert('" + "Booking Successful!! your Booking Reference ID is - " +bookingObj.getReferenceNumber()+ "');");
+            	out.println("window.location.replace('" + "/reservation" + "');");
             	out.println("</script>");
 			}
 			else{
 				PrintWriter out = response.getWriter();
             out.println("<script>");
             out.println("alert('" + "invalid indexes entered, enter again" + "');");
-            out.println("window.location.replace('" + "/displayAttractions" + "');");
+            out.println("window.location.replace('" + "/reservation" + "');");
             out.println("</script>");
 			}
 		}
 	}
+
+	public MongoBooking convertBookingToMongoBooking(Booking b){
+		userBooking.setReferenceId(String.valueOf(b.getReferenceNumber()));
+		userBooking.setFlightDetails(b.getFlight().toString());
+		userBooking.setHotelDetails(b.getHotel().toString());
+
+		String temp="";
+		boolean bool = true;
+		for(ActivityItem ai:b.getActivities()){
+			if(ai!=null){
+				bool = false;
+				temp+= ai.toString();
+				temp+="\n";
+			}
+		}
+		if(bool){
+			temp = "None";
+		}
+		userBooking.setActivitiesDetails(temp);
+
+		String temp2="";
+		boolean bool2 = true;
+		for(Attraction at:b.getAttractions()){
+			if(at!=null){
+				bool2 = false;
+				temp2+= at.toString();
+				temp2+="\n";
+			}
+		}
+		if(bool2){
+			temp2 = "None";
+		}
+		userBooking.setAttractionsDetails(temp2);
+		return userBooking;
+	}
+
+	@RequestMapping(value="/showBooking",method=RequestMethod.POST)
+	public void showBooking(String inputBookingReference, HttpServletResponse response) throws IOException{
+		inputBookingReference = inputBookingReference.trim();
+		boolean isNumeric = inputBookingReference.chars().allMatch( Character::isDigit );
+		if(!isNumeric){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "invalid booking reference id entered, enter again" + "');");
+            out.println("window.location.replace('" + "/" + "');");
+            out.println("</script>");
+		}
+		else{
+		userBooking = Client.getBookingFromTravelAgent(inputBookingReference);
+		if (userBooking.getReferenceId()==null){
+			PrintWriter out = response.getWriter();
+            out.println("<script>");
+            out.println("alert('" + "No booking found with provided booking id, enter again" + "');");
+            out.println("window.location.replace('" + "/" + "');");
+            out.println("</script>");
+		}
+		else{
+			response.sendRedirect("/reservation");
+		}
+	}
+	}
+
+@GetMapping("/reservation")
+    public String reservation(Model model){
+		DisplayBooking db= new DisplayBooking(userBooking);
+        model.addAttribute("userBooking", db);
+        return "reservation.html";
+    }
 
     @GetMapping("/displayFlights")
     public String displayflights(Model model){
@@ -576,7 +656,7 @@ public class ClientController {
 	public static JSONObject parseJSONObject(String response){
 
 		JSONObject jsonObject = new JSONObject();
-		try{.
+		try{
 			JSONParser parser = new JSONParser();
 			jsonObject = (JSONObject) parser.parse(response);
 		} catch (ParseException e) {

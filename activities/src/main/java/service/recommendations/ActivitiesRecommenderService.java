@@ -127,10 +127,18 @@ public class ActivitiesRecommenderService {
 	@RequestMapping(value="/activityservice/activities",method=RequestMethod.POST)
 	public ResponseEntity<ActivityItem> createActivity(@RequestBody ClientChoice clientChoiceOfActivity)  throws URISyntaxException {
 
+<<<<<<< HEAD
         ActivityItem activity = new ActivityItem();   // holds new activity the client wishes to book
         activity = searchedActivities.get(clientChoiceOfActivity.getReferenceNumber()); 
         System.out.println("\nTESTING ACTIViTY POST BOOKING)");
 		
+=======
+        System.out.println("\nTESTING ACTIVITY POST BOOKING)");
+		ActivityItem activity = searchedActivities.get(clientChoicesOfActivities.getReferenceNumbers()[0]);        // find activity the client wishes to book
+        ActivityItem[] activities = new ActivityItem[1];
+        activities[0] = activity;
+		System.out.println("\nTesting /activityservice/activities\n");
+>>>>>>> 54fda2865a30befc2e48969eef06600366a96ae0
 		System.out.println(activity.toString());
 		
 		// Add new activities for this client to bookedActivities map (which contains booked activities for all clients)

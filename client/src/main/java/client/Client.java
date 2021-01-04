@@ -11,6 +11,7 @@ import org.springframework.http.HttpEntity;
 import service.core.FlightRequest;
 import service.core.Flight;
 import service.core.Hotel;
+import service.core.Booking;
 import service.core.Attraction;
 import service.core.ActivityRequest;
 import service.core.ActivityItem;
@@ -19,6 +20,7 @@ import service.core.ClientRequest;
 import service.core.ClientResponse;
 import service.core.HotelRequest;
 import service.core.TravelPackage;
+import service.core.MongoBooking;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -34,11 +36,11 @@ import java.io.IOException;
 public class Client {
 	
 	// Use ip address found through "minikube ip" in format"IP:31500" to access kubernetes travel_agent
-	// public static final String argsRequest = "http://192.168.49.2:31500/travelagent/travelpackagerequests";
-	// public static final String argsResponse = "http://192.168.49.2:31500/travelagent/bookings";
+	public static final String argsRequest = "http://192.168.49.2:31500/travelagent/travelpackagerequests";
+	public static final String argsResponse = "http://192.168.49.2:31500/travelagent/bookings";
 
-	public static final String argsRequest = "http://localhost:8081/travelagent/travelpackagerequests";
-	public static final String argsResponse = "http://localhost:8081/travelagent/bookings";
+	// public static final String argsRequest = "http://localhost:8081/travelagent/travelpackagerequests";
+	// public static final String argsResponse = "http://localhost:8081/travelagent/bookings";
 
 	public static int referenceNumber = 0;
 
@@ -110,10 +112,11 @@ public class Client {
 						}
 
 	//Send the clientResponse to the travel agent
-	public static void sendBookinChoicesToTravelTragent(ClientResponse clientResponse){
+	public static Booking sendBookingChoicesToTravelAgent(ClientResponse clientResponse){
 
 		HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(clientResponse);
 		Booking booking = new Booking();
+		RestTemplate restTemplate = new RestTemplate();
             booking = restTemplate.postForObject(argsResponse,requestClientResponse,Booking.class);
 
 		/**
@@ -123,7 +126,18 @@ public class Client {
             System.out.println("Hotel Address: "+booking.getHotel().getAddress());
 		System.out.println("Booking ref Num: "+booking.getReferenceNumber());
 		System.out.println("Activity 1: "+booking.getActivities()[0]);
-            System.out.println("Attraction 1: "+booking.getAttractions()[0]);
+			System.out.println("Attraction 1: "+booking.getAttractions()[0]);
+			return booking;
                   
+	}
+
+	public static MongoBooking getBookingFromTravelAgent(String inputBookingReference){
+		// HttpEntity<String> requestuserBooking = new HttpEntity<>(inputBookingReference);
+		// Booking booking = new Booking();
+		RestTemplate restTemplate = new RestTemplate();
+		// booking = restTemplate.postForObject(argsResponse,requestuserBooking,Booking.class);
+		MongoBooking getBooking = restTemplate.getForObject("http://localhost:8081/travelagent/bookings/"+inputBookingReference, MongoBooking.class);
+		return getBooking;
+        // System.out.println("\nGET TEST: "+getBooking.getFlight().getAirline()+"\n");
 	}
 }

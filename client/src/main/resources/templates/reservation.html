@@ -45,51 +45,63 @@
 		    <div class="col-md-auto">
 		    </div>
 		    <div class="col col-lg-2">
-<!-- 		    	<button type="button" class="btn btn-primary btn-lg">Terms and Conditions</button>
- -->		    	<button type="button" class="btn btn-outline-info">Terms and Conditions</button>
+		    	<button type="button" class="btn btn-outline-info">Terms and Conditions</button>
 		    </div>
 		  </div>
 		</div>
 		<hr style="color: green; display: block;" >
 
 		<div class="container">
-<!-- 			I should comment out the row or make it applicable only to Your Booking Reservation text only
- -->			<div class="row">
+			<div class="row">
 				<div class="col-12"><h5>Your Boooking Reservation</h5>
-<!-- 					<h6>Hotels found according to your requirements</h6>
- -->           <!--          <form action="/userHotelSelection" method="post" > -->
                         <div class="container">
-							<table>
-								<tr th:each="userBooking : ${userBookings}">
-									<td>REFERENCE ID :</td>
-									<td th:text="${userBooking.bookingReferenceID} "></td>	
+							<table class="table">
+								<col style="width: 20%"/>
+                            	<col style="width: 80%"/>
+								<tr>
+									<td><b>REFERENCE ID - </b></td>
+									<td th:text="${userBooking.getRefId()} "></td>	
 								</tr>
-								<tr th:each="userBooking : ${userBookings}">
-									<td>HOTEL :</td>
-									<td th:text="${userBooking.hotelToString} "></td>	
+								<tr>
+									<td><b>FLIGHT - </b></td>
+									 <td>
+							            <p th:each="str : ${userBooking.getFlight()}">
+							                <li th:text="${str}"></li>
+							            </p>
+							        </td>
 								</tr>
-								<tr th:each="userBooking : ${userBookings}">
-									<td>FLIGHT :</td>
-									<td th:text="${userBooking.flightsToString} "></td>	
+								<tr>
+									<td><b>HOTEL - </b></td>
+									<td>
+							            <p th:each="str1 : ${userBooking.getHotel()}">
+							                <li th:text="${str1}"></li>
+							            </p>
+							        </td>
 								</tr>
-								<tr th:each="userBooking : ${userBookings}">
-									<td>ACTIVITIES :</td>
-									<td th:text="${userBooking.activities} "></td>	
+								<tr>
+									<td><b>ACTIVITIES - </b></td>
+									<td>
+							            <p th:each="str2 : ${userBooking.getActivities()}">
+							                <li th:text="${str2}"></li>
+							            </p>
+							        </td>
 								</tr>
-
-								<tr th:each="userBooking : ${userBookings}">
-									<td>ATTRACTIONS :</td>
-									<td th:text="${userBooking.attractions} "></td>	
+								<tr>
+									
+								</tr>
+								<tr>
+									<td><b>ATTRACTIONS - </b></td>
+									<td>
+							            <p th:each="str3 : ${userBooking.getAttractions()}">
+							                <li th:text="${str3}"></li>
+							            </p>
+							        </td>
 								</tr>
 							</table>
                         </div>
                         <br>
 						<br>
-<!-- 						<button type="submit" class="btn btn-primary">Submit</button>
- -->
-<!-- 					</form>
- -->					<br>
-
+ 						<br>
 				</div>
 			</div>
 		</div>

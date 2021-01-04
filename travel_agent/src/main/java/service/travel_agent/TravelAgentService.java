@@ -37,6 +37,7 @@ import service.core.ActivityRequest;
 import service.core.ActivityItem;
 import service.core.Hotel;
 import service.core.Booking;
+import service.core.MongoBooking;
 import service.core.ClientResponse;
 import service.core.ClientChoice;
 import service.core.ClientChoices;
@@ -82,14 +83,22 @@ public class TravelAgentService {
 
 	@RequestMapping(value="/travelagent/travelpackagerequests",method=RequestMethod.POST)
 	public ResponseEntity<TravelPackage> createTravelPackageRequest(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
-	
+		System.out.println("COMESHERE90");
+		mongoRepository.insertBooking(new MongoBooking("Sean", "MCLOU", "S", "m", "Hello"));
 		/**
 		 * POST request to Flight service for a FlightRequest which will return a list of available flights
 		 */
+<<<<<<< HEAD
 		// Flight[] flights = new Flight[50];	
 		HttpEntity<FlightRequest> requestForFlights = new HttpEntity<>(clientRequest.getFlightRequest());
 		Flight[] flights = restTemplate.postForObject("http://flights-service/flightservice/flightrequests",requestForFlights, Flight[].class);
 
+=======
+		Flight[] flights = new Flight[50];	
+		HttpEntity<FlightRequest> request = new HttpEntity<>(clientRequest.getFlightRequest());
+		flights = restTemplate.postForObject("http://flights-service/flightservice/flightrequests",request, Flight[].class);
+		System.out.println("COMESHERE97");
+>>>>>>> 54fda2865a30befc2e48969eef06600366a96ae0
 		/**
 		 * POST request to Hotel Service for a HotelRequest which will return a list of available hotels
 		 */
@@ -122,12 +131,16 @@ public class TravelAgentService {
 		Attraction[] attractions = new Attraction[200];  // must instantiate the array as we will be sending back a null array if there are no client requests for attractions
 
 
+<<<<<<< HEAD
 		// System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity().equals(null)+"\n");
 
 		// AttractionRequest at = new AttractionRequest();
 		// System.out.println("TESTING attractionREquest null: "+at.getCity());
+=======
+		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity()==null+"\n");
+>>>>>>> 54fda2865a30befc2e48969eef06600366a96ae0
 
-		if (!(clientRequest.getAttractionRequest().getCity().equals(null))){
+		if (!(clientRequest.getAttractionRequest().getCity()==null)){
 
 			HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
 			attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
@@ -163,21 +176,59 @@ public class TravelAgentService {
 		
 	} 
 
-	// public void storeBookingInMongo(){
-	// 	// Booking b = new Booking("try", "ni");
-	// 	// mongoRepository.insertBooking(b);
-	// }
+	public void storeBookingInMongo(Booking b){
+		System.out.println("GETS TO travel agent 168");
+		MongoBooking mb = new MongoBooking();
+		mb.setReferenceId(String.valueOf(b.getReferenceNumber()));
+		mb.setFlightDetails(b.getFlight().toString());
+		mb.setHotelDetails(b.getHotel().toString());
 
-	// public Booking getBookingFromMongo(String referenceId){
-	// 	Booking b = new Booking();
-	// 	try{
-	// 		b = mongoRepository.getBookingFromMongo(referenceId);
-	// 	}
-	// 	catch(Exception e){
-	// 		e.printStackTrace();
-	// 	}
-	// 	return b;
-	// }
+		String temp="";
+		boolean bool = true;
+		for(ActivityItem ai:b.getActivities()){
+			if(ai!=null){
+				bool = false;
+				temp+= ai.toString();
+				temp+="\n";
+			}
+		}
+		if(bool){
+			temp = "None";
+		}
+		mb.setActivitiesDetails(temp);
+
+		String temp2="";
+		boolean bool2 = true;
+		for(Attraction at:b.getAttractions()){
+			if(at!=null){
+				bool2 = false;
+				temp2+= at.toString();
+				temp2+="\n";
+			}
+		}
+		if(bool2){
+			temp2 = "None";
+		}
+		mb.setAttractionsDetails(temp2);
+		System.out.println("REF - "+mb.getReferenceId());
+		System.out.println("FLIGHT - "+mb.getFlightDetails());
+		System.out.println("HOTEL - "+mb.getHotelDetails());
+		System.out.println("ACTI - "+mb.getActivitiesDetails());
+		System.out.println("ATTRA - "+mb.getAttractionsDetails());
+
+		mongoRepository.insertBooking(mb);
+	}
+
+	public MongoBooking getBookingFromMongo(String referenceId){
+		MongoBooking b = new MongoBooking();
+		try{
+			b = mongoRepository.getBookingFromMongo(referenceId);
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
+		return b;
+	}
 
 
 	/**
@@ -283,6 +334,7 @@ public class TravelAgentService {
 		booking.setReferenceNumber(clientBookingReferenceNumber);   // give booking this unique ref num
 		clientBookings.put(clientBookingReferenceNumber,booking);
 
+		storeBookingInMongo(booking);
 		/**
 		 * Send response back to the client
 		 */
@@ -293,7 +345,6 @@ public class TravelAgentService {
 		return new ResponseEntity<>(booking, headers, HttpStatus.CREATED);  // return the newly created booking to client 
 		
 	} 
-
 	
 	/**
 	 * GET REQUEST (single instance)
@@ -303,12 +354,18 @@ public class TravelAgentService {
 	 */
 	@RequestMapping(value="/travelagent/bookings/{referenceNumber}",method=RequestMethod.GET)
 	@ResponseStatus(value=HttpStatus.OK)
+<<<<<<< HEAD
 	public Booking getBooking(@PathVariable int referenceNumber) {
 
 		// System.out.println("\nTEsting GET \n");
 		Booking booking = clientBookings.get(referenceNumber);  // Find booking with given reference
 		if (booking == null) throw new NoSuchBookingException();  // If no booking exists matching this reference then throw an exception
 		return booking;
+=======
+	public MongoBooking getBooking(@PathVariable String referenceNumber) throws NoSuchFieldException{
+		MongoBooking mb = mongoRepository.getBookingFromMongo(referenceNumber);
+		return mb;
+>>>>>>> 54fda2865a30befc2e48969eef06600366a96ae0
 	}
 
 

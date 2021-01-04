@@ -121,6 +121,6 @@ public class ActivityItem {
 
 
     public String toString() {
-        return name + " " + rating + " " + price.toString() + " " + bookingLink + "\n";
+        return "Name: " + name+"\n"+"Link: "+bookingLink+"\n";
     }
 }
