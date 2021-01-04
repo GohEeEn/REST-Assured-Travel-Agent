@@ -37,6 +37,7 @@ import org.springframework.web.client.RestTemplate;
 import service.core.Attraction;
 import service.core.Geocode;
 import service.core.AttractionRequest;
+import service.core.ClientChoices;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
