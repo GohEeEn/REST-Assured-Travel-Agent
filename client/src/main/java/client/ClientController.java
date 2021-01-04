@@ -125,8 +125,12 @@ public class ClientController {
 						else{
 							activityRequest.setCity(cityOfDestination.toLowerCase());
 							if (Arrays.stream(attractionCities).anyMatch(cityOfDestination.toLowerCase()::equals)){
+								System.out.println("IT MATCHEDDDD");
 								attractionRequest.setCity(cityOfDestination.toLowerCase());
 								attractionRequest.setCountry(capDestinaptionCountry);
+							}
+							else{
+								System.out.println("IT DIDNT MATCHE");
 							}
             				hotelRequest.setCityCode(cityCodes.get(cityOfDestination.toLowerCase()));
 							activityRequest.setCountry(capDestinaptionCountry);
@@ -384,7 +388,7 @@ public class ClientController {
 			for(String s: splited){
 			int i = Integer.parseInt(s);
 			chosenAttractions.add(i);
-			if(i<0 || (i == 0 && tp.getAttractions().length!=0) || (i!=0 && i>tp.getAttractions().length)){
+			if(i<0 || (i == 0 && tp.getAttractions()[0]!=null) || (i!=0 && i>tp.getAttractions().length)){
 				checkerB = false;
 				break;
 			}

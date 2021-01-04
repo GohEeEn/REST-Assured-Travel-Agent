@@ -38,6 +38,6 @@ public class Attraction {
 
 
     public String toString(){
-        return "Name: "+getName() + "         ," +" Category: " +getCategory()+"\n";
+        return "Name: "+getName() + "\n" +"Category: " +getCategory()+"\n";
     }
 }

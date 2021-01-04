@@ -102,9 +102,10 @@ public class Flight {
             String flightInfo = "";
             flightInfo += "Airline: " + airline  + "\n";
             flightInfo += "Price: " + price  + "\n";
-            flightInfo += "From "+cityOfOrigin+ "To"+cityOfDestination+"\n";
+            flightInfo += "From "+cityOfOrigin+ " To "+cityOfDestination+"\n";
+            flightInfo += "Origin Airport - "+originAirportName+ " and Destination Airport - "+destinationAirportName+"\n";
             flightInfo += "Departure on "+outboundDate;
-            flightInfo += "and Return on "+returnDate;
+            flightInfo += " and Return on "+returnDate;
             return flightInfo;
       }
       

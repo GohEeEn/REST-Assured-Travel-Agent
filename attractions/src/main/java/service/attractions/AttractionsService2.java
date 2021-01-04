@@ -131,7 +131,7 @@ public class AttractionsService2 {
         Attraction[] attractions = new Attraction[1];
         attractions[0] = attraction;
 		System.out.println("\nTesting /attractionservice/attractions\n");
-		System.out.println(attraction.toString());
+		// System.out.println(attraction.toString());
 		
 		// Add a new attraction for this client to bookedAttractions map (which contains booked attractions for all clients)
 		bookedAttractionReferenceNumber++;

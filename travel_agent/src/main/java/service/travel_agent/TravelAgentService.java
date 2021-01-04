@@ -126,9 +126,9 @@ public class TravelAgentService {
 		Attraction[] attractions = new Attraction[200];
 
 
-		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity().equals(null)+"\n");
+		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity()==null+"\n");
 
-		if (!(clientRequest.getAttractionRequest().getCity().equals(null))){
+		if (!(clientRequest.getAttractionRequest().getCity()==null)){
 
 			HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
 			attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
