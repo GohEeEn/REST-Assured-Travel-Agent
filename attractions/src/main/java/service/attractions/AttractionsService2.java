@@ -141,7 +141,61 @@ public class AttractionsService2 {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(attractions, headers, HttpStatus.CREATED);     // Returns attractions to travel agent
+    }
+    
+    
+    /**
+	 * GET REQUEST
+	 * 
+	 * @param reference
+	 * @return attraction
+	 */
+	@RequestMapping(value="/attractionservice/attractions/{reference}",method=RequestMethod.GET)
+	public Attraction getAttraction(@PathVariable("reference") int reference) {
+
+		Attraction attraction = bookedAttractions.get(reference);
+		if (attraction == null) throw new NoSuchAttractionException();
+		return attraction;
 	}
+
+	/**
+	 * GET REQUEST (all instances)
+	 * 
+	 * @return bookedAttractions.values()
+	 */
+	@RequestMapping(value="/activityservice/activities",method=RequestMethod.GET)
+	public @ResponseBody Collection<Attraction> listEntries() {
+
+		if (bookedAttractions.size() == 0) throw new NoSuchAttractionException();
+		return bookedAttractions.values();
+	}
+
+	/**
+	 * PUT REQUEST: replace attraction with given reference number
+     * A limitiation of this method is that we can only change one attraction per call
+	 * 
+	 * @param referenceNumber
+	 * @param clientChoices
+	 * @throws URISyntaxException
+	 */
+
+	@RequestMapping(value="/attractionservice/attractions/{referenceNumber}", method=RequestMethod.PUT)
+    	public ResponseEntity<Attraction> replaceAttraction(@PathVariable int referenceNumber, @RequestBody ClientChoices clientChoices) throws URISyntaxException{
+
+		Attraction newChoiceOfAttraction = searchedAttractions.get(clientChoices.getReferenceNumbers()[1]);        // find attraction the client wishes to book
+
+		System.out.println("\nTesting PUT /attractionservice/attractions\n");
+		System.out.println(newChoiceOfAttraction.toString());
+		
+		// Replace old attraction with a new attraction
+		Attraction previouslyBookedAttractioin = bookedAttractions.remove(referenceNumber);
+        bookedAttractions.put(referenceNumber,newChoiceOfAttraction);
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/attractionservice/attractions"+referenceNumber;
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Location", path);
+		return new ResponseEntity<>(headers, HttpStatus.OK);
+    }
 
 
     /**

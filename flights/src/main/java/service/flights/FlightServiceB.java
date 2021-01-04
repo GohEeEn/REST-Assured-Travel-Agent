@@ -48,7 +48,7 @@ import org.json.simple.parser.ParseException;
 
 import service.core.Flight; 
 import service.core.FlightRequest;
-import service.flights.NoSuchFlightException;
+import service.flights.NoSuchActivityException;
 import service.core.ClientChoice;
 
 import java.util.Iterator;
@@ -166,7 +166,7 @@ public class FlightServiceB {
 	/**
 	 * GET REQUEST (all instances)
 	 * 
-	 * @return flights.values()
+	 * @return bookedFlights.values()
 	 */
 	@RequestMapping(value="/flightservice/flights",method=RequestMethod.GET)
 	public @ResponseBody Collection<Flight> listEntries() {

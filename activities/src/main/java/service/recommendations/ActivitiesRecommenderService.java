@@ -90,7 +90,7 @@ public class ActivitiesRecommenderService {
     private static int activityRequestReferenceNumber = 0;    // unique reference number for each activityRequest
 	private static int searchedActivityReferenceNumber = 0;           // unique reference number for each list of activities found by ActivitiesRecommenderService that matches requirements from activityRequest
 	private static int bookedActivityReferenceNumber = 0;           // unique reference number for each activity list booked by a client
-	private Map<Integer, ActivityItem> bookedActivites = new HashMap<>();      // Map of all activities created with new reference number as key
+	private Map<Integer, ActivityItem> bookedActivities = new HashMap<>();      // Map of all activities created with new reference number as key
     private Map<Integer, ActivityItem> searchedActivities = new HashMap<>();    // Map of all activites that ActivityRecommenderService searched for
     
 
@@ -149,14 +149,68 @@ public class ActivitiesRecommenderService {
 		
 		// Add a new activity for this client to bookedActivities map (which contains booked activities for all clients)
 		bookedActivityReferenceNumber++;
-		bookedActivites.put(bookedActivityReferenceNumber,activity);
+		bookedActivities.put(bookedActivityReferenceNumber,activity);
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/activityservice/activities/"+bookedActivityReferenceNumber;     // Create URI for this activity
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(activities, headers, HttpStatus.CREATED);     // Returns activities to travel agent
+    }
+    
+
+    /**
+	 * GET REQUEST
+	 * 
+	 * @param reference
+	 * @return activity
+	 */
+	@RequestMapping(value="/activityservice/activities/{reference}",method=RequestMethod.GET)
+	public ActivityItem getActivity(@PathVariable("reference") int reference) {
+
+		ActivityItem activity = bookedActivities.get(reference);
+		if (activity == null) throw new NoSuchActivityException();
+		return activity;
 	}
+
+	/**
+	 * GET REQUEST (all instances)
+	 * 
+	 * @return bookedActivities.values()
+	 */
+	@RequestMapping(value="/activityservice/activities",method=RequestMethod.GET)
+	public @ResponseBody Collection<ActivityItem> listEntries() {
+
+		if (bookedActivities.size() == 0) throw new NoSuchActivityException();
+		return bookedActivities.values();
+	}
+
+	/**
+	 * PUT REQUEST: replace activity with given reference number
+     * A limitiation of this method is that we can only change one activity per call
+	 * 
+	 * @param referenceNumber
+	 * @param clientChoices
+	 * @throws URISyntaxException
+	 */
+
+	@RequestMapping(value="/activityservice/activities/{referenceNumber}", method=RequestMethod.PUT)
+    	public ResponseEntity<ActivityItem> replaceActivity(@PathVariable int referenceNumber, @RequestBody ClientChoices clientChoices) throws URISyntaxException{
+
+		ActivityItem newChoiceOfActivity = searchedActivities.get(clientChoices.getReferenceNumbers()[1]);        // find activity the client wishes to book
+
+		System.out.println("\nTesting PUT /activityservice/activities\n");
+		System.out.println(newChoiceOfActivity.toString());
+		
+		// Replace old activity with a new activity
+		ActivityItem previouslyBookedActivity = bookedActivities.remove(referenceNumber);
+        bookedActivities.put(referenceNumber,newChoiceOfActivity);
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/activityservice/activities"+referenceNumber;
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Location", path);
+		return new ResponseEntity<>(headers, HttpStatus.OK);
+    }
     
 
     /**
