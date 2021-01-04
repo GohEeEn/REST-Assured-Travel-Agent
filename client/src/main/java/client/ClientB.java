@@ -170,9 +170,12 @@
 //             clientResponse.setTravelPackageReferenceNumber(travelPackage.getTravelPackageReferenceNumber());
 //             clientResponse.setHotelReferenceNumber(1);
 // 		clientResponse.setFlightReferenceNumber(2);
-// 		int [] intArray = new int[1];
-// 		intArray[0] = 1;
+// 		int [] intArray = new int[2];
+// 		intArray[0] = 1;   
+		
 // 		clientResponse.setActivitiesReferenceNumber(intArray);
+// 		clientResponse.setAttractionsReferenceNumber(intArray);
+
 //             HttpEntity<ClientResponse> requestClientResponse = new HttpEntity<>(clientResponse);
                   
 //             Booking booking = new Booking();
@@ -180,8 +183,9 @@
 
 //             System.out.println("\nAirline: "+booking.getFlight().getAirline());
 //             System.out.println("Hotel Address: "+booking.getHotel().getAddress());
-//             System.out.println("Booking ref Num: "+booking.getReferenceNumber()+"\n");
-            
+// 		System.out.println("Booking ref Num: "+booking.getReferenceNumber());
+// 		System.out.println("Activity 1: "+booking.getActivities()[0]);
+//             System.out.println("Attraction 1: "+booking.getAttractions()[0]);
                   
 //             /**
 //              * Testing code for GET below
@@ -193,7 +197,7 @@
 // 		/**
 // 		 * Testing code for DELETE below
 // 		 */
-// 		// restTemplate.delete("http://localhost:8081/bookings/1");
+// 		// restTemplate.delete("http://localhost:8081/travelagent/bookings/1");
 
 
 // 		/**
@@ -201,7 +205,13 @@
 // 		 *  */ 
 // 		travelPackage = restTemplate.postForObject(newArgs,request,TravelPackage.class);
 //             clientResponse.setHotelReferenceNumber(1);
-//             clientResponse.setFlightReferenceNumber(2);
+// 		clientResponse.setFlightReferenceNumber(2);
+// 		int [] intArray2 = new int[2];
+// 		intArray2[0] = 1;    // old activity
+// 		intArray2[1] = 3;	   // new activity
+// 		clientResponse.setActivitiesReferenceNumber(intArray2);
+// 		clientResponse.setAttractionsReferenceNumber(intArray2);
+
 //             ReplaceBooking replaceBooking = new ReplaceBooking();
 //             replaceBooking.setNewChoiceOfBooking(clientResponse);
 //             replaceBooking.setPreviousBooking(booking);

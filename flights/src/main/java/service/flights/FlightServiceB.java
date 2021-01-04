@@ -166,7 +166,7 @@ public class FlightServiceB {
 	/**
 	 * GET REQUEST (all instances)
 	 * 
-	 * @return flights.values()
+	 * @return bookedFlights.values()
 	 */
 	@RequestMapping(value="/flightservice/flights",method=RequestMethod.GET)
 	public @ResponseBody Collection<Flight> listEntries() {

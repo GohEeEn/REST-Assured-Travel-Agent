@@ -46,6 +46,8 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import service.core.ClientChoices;
+
 
 @RestController
 public class AttractionsService2 {
@@ -83,7 +85,8 @@ public class AttractionsService2 {
         System.out.println("\nTesting AttractionService POST Request\n");
 
         Attraction[] attractions = getAttractionsWithQueries(attractionRequest.getCity(), attractionRequest.getCountry());
-        
+        addAttractionsToSearchAttractionsMap(attractions);
+
         /** 
 		 * The following code prints all attractions which were found through the Amadeus API
 		 */
@@ -139,7 +142,61 @@ public class AttractionsService2 {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(attractions, headers, HttpStatus.CREATED);     // Returns attractions to travel agent
+    }
+    
+    
+    /**
+	 * GET REQUEST
+	 * 
+	 * @param reference
+	 * @return attraction
+	 */
+	@RequestMapping(value="/attractionservice/attractions/{reference}",method=RequestMethod.GET)
+	public Attraction getAttraction(@PathVariable("reference") int reference) {
+
+		Attraction attraction = bookedAttractions.get(reference);
+		if (attraction == null) throw new NoSuchAttractionException();
+		return attraction;
 	}
+
+	/**
+	 * GET REQUEST (all instances)
+	 * 
+	 * @return bookedAttractions.values()
+	 */
+	@RequestMapping(value="/activityservice/activities",method=RequestMethod.GET)
+	public @ResponseBody Collection<Attraction> listEntries() {
+
+		if (bookedAttractions.size() == 0) throw new NoSuchAttractionException();
+		return bookedAttractions.values();
+	}
+
+	/**
+	 * PUT REQUEST: replace attraction with given reference number
+     * A limitiation of this method is that we can only change one attraction per call
+	 * 
+	 * @param referenceNumber
+	 * @param clientChoices
+	 * @throws URISyntaxException
+	 */
+
+	@RequestMapping(value="/attractionservice/attractions/{referenceNumber}", method=RequestMethod.PUT)
+    	public ResponseEntity<Attraction> replaceAttraction(@PathVariable int referenceNumber, @RequestBody ClientChoices clientChoices) throws URISyntaxException{
+
+		Attraction newChoiceOfAttraction = searchedAttractions.get(clientChoices.getReferenceNumbers()[1]);        // find attraction the client wishes to book
+
+		System.out.println("\nTesting PUT /attractionservice/attractions\n");
+		System.out.println(newChoiceOfAttraction.toString());
+		
+		// Replace old attraction with a new attraction
+		Attraction previouslyBookedAttractioin = bookedAttractions.remove(referenceNumber);
+        bookedAttractions.put(referenceNumber,newChoiceOfAttraction);
+
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/attractionservice/attractions"+referenceNumber;
+		HttpHeaders headers = new HttpHeaders();
+		headers.set("Content-Location", path);
+		return new ResponseEntity<>(headers, HttpStatus.OK);
+    }
 
 
     /**
@@ -215,7 +272,7 @@ public class AttractionsService2 {
      * @param longitude Double value in range of -90 to 90
      * @return list of attractions in a given destination, empty if the given location is unavailable or no attractions can be found
      */
-    @GetMapping(value = PAGE)
+    // @GetMapping(value = PAGE)
     public PointOfInterest[] getAttractions(double latitude, double longitude) {
         if(Math.abs(latitude) > 90 || Math.abs(longitude) > 180) {
             System.out.println("Invalid coordinate(s) given (Lat=" + latitude + ", Lon=" + longitude + ")");

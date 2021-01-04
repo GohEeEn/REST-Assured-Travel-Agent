@@ -44,6 +44,8 @@ import service.core.ReplaceBooking;
 import service.core.Attraction;
 import service.core.AttractionRequest;
 
+import static org.springframework.web.bind.annotation.RequestMethod.DELETE;
+
 // import java.net.URLDecoder;
 //  import java.net.URLEncoder;
 
@@ -125,10 +127,17 @@ public class TravelAgentService {
 		System.out.println("City: "+clientRequest.getAttractionRequest().getCity());
 		System.out.println("Country: "+clientRequest.getAttractionRequest().getCountry()+"\n");
 		Attraction[] attractions = new Attraction[200];
-		HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
-		attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
-		// System.out.println("\n"+attractions[0].toString()+"\n");
 
+		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity().equals(null)+"\n");
+
+		if (!(clientRequest.getAttractionRequest().getCity().equals(null))){
+
+			HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
+			attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
+			System.out.println("\n"+attractions[0].toString()+"\n");
+
+		}
+		
 
 
 		/**
@@ -213,6 +222,7 @@ public class TravelAgentService {
 		// ClientChoice clientChoiceOfActivities = new ClientChoice();      // create ClientChoice to hold array of ref number (if a negative number then no activities were chosen)
 		HttpEntity<ClientChoices> requestActivities = new HttpEntity<>(clientChoicesOfActivities);
 		activities = restTemplate.postForObject("http://activities-service/activityservice/activities",requestActivities, ActivityItem[].class);
+		System.out.println("TEsting after activity post booking");
 		System.out.println(activities[0].getName());
 
 		/**
@@ -238,6 +248,8 @@ public class TravelAgentService {
 
 		booking.setFlight(flight);
 		booking.setHotel(hotel);
+		booking.setActivities(activities);
+		booking.setAttractions(attractions);
 		clientBookingReferenceNumber++; // create unique ref num
 		booking.setReferenceNumber(clientBookingReferenceNumber);   // give booking this unique ref num
 		clientBookings.put(clientBookingReferenceNumber,booking);
@@ -300,7 +312,7 @@ public class TravelAgentService {
 		System.out.println("\n Testing PUT \n");
 
 		/**
-		 * POST request to Flight service
+		 * PUT request to Flight service
 		 */
 		Flight flight = new Flight();	
 		ClientChoice clientChoiceOfFlight = new ClientChoice();      // create ClientChoice to hold ref number
@@ -311,7 +323,7 @@ public class TravelAgentService {
 		System.out.println("\n GET FLIGHT:" +flight.toString());
 
 		/**
-		 * POST request to Hotel Service
+		 * PUT request to Hotel Service
 		 */
 
 		Hotel hotel = new Hotel();
@@ -322,8 +334,43 @@ public class TravelAgentService {
 		hotel = restTemplate.getForObject("http://hotels-service/hotelservice/hotels/"+replaceBooking.getPreviousBooking().getHotel().getReferenceNumber(), Hotel.class);
 		System.out.println("\n GET HOTEL:" +hotel.toString());
 
+
 		/**
-		 * Create a new Booking for client
+		 * PUT request to Activity Service (client is only permitted to change one activity)
+		 * Value at index 0 of clientResponse.activitiesReferenceNumber will be the old choice & value at index 1 will be the new choice
+		 */
+		System.out.println("TESTING actvity service PUT: "+replaceBooking.getNewChoiceOfBooking().getActivitiesReferenceNumber()[0]);
+		ActivityItem newChoiceOfActivity = new ActivityItem();
+		ClientChoices clientChoicesOfActivities = new ClientChoices();
+		System.out.println("\n ARRAY size: "+replaceBooking.getNewChoiceOfBooking().getActivitiesReferenceNumber().length+"\n");
+		clientChoicesOfActivities.setReferenceNumbers(replaceBooking.getNewChoiceOfBooking().getActivitiesReferenceNumber());
+		HttpEntity<ClientChoices> requestActivities = new HttpEntity<>(clientChoicesOfActivities);
+		
+		restTemplate.put("http://activities-service/activityservice/activities/"+replaceBooking.getNewChoiceOfBooking().getActivitiesReferenceNumber()[0],requestActivities);
+		newChoiceOfActivity = restTemplate.getForObject("http://activities-service/activityservice/activities/"+replaceBooking.getNewChoiceOfBooking().getActivitiesReferenceNumber()[0], ActivityItem.class);
+		System.out.println("\n GET ACTIVITY:" +newChoiceOfActivity.toString());
+
+		
+		/**
+		 * PUT request to Attraction Service (client is only permitted to change one attraction)
+		 * Value at index 0 of clientResponse.attractionsReferenceNumber will be the old choice & value at index 1 will be the new choice
+		 */
+		System.out.println("TESTING attraction service PUT: "+replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber()[0]);
+		Attraction newChoiceOfAttraction = new Attraction();
+		ClientChoices clientChoicesOfAttractions = new ClientChoices();
+
+		System.out.println("\n ARRAY size: "+replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber().length+"\n");
+
+		clientChoicesOfAttractions.setReferenceNumbers(replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber());
+		HttpEntity<ClientChoices> requestAttractions = new HttpEntity<>(clientChoicesOfAttractions);
+		
+		restTemplate.put("http://attractions-service/attractionservice/attractions/"+replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber()[0],requestAttractions);
+		newChoiceOfAttraction = restTemplate.getForObject("http://attractions-service/attractionservice/attractions/"+replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber()[0], Attraction.class);
+		System.out.println("\n GET ATTRACTION:" +newChoiceOfAttraction.toString());
+
+
+		/**
+		 * Create a new Booking to replace the old booking 
 		 */
 
 		System.out.println("\n"+flight.toString());
@@ -333,6 +380,23 @@ public class TravelAgentService {
 		Booking newBooking = new Booking();
 		newBooking.setFlight(flight);
 		newBooking.setHotel(hotel);
+
+		/**
+		 * Replace old activity with new one and add this set of activities to the new booking
+		 */
+		ActivityItem [] newSetOfActivities = new ActivityItem[previousBooking.getActivities().length];
+		newSetOfActivities = findActivityToReplace(previousBooking.getActivities(), newChoiceOfActivity);
+		newBooking.setActivities(newSetOfActivities);
+
+		/**
+		 * Replace old attraction with new one and add this set of attractions to the new booking
+		 */
+		Attraction [] newSetOfAttractions = new Attraction[previousBooking.getAttractions().length];
+		newSetOfAttractions = findAttractionToReplace(previousBooking.getAttractions(), newChoiceOfAttraction);
+		newBooking.setAttractions(newSetOfAttractions);
+
+
+		
 		newBooking.setReferenceNumber(referenceNumber);   // give booking this unique ref num
 		clientBookings.put(referenceNumber,newBooking);
 
@@ -344,19 +408,61 @@ public class TravelAgentService {
 		return new ResponseEntity<>(headers, HttpStatus.OK);
     }
 
+
+    /**
+     * The following method replaces the old activity with the new one
+     * @param activities
+     * @param newChoiceOfActivity
+     * @return
+     */
+
+    public ActivityItem[] findActivityToReplace(ActivityItem[] activities, ActivityItem newChoiceOfActivity){
+
+	   for (ActivityItem activityItem : activities){
+
+		if (activityItem.getReferenceNumber() == newChoiceOfActivity.getReferenceNumber()){
+
+			activityItem = newChoiceOfActivity;
+		}
+	   }
+
+	   return activities;
+    }
+
+    /**
+     * The following method replaces the old attraction with the new one
+     * @param attractions
+     * @param newChoiceOfAttractions
+     * @return
+     */
+
+    public Attraction[] findAttractionToReplace(Attraction[] attractions, Attraction newChoiceOfAttraction){
+
+	for (Attraction attraction : attractions){
+
+	   if (attraction.getReferenceNumber() == newChoiceOfAttraction.getReferenceNumber()){
+
+		   attraction = newChoiceOfAttraction;
+	   }
+	}
+
+	return attractions;
+ }
+
 	
-// 	/**
-// 	 * DELETE REQUEST
-// 	 * 
-// 	 * @param referenceNumber
-// 	 */
-// 	@RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.DELETE)
-// 	@ResponseStatus(value=HttpStatus.NO_CONTENT)
-// 	public @ResponseBody void deleteTravelPackage(@PathVariable int referenceNumber) {
-// 		System.out.println("DELETE METHOD");
-// 		TravelPackage travelPackage = travelPackageRequests.remove(referenceNumber);
-// 		if (travelPackage == null) throw new NoSuchTravelPackageException();
-// 	}
+	// /**
+	//  * DELETE REQUEST
+	//  * 
+	//  * @param referenceNumber
+	//  */
+	// @RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.DELETE)
+	// public @ResponseBody String deleteBooking(@PathVariable int referenceNumber) {
+	// 	System.out.println("DELETE METHOD");
+	// 	Booking clientBooking = clientBookings.remove(referenceNumber);
+	// 	if (clientBooking == null) throw new NoSuchBookingException();
+		
+	// 	return "redirect:/";
+	// }
 
 
 	// If there is no booking listed with the given reference then throw this exception
