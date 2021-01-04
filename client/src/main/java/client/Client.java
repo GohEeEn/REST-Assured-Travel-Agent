@@ -33,11 +33,12 @@ import java.io.IOException;
 
 public class Client {
 	
-	public static final String argsRequest = "http://192.168.49.2:31500/travelagent/travelpackagerequests";
-	public static final String argsResponse = "http://192.168.49.2:31500/travelagent/bookings";
+	// Use ip address found through "minikube ip" in format"IP:31500" to access kubernetes travel_agent
+	// public static final String argsRequest = "http://192.168.49.2:31500/travelagent/travelpackagerequests";
+	// public static final String argsResponse = "http://192.168.49.2:31500/travelagent/bookings";
 
-	// public static final String argsRequest = "http://localhost:8081/travelagent/travelpackagerequests";
-	// public static final String argsResponse = "http://localhost:8081/travelagent/bookings";
+	public static final String argsRequest = "http://localhost:8081/travelagent/travelpackagerequests";
+	public static final String argsResponse = "http://localhost:8081/travelagent/bookings";
 
 	public static int referenceNumber = 0;
 
