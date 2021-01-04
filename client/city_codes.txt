@@ -110,7 +110,7 @@ Benbecula BEB
 Benghazi – Benina BEN
 Bergen, Flesland BGO
 Bergerac-Roumaniere EGC
-Berlin – Schönefeld SXF
+Berlin SXF
 Berlin – Tegel TXL
 Berlin – Tempelhof THF
 Bermuda BDA
@@ -631,7 +631,7 @@ Lome-Tokoin LFW
 London – Biggin Hill BQH
 London – City LCY
 London – Gatwick LGW
-London – Heathrow LHR
+London Heathrow LHR
 London – Luton LTN
 London – Manston MSE
 London – Southend SEN
@@ -710,7 +710,7 @@ Mexico-Benito Juarez MEX
 Miami MIA
 Midland MAF
 Mikkeli City MIK
-Milan – Orio Al Serio BGY
+Milan BGY
 Milan-Linate LIN
 Milan-Malpensa MXP
 Milwaukee – General Mitchell Int´l MKE
