@@ -44,7 +44,6 @@ import java.util.HashMap;
 import java.util.Collection;
 
 
-
 @RestController
 public class ActivitiesRecommenderService {
 
@@ -64,17 +63,15 @@ public class ActivitiesRecommenderService {
 	private static int bookedActivityReferenceNumber = 0;           // unique reference number for each activity list booked by a client
 	private Map<Integer, ActivityItem> bookedActivities = new HashMap<>();      // Map of all activities created with new reference number as key
     private Map<Integer, ActivityItem> searchedActivities = new HashMap<>();    // Map of all activites that ActivityRecommenderService searched for
-    
 
     /**
-	 * POST REQUEST:  Handles all activity requests from travel agent. TravelAgentService sends a activityRequest object specifying
+	 * POST REQUEST:  Handles all activity requests from travel agent. TravelAgentService sends an activityRequest object specifying
 	 * the user requirements and then uses this info to search for activities
 	 * 
-	 * @param activityRequest
-	 * @return activityItems
+	 * @param activityRequest The ActivityRequest object that sent from the client and redirected here by the travel agent
+	 * @return A list of ActivityItem objects that represents the activities available in the given location
 	 * @throws URISyntaxException
 	 */
-
 	@RequestMapping(value= PAGE + "activityrequests",method=RequestMethod.POST)
 	public ResponseEntity<ActivityItem []> searchActivities(@RequestBody ActivityRequest activityRequest)  throws URISyntaxException {
 
@@ -97,7 +94,6 @@ public class ActivitiesRecommenderService {
 		return new ResponseEntity<>(activityItems, headers, HttpStatus.CREATED);     // Returns activities to travel agent
     }
 
-
     /**
 	 * POST REQUEST: Once the client has chosen their activities then these choices will be passed on to TravelAgentService which
 	 * will then pass them on to this method
@@ -105,7 +101,6 @@ public class ActivitiesRecommenderService {
 	 * @param clientChoiceOfActivities
 	 * @return activities
 	 */
-
 	@RequestMapping(value= PAGE + "activities",method=RequestMethod.POST)
 	public ResponseEntity<ActivityItem> createActivity(@RequestBody ClientChoices clientChoicesOfActivities)  throws URISyntaxException {
 
@@ -126,13 +121,12 @@ public class ActivitiesRecommenderService {
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(activity, headers, HttpStatus.CREATED);     // Returns activity to travel agent
     }
-    
 
     /**
-	 * GET REQUEST
+	 * GET REQUEST to find the activity entry with given reference number
 	 * 
-	 * @param reference
-	 * @return activity
+	 * @param reference The reference number that maps to the corresponding ActivityItem object stored
+	 * @return The corresponding ActivityItem object
 	 */
 	@RequestMapping(value=PAGE + "activities/{reference}", method=RequestMethod.GET)
 	public ActivityItem getActivity(@PathVariable("reference") int reference) {
@@ -162,7 +156,6 @@ public class ActivitiesRecommenderService {
 	 * @param clientChoices
 	 * @throws URISyntaxException
 	 */
-
 	@RequestMapping(value=PAGE + "activities/{referenceNumber}", method=RequestMethod.PUT)
     public ResponseEntity<ActivityItem> replaceActivity(@PathVariable int referenceNumber, @RequestBody ClientChoices clientChoices) throws URISyntaxException{
 
@@ -180,7 +173,6 @@ public class ActivitiesRecommenderService {
 		headers.set("Content-Location", path);
 		return new ResponseEntity<>(headers, HttpStatus.OK);
     }
-    
 
     /**
      * Method to validate the user string query, to prevent unwanted characters used<br/>
@@ -344,7 +336,7 @@ public class ActivitiesRecommenderService {
 			searchedActivityReferenceNumber++; 
 			activity.setReferenceNumber(searchedActivityReferenceNumber);           // set the ref number in Activity so that we can cross reference 
                                                                                     // with the client choice of activity booking
-            searchedActivities.put(searchedActivityReferenceNumber,activity);          // add new activity to map with new ref number
+            searchedActivities.put(searchedActivityReferenceNumber,activity);       // add new activity to map with new ref number
 		}
 		return activities;
 	 }
