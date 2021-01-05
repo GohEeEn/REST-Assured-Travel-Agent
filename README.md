@@ -71,7 +71,7 @@ depending on internet connection.
 
 4. Obtain minikube IP address by running `minikube ip`. This value will need to be applied to the `client/src/main/java/Client.java` in _linel 37/38_, as ___IP address is machine dependent___.
 
-	```Java
+	```java
 	public static final String argsRequest = "http://${minikube ip}:31500/travelagent/travelpackagerequests";
 	public static final String argsResponse = "http://${minikube ip}:31500/travelagent/bookings";
 	```
