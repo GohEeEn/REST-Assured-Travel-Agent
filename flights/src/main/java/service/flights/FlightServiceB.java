@@ -35,7 +35,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-// import java.text.ParseException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -86,8 +85,6 @@ public class FlightServiceB {
 
 		// Only uses the first origin airport and finds flights to all destination airports
 		// String test = null;
-		// System.out.println("\nTESTING null string: \n"+ test);
-		// System.out.println("\nTESTING .equals null: " + (originAirportIDs[0].equals(null) && destAirportIDs[0].equals(null)));
 		if( !(originAirportIDs[0].equals(null)) && !(destAirportIDs[0].equals(null)) ){   // search for flights only if there is an origin airport and at least one destination airport
 
 			for (String airportID : destAirportIDs){
@@ -145,7 +142,6 @@ public class FlightServiceB {
 		Flight flight = searchedFlights.get(clientChoice.getReferenceNumber());        // find flight the client wishes to book from searchedFlights map
 
 		System.out.println("\nTesting /flightservice/flights\n");
-		// System.out.println(flight.toString());
 		
 		// Add a new flight for this client to bookedFlights map (which contains booked flights for all clients)
 		bookedFlightReferenceNumber++;
@@ -197,9 +193,6 @@ public class FlightServiceB {
 
 		Flight newChoiceOfFlight = searchedFlights.get(clientChoice.getReferenceNumber());        // find flight the client wishes to book
 
-		// System.out.println("\nTesting PUT /flightservice/flight\n");
-		// System.out.println(newChoiceOfFlight.toString());
-		
 		// Replace old flight with a new flight 
 		Flight previouslyBookedFlight = bookedFlights.remove(referenceNumber);
 		bookedFlights.put(referenceNumber,newChoiceOfFlight);
@@ -278,14 +271,12 @@ public class FlightServiceB {
 					.method("GET", HttpRequest.BodyPublishers.noBody())
 					.build();
 			HttpResponse<String> response = HttpClient.newHttpClient().send(request, HttpResponse.BodyHandlers.ofString());
-			// System.out.println("FindFlights: "+ response.body());
 
 			String flightQuotations = response.body();   // Puts response into a string
 			JSONObject placesJson = parseJSONObject(flightQuotations);  // Converts the string into a JSON object
 
 			JSONArray flightQuotesArray = new JSONArray();
 			flightQuotesArray = (JSONArray) placesJson.get("Quotes");
-			// System.out.println("FlightQuotes array size: "+ (flightQuotesArray.size()));  
 			
 			JSONArray carriersArray = new JSONArray();
 			carriersArray = (JSONArray) placesJson.get("Carriers");   // Find 'carriers' array in placesJson JSON object
@@ -321,9 +312,6 @@ public class FlightServiceB {
 					for(int j=0; j<carriersArray.size(); j++){
 						JSONObject carriers = (JSONObject) carriersArray.get(j);
 						Long carId = (Long) carriers.get("CarrierId");
-						// System.out.println("Carrier name: "+carriers.get("Name"));
-						// System.out.println("Carrierid 1: "+carId);
-						// System.out.println("Carrierid 2: "+carrierId);
 						if (carId.equals(carrierId)){
 							flightQuote.setAirline((String) carriers.get("Name"));
 						}
@@ -341,7 +329,6 @@ public class FlightServiceB {
 						if (placeId.equals(originId)){
 							
 							flightQuote.setOriginAirportName(placeName);
-							// System.out.println("placename: "+placeName+" placeid: "+placeId);
 						}
 
 						// If IDs match then we know this is the destination airport
@@ -349,9 +336,7 @@ public class FlightServiceB {
 							flightQuote.setDestAirportName(placeName);
 						}
 					}	
-
 					flightQuotes.add(flightQuote);
-					
 					index++;
 			}	
 		}
@@ -363,7 +348,6 @@ public class FlightServiceB {
             catch(InterruptedException e) {
                   e.printStackTrace();
 		}    
-
 		return flightQuotes;
 	}
 
