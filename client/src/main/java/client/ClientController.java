@@ -76,6 +76,11 @@ public class ClientController {
 	public String hotelsForm(){
 		return "hotels.html";
 	}
+
+	@RequestMapping(value="/home", method=RequestMethod.POST)
+	public void home(String homeButton, HttpServletResponse response) throws IOException{
+		response.sendRedirect("/");
+	}
 	
 	@RequestMapping(value="/processFlightsForm",method=RequestMethod.POST)  
 	public void processFlightsForm(String name, String cityOfOrigin, String countryOfOrigin, String cityOfDestination, String countryOfDestination, boolean oneWayTrip, String returnDate, String outboundDate, String currency, HttpServletResponse response) throws IOException {
