@@ -631,7 +631,7 @@ Lome-Tokoin LFW
 London – Biggin Hill BQH
 London – City LCY
 London – Gatwick LGW
-London Heathrow LHR
+London LHR
 London – Luton LTN
 London – Manston MSE
 London – Southend SEN
@@ -768,7 +768,7 @@ Nevis – Newcastle NEV
 New Caledonia NOU
 New Haven HVN
 New Orleans – Louis Armstrong MSY
-New York – John F Kennedy JFK
+New York JFK
 New York-La Guardia LGA
 Newark EWR
 Newcastle NTL

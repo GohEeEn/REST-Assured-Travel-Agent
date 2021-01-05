@@ -178,7 +178,9 @@ public class TravelAgentService {
 		MongoBooking mb = new MongoBooking();
 		mb.setReferenceId(String.valueOf(b.getReferenceNumber()));
 		mb.setFlightDetails(b.getFlight().toString());
-		mb.setHotelDetails(b.getHotel().toString());
+		if(b.getHotel()==null){
+			mb.setHotelDetails("No hotel selected");
+		}
 
 		String temp="";
 		boolean bool = true;
@@ -186,7 +188,6 @@ public class TravelAgentService {
 			if(ai!=null){
 				bool = false;
 				temp+= ai.toString();
-				temp+="\n";
 			}
 		}
 		if(bool){
@@ -200,7 +201,6 @@ public class TravelAgentService {
 			if(at!=null){
 				bool2 = false;
 				temp2+= at.toString();
-				temp2+="\n";
 			}
 		}
 		if(bool2){
