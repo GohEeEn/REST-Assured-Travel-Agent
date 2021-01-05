@@ -207,11 +207,11 @@ public class TravelAgentService {
 			temp2 = "None";
 		}
 		mb.setAttractionsDetails(temp2);
-		System.out.println("REF - "+mb.getReferenceId());
-		System.out.println("FLIGHT - "+mb.getFlightDetails());
-		System.out.println("HOTEL - "+mb.getHotelDetails());
-		System.out.println("ACTI - "+mb.getActivitiesDetails());
-		System.out.println("ATTRA - "+mb.getAttractionsDetails());
+		// System.out.println("REF - "+mb.getReferenceId());
+		// System.out.println("FLIGHT - "+mb.getFlightDetails());
+		// System.out.println("HOTEL - "+mb.getHotelDetails());
+		// System.out.println("ACTI - "+mb.getActivitiesDetails());
+		// System.out.println("ATTRA - "+mb.getAttractionsDetails());
 
 		mongoRepository.insertBooking(mb);
 	}
@@ -261,7 +261,13 @@ public class TravelAgentService {
 		clientChoiceOfHotel.setReferenceNumber(clientResponse.getHotelReferenceNumber());
 		// HttpEntity<ClientChoice> requestHotel = new HttpEntity<>(clientChoiceOfHotel);
 		// Hotel hotel = restTemplate.postForObject("http://hotels-service/hotelservice/hotels",requestHotel, Hotel.class);
-		Hotel hotel = searchedHotels.get(clientChoiceOfHotel.getReferenceNumber()); 
+		Hotel hotel;
+		if (clientChoiceOfHotel.getReferenceNumber()<0){
+			hotel = new Hotel();
+		}
+		else{
+			hotel = searchedHotels.get(clientChoiceOfHotel.getReferenceNumber()); 
+		}
 
 		/**
 		 * POST request to ActivityRecommenderService for activity booking

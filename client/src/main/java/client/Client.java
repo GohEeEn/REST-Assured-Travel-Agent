@@ -122,11 +122,11 @@ public class Client {
 		/**
 		 * TESTING code for clientResponse sent to travel agent
 		 */
-            System.out.println("\nAirline: "+booking.getFlight().getAirline());
-            System.out.println("Hotel Address: "+booking.getHotel().getAddress());
-		System.out.println("Booking ref Num: "+booking.getReferenceNumber());
-		System.out.println("Activity 1: "+booking.getActivities()[0]);
-			System.out.println("Attraction 1: "+booking.getAttractions()[0]);
+        //     System.out.println("\nAirline: "+booking.getFlight().getAirline());
+        //     System.out.println("Hotel Address: "+booking.getHotel().getAddress());
+		// System.out.println("Booking ref Num: "+booking.getReferenceNumber());
+		// System.out.println("Activity 1: "+booking.getActivities()[0]);
+		// 	System.out.println("Attraction 1: "+booking.getAttractions()[0]);
 			return booking;
                   
 	}
