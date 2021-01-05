@@ -80,22 +80,30 @@
 								</tr>
 								<tr>
 									<td><b>ACTIVITIES - </b></td>
-									<td>
+									<td th:unless="${userBooking.getActivities()[0]==null}">
 							            <p th:each="str2 : ${userBooking.getActivities()}">
 							                <li th:text="${str2}"></li>
 							            </p>
-							        </td>
+									</td>
+									<td>
+										<td th:if="${userBooking.getActivities()[0]==null}">
+											NONE selected/available
+										</td>
+									</td>
 								</tr>
 								<tr>
 									
 								</tr>
 								<tr>
 									<td><b>ATTRACTIONS - </b></td>
-									<td>
+									<td th:unless="${userBooking.getAttractions()[0]==null}">
 							            <p th:each="str3 : ${userBooking.getAttractions()}">
 							                <li th:text="${str3}"></li>
 							            </p>
-							        </td>
+									</td>
+									<td th:if="${userBooking.getAttractions()[0]==null}">
+										NONE selected/available
+									</td>
 								</tr>
 							</table>
                         </div>
