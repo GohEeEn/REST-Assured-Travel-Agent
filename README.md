@@ -10,7 +10,12 @@ Features
 
 Components required to run this application
 
-## How to run the application
+HyperVisor/ Virtualisation enabled in BIOS
+minikube 1.16
+kubectl: 1.20.1
+VirtualBox  6.1.10_Ubuntu r138449
+Ubuntu 20.04 recommended, Windows may be possible with correct network configuration for VirtualBox
+## How to run the application with Spring Boot
 
 Step-by-step instructions of how to run this program
 
@@ -37,6 +42,8 @@ Step 5: Enter your travel details into displayed form
 
 4. Run client ("mvn spring-boot:run -pl client") and open webpage at localhost:8080.
 
+5. Eureka dashboard can be accessed at "http://localhost:8761/"
+
 ## Running with Kubernetes
 
 Configuration:
@@ -54,7 +61,7 @@ Docker images are pulled from Docker Hub (conchobar/${IMAGE_NAME}).
 
 2. After successful instantiation of minikube, run "minikube dashboard" to open the Kubernetes dashboard in the default browser. 
 
-3. In the project directory, run "kubectl apply -f ." to spin up pods/services in minikube. Initial pull from Docker Hub will be over 300MB, so make take time
+3. In the k8s folder, run "kubectl apply -f ." to spin up pods/services in minikube. Initial pull from Docker Hub will be over 300MB, so make take time
 depending on internet connection.
 
 4. Obtain minikube IP address by running "minikube ip". This value will need to be applied to the client/src/main/java/Client.java in linel 37/38, as IP address is machine dependent.
@@ -64,6 +71,8 @@ depending on internet connection.
 5. Recompile client module via "mvn clean compile -pl client"
 
 6. Run client ("mvn spring-boot:run -pl client") and open webpage at localhost:8080.
+
+It may take several minutes for all services to correctly register with the Eureka servers initially. The server dashboard can be viewed in a browser at http://#{minikube ip}:32001. 
 
 ### Technologies used
 

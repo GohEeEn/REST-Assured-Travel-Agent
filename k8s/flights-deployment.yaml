@@ -35,11 +35,6 @@ spec:
           value: "true"
         - name: EUREKA_CLIENT_FETCHREGISTRY
           value: "true"
-        # - name: SPRING_APPLICATION_NAME
-        #   value: flights-service
-        # The hostnames must match with the the eureka serviceUrls, otherwise the replicas are reported as unavailable in the eureka dashboard      
-        # - name: EUREKA_INSTANCE_HOSTNAME
-        #   value: ${MY_POD_NAME}.eureka
         image: conchobar/flights:latest
         imagePullPolicy: ""
         name: flights

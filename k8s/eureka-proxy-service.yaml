@@ -1,3 +1,4 @@
+# Allows for access to the Eureka Server dashboard in browser.
 apiVersion: v1
 kind: Service
 metadata:

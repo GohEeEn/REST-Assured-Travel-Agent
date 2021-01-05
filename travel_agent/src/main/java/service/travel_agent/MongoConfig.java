@@ -1,6 +1,7 @@
 package service.travel_agent;
 
 import service.travel_agent.MongoRepository;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

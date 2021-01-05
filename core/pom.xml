@@ -1,6 +1,6 @@
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>assignment2</groupId>
+    <groupId>quaranteam</groupId>
     <artifactId>core</artifactId>
     <version>0.0.1</version>
     <packaging>jar</packaging>

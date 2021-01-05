@@ -6,13 +6,13 @@ metadata:
     kompose.version: 1.21.0 (992df58d8)
   creationTimestamp: null
   labels:
-    app: travel
-  name: travel
+    app: hotels
+  name: hotels
 spec:
   replicas: 3
   selector:
     matchLabels:
-      app: travel
+      app: hotels
   strategy: {}
   template:
     metadata:
@@ -21,7 +21,7 @@ spec:
         kompose.version: 1.21.0 (992df58d8)
       creationTimestamp: null
       labels:
-        app: travel
+        app: hotels
     spec:
       containers:
       - env:
@@ -31,26 +31,11 @@ spec:
               fieldPath: metadata.name
         - name: _JAVA_OPTIONS
           value: -Deureka.client.serviceUrl.defaultZone=http://eureka-0.eureka:8761/eureka/,http://eureka-1.eureka:8761/eureka/ -Deureka.instance.preferIpAddress=true
-                  -Deureka.client.registryFetchIntervalSeconds=15
-        - name: EUREKA_CLIENT_REGISTERWITHEUREKA
-          value: "true"
-        - name: EUREKA_CLIENT_FETCHREGISTRY
-          value: "true"
-        # - name: MONGODB_ATLAS
-        #   value: mongodb+srv://tanmayjoshi:tanmaypass@cluster-quaranteam.sr96d.mongodb.net/bookings?retryWrites=true&w=majority
-        # - name: FRONT_SERVER_PORT
-        #   value: "8080"
-        # - name: spring_profiles_active
-        #   value: dev
-
-        # The hostnames must match with the the eureka serviceUrls, otherwise the replicas are reported as unavailable in the eureka dashboard      
-        # - name: EUREKA_INSTANCE_HOSTNAME
-        #   value: ${MY_POD_NAME}.eureka
-        image: conchobar/travel_agent:latest
+        image: conchobar/hotels:latest
         imagePullPolicy: ""
-        name: travel
+        name: hotels
         ports:
-        - containerPort: 8081
+        - containerPort: 8089
         resources: {}
       restartPolicy: Always
       serviceAccountName: ""

@@ -8,7 +8,7 @@
         <version>2.3.0.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>assignment2</groupId>
+    <groupId>quaranteam</groupId>
     <artifactId>attractions</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>attractions</name>
