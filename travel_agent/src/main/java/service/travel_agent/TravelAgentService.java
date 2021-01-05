@@ -22,6 +22,7 @@ import java.net.URISyntaxException;
 import org.springframework.http.HttpEntity;
 
 import java.util.Map;
+import java.util.Random;
 import java.util.TreeMap;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -91,7 +92,6 @@ public class TravelAgentService {
 	@RequestMapping(value="/travelagent/travelpackagerequests",method=RequestMethod.POST)
 	public ResponseEntity<TravelPackage> createTravelPackageRequest(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
 		System.out.println("COMESHERE90");
-		mongoRepository.insertBooking(new MongoBooking("Sean", "MCLOU", "S", "m", "Hello"));
 		/**
 		 * POST request to Flight service for a FlightRequest which will return a list of available flights
 		 */
@@ -180,6 +180,9 @@ public class TravelAgentService {
 		mb.setFlightDetails(b.getFlight().toString());
 		if(b.getHotel()==null){
 			mb.setHotelDetails("No hotel selected");
+		}
+		else{
+			mb.setHotelDetails(b.getHotel().toString());
 		}
 
 		String temp="";
@@ -338,7 +341,8 @@ public class TravelAgentService {
 		booking.setHotel(hotel);
 		booking.setActivities(activities);
 		booking.setAttractions(attractions);
-		clientBookingReferenceNumber++; // create unique ref num
+		Random r = new Random();
+		clientBookingReferenceNumber = r.nextInt(1000000); // create unique ref num
 		booking.setReferenceNumber(clientBookingReferenceNumber);   // give booking this unique ref num
 		clientBookings.put(clientBookingReferenceNumber,booking);
 
