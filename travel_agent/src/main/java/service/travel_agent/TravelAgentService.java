@@ -91,14 +91,12 @@ public class TravelAgentService {
 
 	@RequestMapping(value="/travelagent/travelpackagerequests",method=RequestMethod.POST)
 	public ResponseEntity<TravelPackage> createTravelPackageRequest(@RequestBody ClientRequest clientRequest) throws URISyntaxException {
-		System.out.println("COMESHERE90");
 		/**
 		 * POST request to Flight service for a FlightRequest which will return a list of available flights
 		 */
 		Flight[] flights = new Flight[50];	
 		HttpEntity<FlightRequest> request = new HttpEntity<>(clientRequest.getFlightRequest());
 		flights = restTemplate.postForObject("http://flights-service/flightservice/flightrequests",request, Flight[].class);
-		System.out.println("COMESHERE97");
 
 		addFlightsToSearchFlightsMap(flights);
 		/**
@@ -120,18 +118,12 @@ public class TravelAgentService {
 		 * POST request to AttractionsService
 		 */
 
-		// System.out.println("Testing attractionRequest: \n");
-		// System.out.println("City: "+clientRequest.getAttractionRequest().getCity());
-		// System.out.println("Country: "+clientRequest.getAttractionRequest().getCountry()+"\n");
 		Attraction[] attractions = new Attraction[200];  // must instantiate the array as we will be sending back a null array if there are no client requests for attractions
-
-		System.out.println("\nTESTINg null attraction: "+clientRequest.getAttractionRequest().getCity()==null+"\n");
 
 		if (!(clientRequest.getAttractionRequest().getCity()==null)){
 
 			HttpEntity<AttractionRequest> attractionRequest = new HttpEntity<>(clientRequest.getAttractionRequest());
 			attractions = restTemplate.postForObject("http://attractions-service/attractionservice/attractionrequests", attractionRequest, Attraction[].class);
-			// System.out.println("\n"+attractions[0].toString()+"\n");
 			addAttractionsToSearchAttractionsMap(attractions);
 		}
 		
@@ -161,7 +153,6 @@ public class TravelAgentService {
 
 
 	public void storeBookingInMongo(Booking b){
-		System.out.println("GETS TO travel agent 168");
 		MongoBooking mb = new MongoBooking();
 		mb.setReferenceId(String.valueOf(b.getReferenceNumber()));
 		mb.setFlightDetails(b.getFlight().toString());
@@ -224,7 +215,6 @@ public class TravelAgentService {
 	@RequestMapping(value="/travelagent/bookings",method=RequestMethod.POST)
 	public ResponseEntity<Booking> createBooking(@RequestBody ClientResponse clientResponse) throws URISyntaxException {
 
-		System.out.println("\nTesting booking method\n");
 		/**
 		 * POST request to Flight service for flight booking
 		 * ClientChoice has an instance variable which holds the reference number of the flight the client wishes to book
@@ -238,7 +228,6 @@ public class TravelAgentService {
 		 * ClientChoice has an instance variable which holds the reference number of the hotel the client wishes to book
 		 */
 
-		// Hotel hotel = new Hotel();
 		ClientChoice clientChoiceOfHotel = new ClientChoice();
 		clientChoiceOfHotel.setReferenceNumber(clientResponse.getHotelReferenceNumber());
 		Hotel hotel;
@@ -254,7 +243,6 @@ public class TravelAgentService {
 		 * ClientChoices has an instance variable (int array) which holds each reference number for the activities the client wishes to book
 		 */
 
-		// System.out.println("\nTesting actvities booking: "+clientResponse.getActivitiesReferenceNumber()[0]);
 		ActivityItem [] activities = new ActivityItem[clientResponse.getActivitiesReferenceNumber().length];
 		
 		ClientChoice clientChoiceOfActivity = new ClientChoice();
@@ -264,10 +252,7 @@ public class TravelAgentService {
 			for(int i=0; i<clientResponse.getActivitiesReferenceNumber().length; i++){
 
 				if(clientResponse.getActivitiesReferenceNumber()[i] > 0){
-						System.out.println(clientResponse.getActivitiesReferenceNumber()[i]);
 					clientChoiceOfActivity.setReferenceNumber(clientResponse.getActivitiesReferenceNumber()[i]);
-					// HttpEntity<ClientChoice> requestActivity = new HttpEntity<>(clientChoiceOfActivity);
-					// activities[i] = restTemplate.postForObject("http://activities-service/activityservice/activities",requestActivity, ActivityItem.class);
 					activities[i] = searchedActivities.get(clientResponse.getActivitiesReferenceNumber()[i]);
 				}
 			}
@@ -286,17 +271,9 @@ public class TravelAgentService {
 
 				if (clientResponse.getAttractionsReferenceNumber()[j] > 0){
 
-					System.out.println("TESTING attractions booking IF STATEMENT");
-					System.out.println(clientResponse.getAttractionsReferenceNumber()[j]);
 					clientChoiceOfAttraction.setReferenceNumber(clientResponse.getAttractionsReferenceNumber()[j]);
-					
-					// HttpEntity<ClientChoice> requestAttraction = new HttpEntity<>(clientChoiceOfAttraction);
-					// attractions[j] = restTemplate.postForObject("http://attractions-service/attractionservice/attractions",requestAttraction, Attraction.class);
-					// System.out.println(attractions[0].getName());
 					attractions[j] = searchedAttractions.get(clientResponse.getAttractionsReferenceNumber()[j]);
-
-				}
-				
+				}			
 			}
 		}
 		
@@ -366,7 +343,6 @@ public class TravelAgentService {
 
 		Booking booking = clientBookings.get(referenceNumber);
 		if (booking == null) throw new NoSuchBookingException();
-		System.out.println("\n Testing PUT \n");
 
 		/**
 		 * PUT request to Flight service. Reference number for previous flight is specifified in URI and new flight reference number
@@ -379,7 +355,6 @@ public class TravelAgentService {
 		HttpEntity<ClientChoice> requestFlight = new HttpEntity<>(clientChoiceOfFlight);
 		restTemplate.put("http://flights-service/flightservice/flights/"+replaceBooking.getPreviousBooking().getFlight().getReferenceNumber(),requestFlight);
 		Flight flight = restTemplate.getForObject("http://flights-service/flightservice/flights/"+replaceBooking.getPreviousBooking().getFlight().getReferenceNumber(),Flight.class);
-		// System.out.println("\n GET FLIGHT:" +flight.toString());
 
 		/**
 		 * PUT request to Hotel Service
@@ -396,7 +371,6 @@ public class TravelAgentService {
 		 * PUT request to Activity Service (client is only permitted to change one activity for the current implementation)
 		 * Value at index 0 of clientResponse.activitiesReferenceNumber will be the old choice & value at index 1 will be the new choice
 		 */
-		System.out.println("TESTING actvity service PUT: "+replaceBooking.getNewChoiceOfBooking().getActivitiesReferenceNumber()[0]);
 		ActivityItem newChoiceOfActivity = new ActivityItem();
 		ClientChoices clientChoicesOfActivities = new ClientChoices();
 		clientChoicesOfActivities.setReferenceNumbers(replaceBooking.getNewChoiceOfBooking().getActivitiesReferenceNumber());
@@ -410,31 +384,21 @@ public class TravelAgentService {
 		 * Value at index 0 of clientResponse.attractionsReferenceNumber will be the old choice & value at index 1 will be the new choice
 		 */
 
-		System.out.println("TESTING attraction service PUT: "+replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber()[0]);
 		ClientChoices clientChoicesOfAttractions = new ClientChoices();
 		clientChoicesOfAttractions.setReferenceNumbers(replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber());
 		HttpEntity<ClientChoices> requestAttractions = new HttpEntity<>(clientChoicesOfAttractions);
 		restTemplate.put("http://attractions-service/attractionservice/attractions/"+replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber()[0],requestAttractions);
 		Attraction newChoiceOfAttraction = restTemplate.getForObject("http://attractions-service/attractionservice/attractions/"+replaceBooking.getNewChoiceOfBooking().getAttractionsReferenceNumber()[0], Attraction.class);
-		System.out.println("\n GET ATTRACTION:" +newChoiceOfAttraction.toString());
-
 
 		/**
 		 * Create a new Booking to replace the old booking 
 		 */
 
-		System.out.println("\n"+flight.toString());
 		Booking previousBooking = clientBookings.remove(referenceNumber);
 		Booking newBooking = new Booking();
 		newBooking.setFlight(flight);
 		newBooking.setHotel(hotel);
 
-		for(ActivityItem a : previousBooking.getActivities()){
-
-			System.out.println(a);
-		}
-
-		System.out.println("\nTEST 1 \n");
 		/**
 		 * Replace old activity with new one and add this set of activities to the new booking
 		 */
@@ -443,21 +407,16 @@ public class TravelAgentService {
 		// newSetOfActivities = findActivityToReplace(previousBooking.getActivities(), newChoiceOfActivity);
 		// newBooking.setActivities(newSetOfActivities);
 
-		System.out.println("\nTEST 2 \n");
-
 		/**
 		 * Replace old attraction with new one and add this set of attractions to the new booking
 		 */
 		// Attraction [] newSetOfAttractions = new Attraction[previousBooking.getAttractions().length];
 		// newSetOfAttractions = findAttractionToReplace(previousBooking.getAttractions(), newChoiceOfAttraction);
 		// newBooking.setAttractions(newSetOfAttractions);
-
-		System.out.println("\nTEST 3 \n");
 		
 		newBooking.setReferenceNumber(referenceNumber);   // give new booking the ref num of the old booking
 		clientBookings.put(referenceNumber,newBooking);
 
-		System.out.println("\n PUT successful \n");
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
 			build().toUriString()+ "/travelagent/bookings/"+clientBookingReferenceNumber;  // Create new URI for this newly created travel booking
 		HttpHeaders headers = new HttpHeaders();
@@ -546,7 +505,6 @@ public class TravelAgentService {
 	//  */
 	// @RequestMapping(value="/bookings/{referenceNumber}", method=RequestMethod.DELETE)
 	// public @ResponseBody String deleteBooking(@PathVariable int referenceNumber) {
-	// 	System.out.println("DELETE METHOD");
 	// 	Booking clientBooking = clientBookings.remove(referenceNumber);
 	// 	if (clientBooking == null) throw new NoSuchBookingException();
 		

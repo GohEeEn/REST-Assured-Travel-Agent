@@ -84,30 +84,9 @@ public class Client {
 									System.out.println("Category of attraction is: " + at.getCategory());
 									System.out.println("Name of attraction is: " + at.getName());
 								}
-
-							//    System.out.println(travelPackage.getActivities());
-			 			// flights = restTemplate.postForObject("http://localhost:8081/bookings",request,Flight[].class);
 			
-							  //106, 111, 121-125
 			                   Hotel [] hotels2 = travelPackage.getHotels();
-			                   System.out.println(hotels2);
 							   Flight [] flights2 = travelPackage.getFlights();
-							   System.out.println("SIZE OF FLIGHST ARRAY is = "+flights2.length);
-			                   System.out.println(flights2);
-			 			// for (int i=0; i < 1; i++){
-			            //              Flight f = flights2[i];
-			            //              Hotel h = hotels2[i];
-			 			// 	if (f != null){
-			 			// 		System.out.println("City of Destination is: " + f.getCityOfDestination());
-			 			// 		System.out.println("Price of flight is: " + f.getPrice());
-			            //              }	
-			            //              System.out.println("\n");
-			            //              if (h != null){
-			            //                    System.out.println("Description of hotel is: " + h.getDescription());
-			 			// 		System.out.println("Price of hotel is: " + h.getPrice());
-			            //              }
-			            //              System.out.println("\n");
-						//  }
 						 return travelPackage;
 						}
 
@@ -118,26 +97,14 @@ public class Client {
 		Booking booking = new Booking();
 		RestTemplate restTemplate = new RestTemplate();
             booking = restTemplate.postForObject(argsResponse,requestClientResponse,Booking.class);
-
-		/**
-		 * TESTING code for clientResponse sent to travel agent
-		 */
-        //     System.out.println("\nAirline: "+booking.getFlight().getAirline());
-        //     System.out.println("Hotel Address: "+booking.getHotel().getAddress());
-		// System.out.println("Booking ref Num: "+booking.getReferenceNumber());
-		// System.out.println("Activity 1: "+booking.getActivities()[0]);
-		// 	System.out.println("Attraction 1: "+booking.getAttractions()[0]);
 			return booking;
                   
 	}
 
 	public static MongoBooking getBookingFromTravelAgent(String inputBookingReference){
-		// HttpEntity<String> requestuserBooking = new HttpEntity<>(inputBookingReference);
-		// Booking booking = new Booking();
 		RestTemplate restTemplate = new RestTemplate();
-		// booking = restTemplate.postForObject(argsResponse,requestuserBooking,Booking.class);
 
-		// Use if running Spring Boot/Docker Compose
+		// Use if running Spring Boot/Docker Compose:
 		// MongoBooking getBooking = restTemplate.getForObject("http://localhost:8081/travelagent/bookings/"+inputBookingReference, MongoBooking.class);
 
 		// Use for Kubernetes
