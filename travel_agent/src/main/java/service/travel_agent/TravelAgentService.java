@@ -73,6 +73,12 @@ public class TravelAgentService {
 	private static int clientBookingReferenceNumber = 0;
 	private static int referenceNumber = 0;
 
+	// private static int searchedFlightReferenceNumber = 0;
+	private Map<Integer, Flight> searchedFlights = new HashMap<>(); 
+	private Map<Integer, Hotel> searchedHotels = new HashMap<>(); 
+	private Map<Integer, ActivityItem> searchedActivities = new HashMap<>(); 
+
+
 	/**
 	 * POST REQUEST: handles requests from client for Hotels, Flights, Activities and Attractions
 	 * 
@@ -92,6 +98,8 @@ public class TravelAgentService {
 		HttpEntity<FlightRequest> request = new HttpEntity<>(clientRequest.getFlightRequest());
 		flights = restTemplate.postForObject("http://flights-service/flightservice/flightrequests",request, Flight[].class);
 		System.out.println("COMESHERE97");
+
+		addFlightsToSearchFlightsMap(flights);
 		/**
 		 * POST request to Hotel Service for a HotelRequest which will return a list of available hotels
 		 */
@@ -99,7 +107,7 @@ public class TravelAgentService {
 		// Hotel [] hotels = new Hotel[50];
 		HttpEntity<HotelRequest> requestForHotels = new HttpEntity<>(clientRequest.getHotelRequest());
 		Hotel [] hotels = restTemplate.postForObject("http://hotels-service/hotelservice/hotelrequests",requestForHotels, Hotel[].class);
-
+		addHotelsToSearchHotelsMap(hotelsArray);
 		/**
 		 * POST request to ActivityService
 		 */
@@ -107,6 +115,7 @@ public class TravelAgentService {
 		// ActivityItem[] activities = new ActivityItem[100];
 		HttpEntity<ActivityRequest> activityRequest = new HttpEntity<>(clientRequest.getActivityRequest());
 		ActivityItem[] activities = restTemplate.postForObject("http://activities-service/activityservice/activityrequests", activityRequest, ActivityItem[].class);
+		addActivitiesToSearchActivitiesMap(activities);
 		
 		// System.out.println("\nTesting activity Items\n");
 		// for (ActivityItem a : activities){
@@ -236,8 +245,9 @@ public class TravelAgentService {
 		// Flight flight = new Flight();	
 		ClientChoice clientChoiceOfFlight = new ClientChoice();      // create ClientChoice to hold ref number
 		clientChoiceOfFlight.setReferenceNumber(clientResponse.getFlightReferenceNumber());
-		HttpEntity<ClientChoice> requestFlight = new HttpEntity<>(clientChoiceOfFlight);
-		Flight flight = restTemplate.postForObject("http://flights-service/flightservice/flights",requestFlight, Flight.class);
+		// HttpEntity<ClientChoice> requestFlight = new HttpEntity<>(clientChoiceOfFlight);
+		// Flight flight = restTemplate.postForObject("http://flights-service/flightservice/flights",requestFlight, Flight.class);
+		Flight flight = searchedFlights.get(clientChoiceOfFlight.getReferenceNumber());  
 
 		/**
 		 * POST request to Hotel Service for hotel booking
@@ -247,8 +257,9 @@ public class TravelAgentService {
 		// Hotel hotel = new Hotel();
 		ClientChoice clientChoiceOfHotel = new ClientChoice();
 		clientChoiceOfHotel.setReferenceNumber(clientResponse.getHotelReferenceNumber());
-		HttpEntity<ClientChoice> requestHotel = new HttpEntity<>(clientChoiceOfHotel);
-		Hotel hotel = restTemplate.postForObject("http://hotels-service/hotelservice/hotels",requestHotel, Hotel.class);
+		// HttpEntity<ClientChoice> requestHotel = new HttpEntity<>(clientChoiceOfHotel);
+		// Hotel hotel = restTemplate.postForObject("http://hotels-service/hotelservice/hotels",requestHotel, Hotel.class);
+		Hotel hotel = searchedHotels.get(clientChoiceOfHotel.getReferenceNumber()); 
 
 		/**
 		 * POST request to ActivityRecommenderService for activity booking
@@ -267,8 +278,9 @@ public class TravelAgentService {
 				if(clientResponse.getActivitiesReferenceNumber()[i] > 0){
 						System.out.println(clientResponse.getActivitiesReferenceNumber()[i]);
 					clientChoiceOfActivity.setReferenceNumber(clientResponse.getActivitiesReferenceNumber()[i]);
-					HttpEntity<ClientChoice> requestActivity = new HttpEntity<>(clientChoiceOfActivity);
-					activities[i] = restTemplate.postForObject("http://activities-service/activityservice/activities",requestActivity, ActivityItem.class);
+					// HttpEntity<ClientChoice> requestActivity = new HttpEntity<>(clientChoiceOfActivity);
+					// activities[i] = restTemplate.postForObject("http://activities-service/activityservice/activities",requestActivity, ActivityItem.class);
+					activities[i] = searchedActivities.get(clientResponse.getActivitiesReferenceNumber()[i]);
 				}
 			}
 		}
@@ -529,6 +541,27 @@ public class TravelAgentService {
 	return attractions;
  }
 
+ public void addFlightsToSearchFlightsMap(Flight [] flights){
+
+	for (Flight flight : flights){
+
+		searchedFlights.put(flight.getReferenceNumber(),flight);          // add new flight to map with new ref number
+	}
+ }
+
+ public void addHotelsToSearchHotelsMap(Hotel [] hotels){
+
+	for (Hotel hotel : hotels){												  // with the client choice of hotel booking
+			  searchedHotels.put(hotel.getReferenceNumber(), hotel);          // add new hotel to map with new ref number
+	}
+ }
+ public void addActivitiesToSearchActivitiesMap(ActivityItem [] activities){
+
+	for (ActivityItem activity : activities){        // set the ref number in Activity so that we can cross reference 
+																				// with the client choice of activity booking
+		searchedActivities.put(activity.getReferenceNumber(),activity);          // add new activity to map with new ref number
+	}
+ }
 	
 	// /**
 	//  * DELETE REQUEST
