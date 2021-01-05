@@ -136,6 +136,11 @@ public class Client {
 		// Booking booking = new Booking();
 		RestTemplate restTemplate = new RestTemplate();
 		// booking = restTemplate.postForObject(argsResponse,requestuserBooking,Booking.class);
+
+		// Use if running Spring Boot/Docker Compose
+		// MongoBooking getBooking = restTemplate.getForObject("http://localhost:8081/travelagent/bookings/"+inputBookingReference, MongoBooking.class);
+
+		// Use for Kubernetes
 		MongoBooking getBooking = restTemplate.getForObject("http://192.168.49.2:31500/travelagent/bookings/"+inputBookingReference, MongoBooking.class);
 		return getBooking;
         // System.out.println("\nGET TEST: "+getBooking.getFlight().getAirline()+"\n");

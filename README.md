@@ -1,11 +1,3 @@
-# REST Assured Travel Planner
-
-Brief description of this travel planner
-
-## About the application
-
-Features
-
 ## Prerequisites
 
 Components required to run this application
@@ -14,21 +6,23 @@ HyperVisor/ Virtualisation enabled in BIOS
 minikube 1.16
 kubectl: 1.20.1
 VirtualBox  6.1.10_Ubuntu r138449
-Ubuntu 20.04 recommended, Windows may be possible with correct network configuration for VirtualBox
+Ubuntu 20.04 recommended, Windows may be possible with correct network configuration for VirtualBox.
 ## How to run the application with Spring Boot
 
 Step-by-step instructions of how to run this program
 
-Step 1: Run the service in a terminal, for instance, Flight Service - mvn spring-boot:run -pl flights
+1. Run the service in a terminal, for instance, Flight Service - mvn spring-boot:run -pl flights
 
-Step 2: Run in a separate terminal, the Travel Agent - mvn spring-boot:run "-Dspring-boot.run.arguments=http://localhost:8081/flights" -pl travel_agent
+2. Run in separate terminals: Travel Agent - mvn spring-boot:run "-Dspring-boot.run.arguments=http://localhost:8081/flights" -pl travel_agent
 
-Step 3: Run in another separate terminal, the Client - mvn spring-boot:run -pl client 
-(The URL was that being passed into this command as an argument is currently hardcoded into Client.java)
+3. Run in another separate terminal, the Client - mvn spring-boot:run -pl client 
+Ensure that variables argsRequest and argsResponse are set to point to localhost:8081
+	public static final String argsRequest = "http://localhost:8081/travelagent/travelpackagerequests";
+	public static final String argsResponse = "http://localhost:8081/travelagent/bookings";
 
-Step 4: When the Client application is running, open a new browser and enter into the url the following - http://localhost:8082/
+4. When the Client application is running, open a new browser and enter into the url the following - http://localhost:8082/
 
-Step 5: Enter your travel details into displayed form
+5. Enter your travel details into displayed form.
 
 ## Running with docker-compose
 
