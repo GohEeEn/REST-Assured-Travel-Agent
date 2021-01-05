@@ -33,7 +33,6 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
-// import java.text.ParseException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -58,8 +57,6 @@ import java.io.InputStreamReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-
-
 
 @RestController
 public class HotelService2 {
@@ -127,9 +124,6 @@ public class HotelService2 {
 
             Hotel hotel = searchedHotels.get(clientChoice.getReferenceNumber());        // find hotel the client wishes to book
             
-            // System.out.println("\nTesting /hotelservice/hotels\n");
-            // System.out.println(hotel.toString());
-		
 		// Add a new hotel for this client to bookedHotels map (which contains booked hotels for all clients)
 		bookedHotelReferenceNumber++;
 		bookedHotels.put(bookedHotelReferenceNumber,hotel);
@@ -185,9 +179,6 @@ public class HotelService2 {
 
         Hotel newChoiceOfHotel = searchedHotels.get(clientChoice.getReferenceNumber());        // find hotel the client wishes to book
 
-      //   System.out.println("\nTesting PUT /hotelservice/hotels\n");
-      //   System.out.println(newChoiceOfHotel.toString());
-        
         // Replace old hotel with a new hotel
         Hotel previouslyBookedHotel = bookedHotels.remove(referenceNumber);
         bookedHotels.put(referenceNumber,newChoiceOfHotel);
@@ -197,7 +188,6 @@ public class HotelService2 {
         headers.set("Content-Location", path);
         return new ResponseEntity<>(headers, HttpStatus.OK);
       }
-
 
       /**
        * The following code converts a list of hotels to an array of hotels
@@ -212,14 +202,13 @@ public class HotelService2 {
             int index = 0;
             
             while (index < hotelList.size()){
-
                   hotelsArray[index] = hotelList.get(index);
                   index++;
             }
-
             return hotelsArray;
       }
       
+
       /**
        * The following method finds hotels in the given location by calling GET FindHotels from the Amadeus API collection
        * 
@@ -230,8 +219,6 @@ public class HotelService2 {
 	public ArrayList<Hotel> findHotels(HotelRequest hotelRequest){
 
             ArrayList<Hotel> hotelList = new ArrayList<>();
-            // Hotel [] testArray = new Hotel[10];
-		// System.out.println("findHotels method \n");
 		try{   // request made to Amadeus API to get available hotel info
                   HttpRequest request = HttpRequest.newBuilder()
                   .uri(URI.create("https://test.api.amadeus.com/v2/shopping/hotel-offers?cityCode="+hotelRequest.getCityCode()+"&roomQuantity=1&adults="+hotelRequest.getNumberOfGuests()+"&radius=5&radiusUnit=KM&paymentPolicy=NONE&includeClosed=false&bestRateOnly=true&view=FULL&sort=NONE"))
@@ -247,7 +234,6 @@ public class HotelService2 {
 	    		hotelInfoArray = (JSONArray) hotelInfo.get("data");   // extracts 'data' array from JSON object
 
                   System.out.println(hotelInfoArray + "\n");
-                  // System.out.println("Response \n");
                   int index = 0;
                   
                   // If data is received from the Amadeus API call then extract the relevant hotel info and create a Hotel object
@@ -322,7 +308,6 @@ public class HotelService2 {
                               /**
                                * Finds hotel rating 
                                */
-                              // System.out.println("Rating: "+hotel.get("rating"));
                               currentHotel.setRating(String.valueOf(hotel.get("rating")));
       
                               /**
@@ -339,23 +324,17 @@ public class HotelService2 {
                                * Finds phone number of hotel
                                */
                               JSONObject contact = (JSONObject) hotel.get("contact");
-                              // System.out.println(contact.get("phone"));
                               currentHotel.setPhoneNumber(String.valueOf(contact.get("phone")));
       
                               /**
                                * Finds name of hotel
                                */
-                              // System.out.println("Name of hotel: "+hotel.get("name"));
                               currentHotel.setName(String.valueOf(hotel.get("name")));
-      
-                              // System.out.println("\n" + currentHotel.toString());
       
                               hotelList.add(currentHotel);
                               index++;
-                        }
-                              
-                  }
-                  
+                        }                         
+                  }               
             }
             catch(IOException e) {
                   e.printStackTrace();
