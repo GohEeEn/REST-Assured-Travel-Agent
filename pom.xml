@@ -15,7 +15,6 @@
             <module>attractions</module>
             <module>eureka</module>
             <module>testAPI</module>
-            <module>mongo</module>
 
 <!--             <module>travelService</module>
  -->      </modules>          
