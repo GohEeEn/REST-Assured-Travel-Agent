@@ -2,20 +2,16 @@ package service.recommendations;
 
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.client.RestTemplate;
-
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,16 +24,11 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-
 
 import service.core.ActivityItem;
 import service.core.Geocode;
 import service.core.ActivityRequest;
+import service.core.ClientChoices;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -48,13 +39,8 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import service.core.ClientChoice;
-import service.core.ClientChoices;
-
 import java.util.Map;
 import java.util.HashMap;
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Collection;
 
 
@@ -67,7 +53,7 @@ public class ActivitiesRecommenderService {
 
     private static final Amadeus amadeus= Amadeus.builder( "06t9AsvC4fSxHQuM0VGPkYwBbpfCLNkj",
                                                         "2ARuN5wPvtHDAKmZ").build();
-    private static final String PAGE = "/activities";
+    private static final String PAGE = "/activityservice/";
     private static final String QUERY_REGEX = "^([a-z\\u0080-\\u024F]+(?:. |-| |'))*[a-z\\u0080-\\u024F]*$";
     private static final Pattern QUERY_PATTERN_CHECKER = Pattern.compile(QUERY_REGEX,Pattern.CASE_INSENSITIVE);
     private static final String STATUS_CODE_ERROR = "Wrong status code: ";
@@ -89,18 +75,14 @@ public class ActivitiesRecommenderService {
 	 * @throws URISyntaxException
 	 */
 
-	@RequestMapping(value="/activityservice/activityrequests",method=RequestMethod.POST)
+	@RequestMapping(value= PAGE + "activityrequests",method=RequestMethod.POST)
 	public ResponseEntity<ActivityItem []> searchActivities(@RequestBody ActivityRequest activityRequest)  throws URISyntaxException {
 
         // System.out.println("\nTesting ActivityService POST Request\n");
         ActivityItem [] activityItems = getActivitiesWithQueries(activityRequest.getCity(), activityRequest.getCountry());
         
-        /** 
-		 * The following code prints all activites which were found through the Amadeus API
-		 */
-
+        /* The following code prints all activites which were found through the Amadeus API */
          for (ActivityItem a : activityItems){
-
             System.out.println("\n"+a.toString()+"\n");
          }
          
@@ -109,7 +91,7 @@ public class ActivitiesRecommenderService {
 		activityRequestReferenceNumber++;
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/activityservice/activityrequests/"+activityRequestReferenceNumber;     // Create URI for this activity
+			build().toUriString()+ PAGE + "activityrequests/" + activityRequestReferenceNumber;     // Create URI for this activity
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(activityItems, headers, HttpStatus.CREATED);     // Returns activities to travel agent
@@ -124,7 +106,7 @@ public class ActivitiesRecommenderService {
 	 * @return activities
 	 */
 
-	@RequestMapping(value="/activityservice/activities",method=RequestMethod.POST)
+	@RequestMapping(value= PAGE + "activities",method=RequestMethod.POST)
 	public ResponseEntity<ActivityItem> createActivity(@RequestBody ClientChoices clientChoicesOfActivities)  throws URISyntaxException {
 
         System.out.println("\nTESTING ACTIVITY POST BOOKING)");
@@ -139,7 +121,7 @@ public class ActivitiesRecommenderService {
 		bookedActivities.put(bookedActivityReferenceNumber,activity);
 
 		String path = ServletUriComponentsBuilder.fromCurrentContextPath().
-			build().toUriString()+ "/activityservice/activities/"+bookedActivityReferenceNumber;     // Create URI for this activity
+			build().toUriString()+ PAGE + "activities/" + bookedActivityReferenceNumber;     // Create URI for this activity
 		HttpHeaders headers = new HttpHeaders();
 		headers.setLocation(new URI(path));
 		return new ResponseEntity<>(activity, headers, HttpStatus.CREATED);     // Returns activity to travel agent
@@ -152,7 +134,7 @@ public class ActivitiesRecommenderService {
 	 * @param reference
 	 * @return activity
 	 */
-	@RequestMapping(value="/activityservice/activities/{reference}",method=RequestMethod.GET)
+	@RequestMapping(value=PAGE + "activities/{reference}", method=RequestMethod.GET)
 	public ActivityItem getActivity(@PathVariable("reference") int reference) {
 
 		ActivityItem activity = bookedActivities.get(reference);
@@ -165,7 +147,7 @@ public class ActivitiesRecommenderService {
 	 * 
 	 * @return bookedActivities.values()
 	 */
-	@RequestMapping(value="/activityservice/activities",method=RequestMethod.GET)
+	@RequestMapping(value=PAGE + "activities",method=RequestMethod.GET)
 	public @ResponseBody Collection<ActivityItem> listEntries() {
 
 		if (bookedActivities.size() == 0) throw new NoSuchActivityException();
@@ -181,8 +163,8 @@ public class ActivitiesRecommenderService {
 	 * @throws URISyntaxException
 	 */
 
-	@RequestMapping(value="/activityservice/activities/{referenceNumber}", method=RequestMethod.PUT)
-    	public ResponseEntity<ActivityItem> replaceActivity(@PathVariable int referenceNumber, @RequestBody ClientChoices clientChoices) throws URISyntaxException{
+	@RequestMapping(value=PAGE + "activities/{referenceNumber}", method=RequestMethod.PUT)
+    public ResponseEntity<ActivityItem> replaceActivity(@PathVariable int referenceNumber, @RequestBody ClientChoices clientChoices) throws URISyntaxException{
 
 		ActivityItem newChoiceOfActivity = searchedActivities.get(clientChoices.getReferenceNumbers()[1]);        // find activity the client wishes to book
 
@@ -190,10 +172,10 @@ public class ActivitiesRecommenderService {
 		System.out.println(newChoiceOfActivity.toString());
 		
 		// Replace old activity with a new activity
-		ActivityItem previouslyBookedActivity = bookedActivities.remove(referenceNumber);
+		bookedActivities.remove(referenceNumber);
         bookedActivities.put(referenceNumber,newChoiceOfActivity);
 
-		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ "/activityservice/activities"+referenceNumber;
+		String path = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString()+ PAGE + "activities"+referenceNumber;
 		HttpHeaders headers = new HttpHeaders();
 		headers.set("Content-Location", path);
 		return new ResponseEntity<>(headers, HttpStatus.OK);
@@ -305,8 +287,6 @@ public class ActivitiesRecommenderService {
      * @param country Full country name in string, eg. Ireland instead of IRE
      * @return list of activities to do in given destination, empty if the given location is unavailable or no activities can be found
      */
-
-    // @GetMapping(value = PAGE + "/{country}/{city}")
      public ActivityItem[] getActivitiesWithQueries(String city, String country) {
         Geocode destination = getDestinationGeocode(city, country);
         if(destination == null) {
@@ -354,10 +334,9 @@ public class ActivitiesRecommenderService {
          return activitiesArray;
      }
 
-      /**
+    /**
 	 * The following method adds all new activities found by ActivitesRecommenderService to searchedActivites map
 	 */
-
 	 public ActivityItem [] addActivitiesToSearchActivitiesMap(ActivityItem [] activities){
 
 		for (ActivityItem activity : activities){
